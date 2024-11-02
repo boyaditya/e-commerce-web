@@ -1,0 +1,119 @@
+/* Body background style */
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212; /* Black dove background */
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Auth container centered and responsive */
+.auth-page .auth-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 7.5rem;
+    background-color: #242424; /* Form background */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    margin: 1rem auto;
+    box-sizing: border-box;
+}
+
+/* Title styling */
+.auth-page .auth-title {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* Form styling */
+.auth-page .auth-form {
+    width: 100%;
+}
+
+.auth-page .auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-page .auth-form .form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: #fff;
+    transition: border-color 0.3s;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.auth-page .auth-form .form-input:focus {
+    outline: none;
+    border-color: #ff4757;
+}
+
+/* Button styling */
+.auth-page .auth-form .auth-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.auth-page .auth-form .auth-button:hover {
+    background-color: #ff3748;
+}
+
+/* Error message styling */
+.auth-page .auth-form .error-message {
+    color: #ff4757;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Link styling */
+.auth-page .auth-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.auth-page .auth-link:hover {
+    color: #ff4757;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .auth-page .auth-container {
+        padding: 1.5rem;
+    }
+    .auth-page .auth-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .auth-page .auth-container {
+        max-width: 90%; /* Adjusts form width for smaller screens */
+    }
+}
+
+@media (min-width: 768px) {
+    .auth-page .auth-container {
+        max-width: 600px;
+    }
+}
