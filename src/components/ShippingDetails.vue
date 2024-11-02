@@ -17,14 +17,12 @@
     data() {
       return {
         fields: {
-          firstName: { placeholder: 'First Name', type: 'text' },
-          lastName: { placeholder: 'Last Name', type: 'text' },
-          email: { placeholder: 'Email', type: 'email' },
-          address: { placeholder: 'Address', type: 'text' },
-          city: { placeholder: 'City', type: 'text' },
-          country: { placeholder: 'Country', type: 'text' },
-          zipCode: { placeholder: 'ZIP Code', type: 'text' },
-          telephone: { placeholder: 'Telephone', type: 'tel' }
+          shippingFirstName: { placeholder: 'First Name', type: 'text' },
+          shippingLastName: { placeholder: 'Last Name', type: 'text' },
+          shippingEmail: { placeholder: 'Email', type: 'email' },
+          shippingAddress: { placeholder: 'Address', type: 'text' },
+          shippingCity: { placeholder: 'City', type: 'text' },
+          shippingCountry: { placeholder: 'Country', type: 'text' },
         },
         formData: { ...this.value }
       };

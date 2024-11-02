@@ -131,8 +131,6 @@ export default {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: red; /* Warna latar belakang centang */
-  border: 2px solid red; /* Warna border */
   border-radius: 4px; /* Mengatur border radius agar sudut melengkung */
   top: -2px; /* Atur posisi vertikal */
   left: -2px; /* Atur posisi horizontal */

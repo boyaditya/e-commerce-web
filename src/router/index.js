@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 // import HomePage from '@/components/HomePage.vue';
 import CheckoutPage from '@/components/CheckoutPage.vue';
+import QuickViewPage from '@/components/QuickViewPage';
 import LoginForm from '@/components/LoginForm.vue';
 import RegisterForm from '@/components/RegisterForm.vue';
 import HomeView from '@/views/HomeView.vue';
@@ -24,6 +25,10 @@ const routes = [
   {
     path: '/register',
     component: RegisterForm
+  },
+  {
+    path: '/view',
+    component: QuickViewPage
   }
 ];
 
