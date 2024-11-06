@@ -1,7 +1,8 @@
 <template>
+  <div class="col-md-4">
   <div class="product">
     <div class="product-img">
-      <img :src="resolvedImgSrc" :alt="imgAlt" />
+      <img :src="resolvedImgSrc" :alt="productName" />
       <div class="product-label">
         <span v-if="saleLabel" class="sale">{{ saleLabel }}</span>
         <span v-if="newLabel" class="new">{{ newLabel }}</span>
@@ -29,23 +30,23 @@
           ><span class="tooltipp">add to compare</span>
         </button>
         <!-- <div> -->
-          <button class="quick-view">
-              <router-link to="/view" class="quick-view">
-              <i class="fa fa-eye"></i><span class="tooltipp">quick view</span>
-            </router-link>
-            </button>
+        <button class="quick-view">
+          <router-link to="/view" class="quick-view">
+            <i class="fa fa-eye"></i><span class="tooltipp">quick view</span>
+          </router-link>
+        </button>
         <!-- </div> -->
       </div>
     </div>
     <div class="add-to-cart">
-      <button
-        @click="addCartItemHandler(id, 1)"
-        class="add-to-cart-btn"
-      >
+      <button @click="addCartItemHandler(id, 1)" class="add-to-cart-btn">
         <i class="fa fa-shopping-cart"></i> add to cart
       </button>
     </div>
   </div>
+</div>
+  <!-- <div class="clearfix visible-sm visible-xs"></div>
+  <div class="clearfix visible-lg visible-md"></div> -->
 </template>
 
 <script>

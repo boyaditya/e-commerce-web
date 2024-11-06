@@ -11,3 +11,12 @@ app.use(router);
 app.use(jQueryPlugin);
 
 app.mount("#app");
+
+// // Hot Module Replacement (HMR) - Ensure scripts are re-initialized
+// if (module.hot) {
+//   module.hot.accept(['./App.vue', './assets/js/jquery-plugin'], () => {
+//     const newApp = require('./App.vue').default;
+//     app.unmount();
+//     app.mount(newApp);
+//   });
+// }

@@ -6,9 +6,9 @@
       </div>
       <div class="shop-body">
         <h3>{{ title }}<br />{{ subtitle }}</h3>
-        <a :href="link" class="cta-btn">
-          Shop now <i class="fa fa-arrow-circle-right"></i>
-        </a>
+        <router-link :to="{ path: '/store' }" class="cta-btn"
+          >Shop now <i class="fa fa-arrow-circle-right"></i
+        ></router-link>
       </div>
     </div>
   </div>
@@ -16,35 +16,35 @@
 
 <script>
 export default {
-  name: 'ShopItem',
+  name: "ShopItem",
   props: {
     imgSrc: {
       type: String,
-      required: true
+      required: true,
     },
     imgAlt: {
       type: String,
-      default: ''
+      default: "",
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
     subtitle: {
       type: String,
-      required: true
+      required: true,
     },
     link: {
       type: String,
-      default: '#'
-    }
+      default: "#",
+    },
   },
   computed: {
     resolvedImgSrc() {
       // Use require to dynamically resolve the image path
       return require(`@/assets/img/${this.imgSrc}`);
-    }
-  }
+    },
+  },
 };
 </script>
 

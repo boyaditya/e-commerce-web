@@ -1,59 +1,244 @@
 <template>
-    <div>
-      <!-- Konten halaman StorePage -->
-      <ul>
-        <!-- Daftar produk atau konten lainnya -->
-      </ul>
-      <span class="copyright">
-        Copyright &copy; {{ currentYear }} All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-      </span>
-      
-      <!-- jQuery Plugins
-      <script src="@/assets/js/jquery.min.js"></script>
-      <script src="@/assets/js/bootstrap.min.js"></script>
-      <script src="@/assets/js/slick.min.js"></script>
-      <script src="@/assets/js/nouislider.min.js"></script>
-      <script src="@/assets/js/jquery.zoom.min.js"></script>
-      <script src="@/assets/js/main.js"></script> -->
+  <!-- SECTION -->
+  <div class="section">
+    <!-- container -->
+    <div class="container">
+      <!-- row -->
+      <div class="row">
+        <!-- ASIDE -->
+        <div id="aside" class="col-md-3">
+          <!-- aside Widget -->
+          <div class="aside">
+            <h3 class="aside-title">Categories</h3>
+            <div class="checkbox-filter">
+              <div class="input-checkbox">
+                <input type="checkbox" id="category-1" />
+                <label for="category-1">
+                  <span></span>
+                  Laptops
+                  <small>(120)</small>
+                </label>
+              </div>
+
+              <div class="input-checkbox">
+                <input type="checkbox" id="category-2" />
+                <label for="category-2">
+                  <span></span>
+                  Smartphones
+                  <small>(740)</small>
+                </label>
+              </div>
+
+              <div class="input-checkbox">
+                <input type="checkbox" id="category-3" />
+                <label for="category-3">
+                  <span></span>
+                  Cameras
+                  <small>(1450)</small>
+                </label>
+              </div>
+
+              <div class="input-checkbox">
+                <input type="checkbox" id="category-4" />
+                <label for="category-4">
+                  <span></span>
+                  Accessories
+                  <small>(578)</small>
+                </label>
+              </div>
+
+              <div class="input-checkbox">
+                <input type="checkbox" id="category-5" />
+                <label for="category-5">
+                  <span></span>
+                  Laptops
+                  <small>(120)</small>
+                </label>
+              </div>
+
+              <div class="input-checkbox">
+                <input type="checkbox" id="category-6" />
+                <label for="category-6">
+                  <span></span>
+                  Smartphones
+                  <small>(740)</small>
+                </label>
+              </div>
+            </div>
+          </div>
+          <!-- /aside Widget -->
+
+          <!-- aside Widget -->
+          <div class="aside">
+            <h3 class="aside-title">Price</h3>
+            <div class="price-filter">
+              <div id="price-slider"></div>
+              <div class="input-number price-min">
+                <input id="price-min" type="number" />
+                <span class="qty-up">+</span>
+                <span class="qty-down">-</span>
+              </div>
+              <span>-</span>
+              <div class="input-number price-max">
+                <input id="price-max" type="number" />
+                <span class="qty-up">+</span>
+                <span class="qty-down">-</span>
+              </div>
+            </div>
+          </div>
+          <!-- /aside Widget -->
+
+        </div>
+        <!-- /ASIDE -->
+
+        <!-- STORE -->
+        <div id="store" class="col-md-9">
+          <!-- store top filter -->
+          <div class="store-filter clearfix">
+            <div class="store-sort">
+              <label>
+                Sort By:
+                <select class="input-select">
+                  <option value="0">Popular</option>
+                  <option value="1">Position</option>
+                </select>
+              </label>
+
+              <label>
+                Show:
+                <select class="input-select">
+                  <option value="0">20</option>
+                  <option value="1">50</option>
+                </select>
+              </label>
+            </div>
+            <ul class="store-grid">
+              <li class="active"><i class="fa fa-th"></i></li>
+              <li>
+                <a href="#"><i class="fa fa-th-list"></i></a>
+              </li>
+            </ul>
+          </div>
+          <!-- /store top filter -->
+
+          <!-- store products -->
+          <div class="row">
+            <!-- products -->
+            <ProductItem
+              v-for="product in new_products"
+              :key="product.id"
+              :imgSrc="product.imgSrc"
+              :imgAlt="product.productName"
+              :saleLabel="'-30%'"
+              :newLabel="'NEW'"
+              :category="product.category"
+              :productName="product.productName"
+              :productLink="product.productLink"
+              :productPrice="product.productPrice"
+              :oldPrice="product.oldPrice"
+              :addCartItemHandler="addCartItemHandler"
+            />
+            <!-- /products -->
+          </div>
+          <!-- /store products -->
+
+          <!-- store bottom filter -->
+          <div class="store-filter clearfix">
+            <span class="store-qty">Showing 20-100 products</span>
+            <ul class="store-pagination">
+              <li class="active">1</li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li>
+                <a href="#"><i class="fa fa-angle-right"></i></a>
+              </li>
+            </ul>
+          </div>
+          <!-- /store bottom filter -->
+        </div>
+        <!-- /STORE -->
+      </div>
+      <!-- /row -->
     </div>
-  </template>
-  
-  <script>
-/* eslint-disable */
-  export default {
-    data() {
-      return {
-        currentYear: new Date().getFullYear(), // Mengambil tahun saat ini
-      };
-    },
-    mounted() {
-      // Memanggil script di sini setelah komponen dimount
-      this.loadScripts();
-    },
-    methods: {
-      loadScripts() {
-        // Menggunakan jQuery setelah load
-        // const scripts = [
-        //   'jquery.min.js',
-        //   'bootstrap.min.js',
-        //   'slick.min.js',
-        //   'nouislider.min.js',
-        //   'jquery.zoom.min.js',
-        //   'main.js',
-        // ];
-  
-        scripts.forEach(script => {
-          const s = document.createElement('script');
-          s.src = require(`@/assets/js/${script}`);
-          s.async = true;
-          document.body.appendChild(s);
-        });
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Gaya untuk StorePage */
-  </style>
-  
+    <!-- /container -->
+  </div>
+  <!-- /SECTION -->
+</template>
+
+<script>
+
+// import ShopItem from "@/components/shop_item/ShopItem.vue";
+import ProductItem from "@/components/shop_item/ProductItem.vue";
+// import ProductWidget from "@/components/shop_item/ProductWidget.vue";
+
+export default {
+  name: "StorePage",
+  components : {
+    ProductItem
+  },
+  data() {
+    return {
+      new_products: [
+        {
+          imgSrc: "product01.png",
+          imgAlt: "Product Image",
+          saleLabel: "-30%",
+          newLabel: "NEW",
+          category: "Category",
+          productName: "product name goes here",
+          productLink: "#",
+          productPrice: "$980.00",
+          oldPrice: "$990.00",
+          rating: 5,
+        },
+        {
+          imgSrc: "product02.png",
+          imgAlt: "Product Image",
+          newLabel: "NEW",
+          category: "Category",
+          productName: "product name goes here",
+          productLink: "#",
+          productPrice: "$980.00",
+          oldPrice: "$990.00",
+          rating: 4,
+        },
+        {
+          imgSrc: "product03.png",
+          imgAlt: "Product Image",
+          saleLabel: "-30%",
+          category: "Category",
+          productName: "product name goes here",
+          productLink: "#",
+          productPrice: "$980.00",
+          oldPrice: "$990.00",
+          rating: 0,
+        },
+        {
+          imgSrc: "product04.png",
+          imgAlt: "Product Image",
+          category: "Category",
+          productName: "product name goes here",
+          productLink: "#",
+          productPrice: "$980.00",
+          oldPrice: "$990.00",
+          rating: 5,
+        },
+        {
+          imgSrc: "product05.png",
+          imgAlt: "Product Image",
+          category: "Category",
+          productName: "product name goes here",
+          productLink: "#",
+          productPrice: "$980.00",
+          oldPrice: "$990.00",
+          rating: 5,
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style>
+</style>
