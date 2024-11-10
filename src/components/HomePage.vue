@@ -550,122 +550,77 @@ export default {
       ],
     };
   },
-  watch: {
-    cartProducts: {
-      handler(newVal) {
-        console.log("Cart products updated:", newVal);
-      },
-      deep: true, // Ensures the watcher reacts to nested changes in the array
-      immediate: true, // Runs the watcher immediately on component mount
-    },
-  },
+  // watch: {
+  //   cartProducts: {
+  //     handler(newVal) {
+  //       console.log("Cart products updated:", newVal);
+  //     },
+  //     deep: true, // Ensures the watcher reacts to nested changes in the array
+  //     immediate: true, // Runs the watcher immediately on component mount
+  //   },
+  // },
   computed: {
-    quantityTotal() {
-      return this.cartProducts.reduce((total, product) => {
-        return total + product.quantity;
-      }, 0);
-    },
-    cartTotal() {
-      return this.cartProducts.reduce((total, product) => {
-        return total + product.product.price * product.quantity;
-      }, 0);
-    },
+    // quantityTotal() {
+    //   return this.cartProducts.reduce((total, product) => {
+    //     return total + product.quantity;
+    //   }, 0);
+    // },
+    // cartTotal() {
+    //   return this.cartProducts.reduce((total, product) => {
+    //     return total + product.product.price * product.quantity;
+    //   }, 0);
+    // },
   },
   async mounted() {
-    this.initializeSlick();
-    await this.login();
+    // await this.login();
     await this.fetchAllProducts();
 
-    if (this.userInfo != null) await this.fetchCarts();
+    // if (this.userInfo != null) await this.fetchCarts();
   },
   methods: {
-     initializeSlick() {
-      this.$nextTick(() => {
-        (function ($) {
-          "use strict";
+    // onSearch() {
+    //   console.log(
+    //     `Searching for ${this.searchQuery} in category ${this.selectedCategory}`
+    //   );
+    // },
+    // toggleCartDropdown() {
+    //   this.cartDropdown = !this.cartDropdown;
+    // },
+    // removeFromCart(productId) {
+    //   this.cartProducts = this.cartProducts.filter(
+    //     (product) => product.product.id !== productId
+    //   );
+    // },
+    // async login() {
+    //   try {
+    //     const response = await axios.post("http://127.0.0.1:8000/login_email", {
+    //       email: "aryaxdm9604@gmail.com",
+    //       password: "inipassword",
+    //     });
 
-          // Products Slick
-          $(".products-slick").each(function () {
-            var $this = $(this),
-              $nav = $this.attr("data-nav");
+    //     this.userInfo = response.data;
+    //   } catch (error) {
+    //     console.error(error);
+    //   } finally {
+    //     this.loadingCart = false;
+    //   }
+    // },
+    // async fetchCarts() {
+    //   try {
+    //     const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
+    //       headers: {
+    //         Authorization: `Bearer ${this.userInfo.access_token}`,
+    //       },
+    //     });
 
-            if ($this.hasClass("slick-initialized")) {
-              $this.slick("unslick");
-            }
-
-            $this.slick({
-              slidesToShow: 4,
-              slidesToScroll: 1,
-              autoplay: true,
-              infinite: true,
-              speed: 300,
-              dots: true,
-              arrows: true,
-              appendArrows: $nav ? $nav : $this,
-              responsive: [
-                {
-                  breakpoint: 991,
-                  settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                  },
-                },
-                {
-                  breakpoint: 480,
-                  settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                  },
-                },
-              ],
-            });
-          });
-        })(jQuery);
-      });
-    },
-    onSearch() {
-      console.log(
-        `Searching for ${this.searchQuery} in category ${this.selectedCategory}`
-      );
-    },
-    toggleCartDropdown() {
-      this.cartDropdown = !this.cartDropdown;
-    },
-    removeFromCart(productId) {
-      this.cartProducts = this.cartProducts.filter(
-        (product) => product.product.id !== productId
-      );
-    },
-    async login() {
-      try {
-        const response = await axios.post("http://127.0.0.1:8000/login_email", {
-          email: "aryaxdm9604@gmail.com",
-          password: "inipassword",
-        });
-
-        this.userInfo = response.data;
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loadingCart = false;
-      }
-    },
-    async fetchCarts() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
-          headers: {
-            Authorization: `Bearer ${this.userInfo.access_token}`,
-          },
-        });
-
-        this.cartProducts.push(...response.data);
-        console.log(this.cartProducts.product.name);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loadingCart = false;
-      }
-    },
+    //     this.cartProducts.push(...response.data);
+    //     console.log(this.cartProducts.product.name);
+    //   } catch (error) {
+    //     console.error(error);
+    //   } finally {
+    //     this.loadingCart = false;
+    //   }
+    // },
     async fetchAllProducts() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/get_products");
@@ -675,45 +630,6 @@ export default {
         console.error(error);
       } finally {
         this.loadingCart = false;
-      }
-    },
-    async addCartItem(product_id, quantity) {
-      try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/add_cart_item",
-          {
-            user_id: this.userInfo.user_id,
-            product_id: product_id,
-            quantity: quantity,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${this.userInfo.access_token}`,
-            },
-          }
-        );
-
-        console.log(response.data);
-        console.log(this.cartProducts.length);
-        this.cartProducts.push(response.data);
-        this.cartProducts = [...this.cartProducts];
-        console.log(this.cartProducts.length);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loadingCart = false;
-      }
-    },
-    addCartItemHandler(product_id, quantity = 1) {
-      console.log("addCartItemHandler");
-      var productExist = this.cartProducts.find(
-        (product) => product.product.id == product_id
-      );
-      if (productExist) {
-        console.log("exist");
-        this.addCartItem(product_id, quantity);
-      } else {
-        this.addCartItem(product_id, quantity);
       }
     },
   },
