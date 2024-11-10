@@ -1850,7 +1850,10 @@ textarea.input {
 }
 
 .order-details {
-  position: relative;
+  /* position: relative; */
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 40px;
   padding: 0px 30px 30px;
   border-right: 1px solid #E4E7ED;
   border-left: 1px solid #E4E7ED;

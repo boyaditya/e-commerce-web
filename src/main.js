@@ -4,6 +4,7 @@ import router from "./router";
 import jQueryPlugin from "./assets/js/jquery-plugin";
 
 import "./assets/js/main";
+import "./assets/js/slick.min";
 
 const app = createApp(App);
 

@@ -1,12 +1,16 @@
 // router/index.js
 import { createRouter, createWebHistory } from "vue-router";
+
 // import HomePage from '@/components/HomePage.vue';
 import CheckoutPage from "@/components/CheckoutPage.vue";
 import QuickViewPage from "@/components/QuickViewPage";
+import ProductView from "@/views/ProductView.vue";
+
 import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 import HomeView from "@/views/HomeView.vue";
 import StoreView from "@/views/StoreView.vue";
+import CartView from "@/views/CartView.vue";
 
 const routes = [
   {
@@ -36,11 +40,31 @@ const routes = [
     name: "StoreView",
     component: StoreView,
   },
+  {
+    path: "/product",
+    name: "Product",
+    component: ProductView,
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: CartView,
+  }
+
 ];
 
 const router = createRouter({
   history: createWebHistory(), // Enables history mode without hash in URLs
   routes,
 });
+
+router.afterEach((to, from, next) => {
+  if (from.name) {
+    window.location.reload();
+  } else {
+    next();
+  }
+});
+
 
 export default router;

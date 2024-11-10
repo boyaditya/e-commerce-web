@@ -572,12 +572,57 @@ export default {
     },
   },
   async mounted() {
+    this.initializeSlick();
     await this.login();
     await this.fetchAllProducts();
 
     if (this.userInfo != null) await this.fetchCarts();
   },
   methods: {
+     initializeSlick() {
+      this.$nextTick(() => {
+        (function ($) {
+          "use strict";
+
+          // Products Slick
+          $(".products-slick").each(function () {
+            var $this = $(this),
+              $nav = $this.attr("data-nav");
+
+            if ($this.hasClass("slick-initialized")) {
+              $this.slick("unslick");
+            }
+
+            $this.slick({
+              slidesToShow: 4,
+              slidesToScroll: 1,
+              autoplay: true,
+              infinite: true,
+              speed: 300,
+              dots: true,
+              arrows: true,
+              appendArrows: $nav ? $nav : $this,
+              responsive: [
+                {
+                  breakpoint: 991,
+                  settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                  },
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                  },
+                },
+              ],
+            });
+          });
+        })(jQuery);
+      });
+    },
     onSearch() {
       console.log(
         `Searching for ${this.searchQuery} in category ${this.selectedCategory}`

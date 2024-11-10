@@ -47,16 +47,13 @@
                   </a>
                 </div>
                 <div class="dropdown">
-                <a
-                  class="dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-expanded="true"
-                >
-                    <i class="fa fa-shopping-cart"></i>
-                    <span>Your Cart</span>
-                    <div class="qty">{{ quantityTotal }}</div>
-                  </a>
-                  <div class="cart-dropdown" >
+                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                  <i class="fa fa-shopping-cart"></i>
+                  <span>Your Cart</span>
+                  <div class="qty">{{ quantityTotal }}</div>
+                </a>
+                <div class="cart-dropdown">
+                  <div class="cart-items">
                     <div v-for="product in cartProducts" :key="product.product.id" class="product-widget">
                       <div class="product-img">
                         <img :src="product.product.image_url" :alt="product.product.name">
@@ -67,16 +64,17 @@
                       </div>
                       <button @click="removeFromCart(product.product.id)" class="delete"><i class="fa fa-close"></i></button>
                     </div>
-                    <div class="cart-summary">
-                      <small>{{ quantityTotal }} Item(s) selected</small>
-                      <h5>SUBTOTAL: {{ cartTotal }}</h5>
-                    </div>
-                    <div class="cart-btns">
-                      <a href="#">View Cart</a>
-                      <router-link to="/checkout">Checkout <i class="fa fa-arrow-circle-right"></i></router-link>
-                    </div>
+                  </div>
+                  <div class="cart-summary">
+                    <small>{{ quantityTotal }} Item(s) selected</small>
+                    <h5>SUBTOTAL: {{ cartTotal }}</h5>
+                  </div>
+                  <div class="cart-btns">
+                    <router-link to="/cart">View Cart</router-link>
+                    <router-link to="/checkout">Checkout <i class="fa fa-arrow-circle-right"></i></router-link>
                   </div>
                 </div>
+              </div>
                 <div class="menu-toggle">
                   <a href="#">
                     <i class="fa fa-bars"></i>
@@ -195,6 +193,80 @@ export default {
 };
 </script>
 
+
 <style scoped>
-/* Include relevant styles */
+.cart-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  z-index: 1000;
+}
+
+.cart-dropdown {
+  display: block;
+}
+
+.cart-items {
+  max-height: 200px; /* Adjust the height as needed */
+  overflow-y: auto;
+}
+
+.product-widget {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-img img {
+  width: 50px;
+  height: 50px;
+}
+
+.product-body {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.product-name {
+  font-size: 14px;
+  margin: 0;
+}
+
+.product-price {
+  font-size: 14px;
+  color: #888;
+}
+
+.delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ff4d4d;
+}
+
+.cart-summary {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.cart-btns {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.cart-btns a {
+  color: #42b983;
+  text-decoration: none;
+}
+
+.cart-btns a:hover {
+  text-decoration: underline;
+}
 </style>

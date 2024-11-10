@@ -150,23 +150,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Price Slider
-    var priceSlider = document.getElementById("price-slider");
-    if (priceSlider) {
-      // eslint-disable-next-line no-undef
-      noUiSlider.create(priceSlider, {
-        start: [1, 999],
-        connect: true,
-        step: 1,
-        range: {
-          min: 1,
-          max: 999,
-        },
-      });
+    // var priceSlider = document.getElementById("price-slider");
+    // if (priceSlider) {
+    //   // eslint-disable-next-line no-undef
+    //   noUiSlider.create(priceSlider, {
+    //     start: [1, 999],
+    //     connect: true,
+    //     step: 1,
+    //     range: {
+    //       min: 1,
+    //       max: 999,
+    //     },
+    //   });
 
-      priceSlider.noUiSlider.on("update", function (values, handle) {
-        var value = values[handle];
-        handle ? (priceInputMax.value = value) : (priceInputMin.value = value);
-      });
-    }
+    //   priceSlider.noUiSlider.on("update", function (values, handle) {
+    //     var value = values[handle];
+    //     handle ? (priceInputMax.value = value) : (priceInputMin.value = value);
+    //   });
+    // }
   })(jQuery);
 });
