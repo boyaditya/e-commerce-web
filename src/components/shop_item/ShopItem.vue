@@ -1,17 +1,16 @@
 <template>
-  <div class="col-md-4 col-xs-6">
+  <router-link :to="{ path: '/store' }" class="shop-body-link">
+  <div class="col-md-2 col-xs-6">
     <div class="shop">
       <div class="shop-img">
         <img :src="resolvedImgSrc" :alt="imgAlt" />
       </div>
-      <div class="shop-body">
-        <h3>{{ title }}<br />{{ subtitle }}</h3>
-        <router-link :to="{ path: '/store' }" class="cta-btn"
-          >Shop now <i class="fa fa-arrow-circle-right"></i
-        ></router-link>
-      </div>
+    <div class="shop-body">
+      <h3>{{ title }}<br />{{ subtitle }}</h3>
     </div>
   </div>
+</div>
+</router-link>
 </template>
 
 <script>

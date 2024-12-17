@@ -39,12 +39,6 @@
             </div>
             <!-- /Cart Items -->
           </div>
-
-          <!-- Order notes -->
-          <div class="order-notes">
-            <textarea class="input" placeholder="Order Notes"></textarea>
-          </div>
-          <!-- /Order notes -->
         </div>
 
         <!-- Order Details -->

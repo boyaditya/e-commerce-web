@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-4">
+  <div :class="colClass">
     <div class="product">
       <div class="product-img">
         <img :src="resolvedImgSrc" :alt="productName" />
@@ -11,16 +11,18 @@
       <div class="product-body">
         <p class="product-category">{{ category }}</p>
         <h3 class="product-name">
-          <router-link :to="productLink">{{ productName }}</router-link>
+          <router-link :to="{ path: '/product' }">{{
+            productName
+          }}</router-link>
         </h3>
         <h4 class="product-price">
-          {{ productPrice }}
+          {{ formattedTotalPrice }}
           <del v-if="oldPrice" class="product-old-price">{{ oldPrice }}</del>
         </h4>
-        <div class="product-rating">
+        <!-- <div class="product-rating">
           <i v-for="star in 5" :key="star" class="fa fa-star"></i>
-        </div>
-        <div class="product-btns">
+        </div> -->
+        <!-- <div class="product-btns">
           <button class="add-to-wishlist">
             <i class="fa fa-heart-o"></i
             ><span class="tooltipp">add to wishlist</span>
@@ -30,11 +32,11 @@
               <i class="fa fa-eye"></i><span class="tooltipp">quick view</span>
             </router-link>
           </button>
-        </div>
+        </div> -->
       </div>
       <div class="add-to-cart">
         <button @click="handleAddToCart" class="add-to-cart-btn">
-          <i class="fa fa-shopping-cart"></i> add to cart
+          <i class="fa fa-shopping-cart"></i> +cart
         </button>
       </div>
     </div>
@@ -97,10 +99,29 @@ export default {
       type: Function,
       required: true,
     },
+    colClass: {
+      type: String,
+      default: "col-md-2",
+    },
   },
   computed: {
     resolvedImgSrc() {
-      return require(`@/assets/img/${this.imgSrc}`);
+      try {
+        return require(`@/assets/img/${this.imgSrc}`);
+      } catch (e) {
+        console.error(`Image not found: ${this.imgSrc}`);
+        return require("@/assets/img/default-image.jpg");
+      }
+    },
+    formattedTotalPrice() {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+        .format(this.productPrice)
+        .replace(/\s/g, "");
     },
   },
   methods: {

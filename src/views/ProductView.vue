@@ -1,25 +1,23 @@
 <template>
-    <HeaderPage />
+  <HeaderPage />
   <ProductPage />
-    <FooterPage />
+  <FooterPage />
 </template>
 
 <script>
-import ProductPage from '@/components/ProductPage.vue';
-import HeaderPage from '@/components/templates/HeaderPage.vue';
-import FooterPage from '@/components/templates/FooterPage.vue';
-
+import ProductPage from "@/components/ProductPage.vue";
+import HeaderPage from "@/components/templates/HeaderPage.vue";
+import FooterPage from "@/components/templates/FooterPage.vue";
 
 export default {
-    name: 'ProductView',
-    components: {
-        ProductPage,
-        HeaderPage,
-        FooterPage,
-    },
-}
+  name: "ProductView",
+  components: {
+    ProductPage,
+    HeaderPage,
+    FooterPage,
+  },
+};
 </script>
 
 <style>
-
 </style>

@@ -299,7 +299,7 @@ textarea.input {
 .section-title {
   position: relative;
   margin-bottom: 30px;
-  margin-top: 15px;
+  margin-top: 0px;
 }
 
 .section-title .title {
@@ -411,8 +411,8 @@ textarea.input {
 \*----------------------------*/
 
 #top-header {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   background-color: #1E1F29;
 }
 
@@ -444,17 +444,22 @@ textarea.input {
 \*----------------------------*/
 
 #header {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 1px;
+  padding-bottom: 1px;
   background-color: #15161D;
 }
 
 .header-logo {
-  float: left;
+  display: flex;
+  justify-content: center; /* Pusatkan secara horizontal */
+  align-items: center; /* Pusatkan secara vertikal */
+  height: 100%; /* Pastikan elemen mengambil tinggi penuh dari kontainer */
 }
 
 .header-logo .logo img {
-  display: block;
+  margin-top: 10px;
+  max-width: 100%; /* Pastikan gambar tidak melampaui lebar kontainer */
+  height: auto; /* Pertahankan rasio aspek gambar */
 }
 
 /*----------------------------*\
@@ -475,13 +480,13 @@ textarea.input {
 }
 
 .header-search form .input {
-  width: calc(100% - 260px);
+  width: calc(100% - 80px);
   margin-right: -4px;
 }
 
 .header-search form .search-btn {
   height: 40px;
-  width: 100px;
+  width: 80px;
   background: #D10024;
   color: #FFF;
   font-weight: 700;
@@ -767,13 +772,18 @@ textarea.input {
 .shop .shop-body {
   position: absolute;
   top: 0;
+  left: 0;
   width: 75%;
-  padding: 30px;
+  padding: 20px;
   z-index: 10;
 }
 
 .shop .shop-body h3 {
   color: #FFF;
+  font-size: medium;
+  top: 10px;
+  left: 10px;
+  margin: 0;
 }
 
 .shop .shop-body .cta-btn {
@@ -868,10 +878,16 @@ textarea.input {
 
 .product .product-img {
   position: relative;
+  width: 100%; /* Atur lebar sesuai kebutuhan, misalnya 100% dari kontainer */
+  height: 200px; /* Atur tinggi sesuai kebutuhan */
+  overflow: hidden; /* Sembunyikan bagian gambar yang melampaui kontainer */
 }
 
-.product .product-img>img {
+.product .product-img img {
   width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memastikan gambar menutupi kontainer tanpa mengubah rasio aspek */
+  object-position: center; /* Memusatkan gambar di dalam kontainer */
 }
 
 .product .product-img .product-label {
@@ -902,7 +918,7 @@ textarea.input {
   position: relative;
   padding: 15px;
   background-color: #FFF;
-  text-align: center;
+  text-align: left;
   z-index: 20;
 }
 
@@ -913,9 +929,19 @@ textarea.input {
 }
 
 .product .product-body .product-name {
-  text-transform: uppercase;
-  font-size: 14px;
+  font-size: 16px;
+  display: -webkit-box; /* Gunakan box model untuk teks */
+  -webkit-box-orient: vertical; /* Orientasi vertikal */
+  -webkit-line-clamp: 2; /* Maksimal 2 baris */
+  overflow: hidden; /* Sembunyikan teks yang melampaui batas */
+  text-overflow: ellipsis; /* Tambahkan elipsis (...) pada teks yang terlalu panjang */
+  display: box; /* Standar box model untuk teks */
+  box-orient: vertical; /* Orientasi vertikal */
+  line-clamp: 2; /* Maksimal 2 baris */
+  height: 48px; /* Tetapkan tinggi tetap untuk dua baris teks */
+  line-height: 24px; /* Tetapkan tinggi baris untuk memastikan dua baris teks */
 }
+
 
 .product .product-body .product-name>a {
   font-weight: 700;

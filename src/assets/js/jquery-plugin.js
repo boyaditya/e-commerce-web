@@ -7,9 +7,9 @@ export default {
     window.$ = window.jQuery = jQuery;
 
     // Dynamically load other scripts after jQuery is available
+    require("./slick.min.js");
     require("./jquery.min.js");
     require("./bootstrap.min.js");
-    require("./slick.min.js");
     require("./nouislider.min.js");
     require("./jquery.zoom.min.js");
     require("./main.js");

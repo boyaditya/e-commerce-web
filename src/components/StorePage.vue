@@ -87,7 +87,6 @@
             </div>
           </div>
           <!-- /aside Widget -->
-
         </div>
         <!-- /ASIDE -->
 
@@ -112,12 +111,12 @@
                 </select>
               </label>
             </div>
-            <ul class="store-grid">
+            <!-- <ul class="store-grid">
               <li class="active"><i class="fa fa-th"></i></li>
               <li>
                 <a href="#"><i class="fa fa-th-list"></i></a>
               </li>
-            </ul>
+            </ul> -->
           </div>
           <!-- /store top filter -->
 
@@ -125,18 +124,18 @@
           <div class="row">
             <!-- products -->
             <ProductItem
-              v-for="product in new_products"
+              v-for="product in allProducts"
               :key="product.id"
-              :imgSrc="product.imgSrc"
-              :imgAlt="product.productName"
+              :imgSrc="product.image_url || 'default-image.jpg'"
+              :imgAlt="product.name"
               :saleLabel="'-30%'"
               :newLabel="'NEW'"
-              :category="product.category"
-              :productName="product.productName"
-              :productLink="product.productLink"
-              :productPrice="product.productPrice"
-              :oldPrice="product.oldPrice"
+              :category="product.category.name"
+              :productName="product.name"
+              :productLink="product.id"
+              :productPrice="product.price"
               :addCartItemHandler="addCartItemHandler"
+              :colClass="'col-md-3'"
             />
             <!-- /products -->
           </div>
@@ -167,75 +166,36 @@
 </template>
 
 <script>
-
 // import ShopItem from "@/components/shop_item/ShopItem.vue";
 import ProductItem from "@/components/shop_item/ProductItem.vue";
 // import ProductWidget from "@/components/shop_item/ProductWidget.vue";
+import { fetchAllProducts } from "@/api/api";
 
 export default {
   name: "StorePage",
-  components : {
-    ProductItem
+  components: {
+    ProductItem,
   },
   data() {
     return {
-      new_products: [
-        {
-          imgSrc: "product01.png",
-          imgAlt: "Product Image",
-          saleLabel: "-30%",
-          newLabel: "NEW",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 5,
-        },
-        {
-          imgSrc: "product02.png",
-          imgAlt: "Product Image",
-          newLabel: "NEW",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 4,
-        },
-        {
-          imgSrc: "product03.png",
-          imgAlt: "Product Image",
-          saleLabel: "-30%",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 0,
-        },
-        {
-          imgSrc: "product04.png",
-          imgAlt: "Product Image",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 5,
-        },
-        {
-          imgSrc: "product05.png",
-          imgAlt: "Product Image",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 5,
-        },
-      ],
+      allProducts: [],
     };
+  },
+  methods: {
+    async fetchAllProducts() {
+      try {
+        this.allProducts = await fetchAllProducts();
+        console.log("jawa");
+        console.log(this.allProducts);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loadingCart = false;
+      }
+    },
+  },
+  created() {
+    this.fetchAllProducts();
   },
 };
 </script>

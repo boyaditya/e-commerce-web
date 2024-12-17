@@ -49,22 +49,18 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: CartView,
-  }
-
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(), // Enables history mode without hash in URLs
   routes,
 });
-
-router.afterEach((to, from, next) => {
+router.afterEach((to, from) => {
   if (from.name) {
     window.location.reload();
-  } else {
-    next();
+     window.scrollTo(0, 0);
   }
 });
-
 
 export default router;

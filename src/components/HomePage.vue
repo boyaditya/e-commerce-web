@@ -5,6 +5,10 @@
     <div class="container">
       <!-- row -->
       <div class="row">
+        <SectionTitle
+          title="Category"
+        />
+
         <!-- shop items -->
         <ShopItem
           v-for="(shop, index) in shops"
@@ -117,18 +121,18 @@
               <div id="tab1" class="tab-pane active">
                 <div class="products-slick" data-nav="#slick-nav-1">
                   <!-- products -->
+                   
                   <ProductItem
-                    v-for="product in new_products"
+                    v-for="product in allProducts"
                     :key="product.id"
-                    :imgSrc="product.imgSrc"
-                    :imgAlt="product.productName"
+                    :imgSrc="product.image_url || 'default-image.jpg'"
+                    :imgAlt="product.name"
                     :saleLabel="'-30%'"
                     :newLabel="'NEW'"
-                    :category="product.category"
-                    :productName="product.productName"
-                    :productLink="product.productLink"
-                    :productPrice="product.productPrice"
-                    :oldPrice="product.oldPrice"
+                    :category="product.category.name"
+                    :productName="product.name"
+                    :productLink="product.id"
+                    :productPrice="product.price"
                     :addCartItemHandler="addCartItemHandler"
                   />
                   <!-- /products -->
@@ -220,7 +224,7 @@
                 <div class="products-slick" data-nav="#slick-nav-2">
                   <!-- products -->
                   <ProductItem
-                    v-for="product in new_products"
+                    v-for="product in allProducts"
                     :key="product.id"
                     :imgSrc="product.imgSrc"
                     :imgAlt="product.productName"
@@ -249,10 +253,10 @@
   <!-- /SECTION -->
 
   <!-- SECTION -->
-  <div class="section">
-    <!-- container -->
+  <!-- <div class="section">
+   
     <div class="container">
-      <!-- row -->
+     
       <div class="row">
         <div class="col-md-4 col-xs-6">
           <div class="section-title">
@@ -264,7 +268,7 @@
 
           <div class="products-widget-slick" data-nav="#slick-nav-3">
             <div>
-              <!-- product widgets -->
+            
               <ProductWidget
                 v-for="(widget, index) in new_products"
                 :key="index"
@@ -276,11 +280,11 @@
                 :productPrice="widget.productPrice"
                 :oldPrice="widget.oldPrice"
               />
-              <!-- /product widgets -->
+      
             </div>
 
             <div>
-              <!-- product widgets -->
+            
               <ProductWidget
                 v-for="(widget, index) in new_products"
                 :key="index"
@@ -292,7 +296,7 @@
                 :productPrice="widget.productPrice"
                 :oldPrice="widget.oldPrice"
               />
-              <!-- /product widgets -->
+  
             </div>
           </div>
         </div>
@@ -307,7 +311,7 @@
 
           <div class="products-widget-slick" data-nav="#slick-nav-4">
             <div>
-              <!-- product widgets -->
+
               <ProductWidget
                 v-for="(widget, index) in new_products"
                 :key="index"
@@ -319,11 +323,11 @@
                 :productPrice="widget.productPrice"
                 :oldPrice="widget.oldPrice"
               />
-              <!-- /product widgets -->
+   
             </div>
 
             <div>
-              <!-- product widgets -->
+
               <ProductWidget
                 v-for="(widget, index) in new_products"
                 :key="index"
@@ -335,7 +339,7 @@
                 :productPrice="widget.productPrice"
                 :oldPrice="widget.oldPrice"
               />
-              <!-- /product widgets -->
+
             </div>
           </div>
         </div>
@@ -352,7 +356,7 @@
 
           <div class="products-widget-slick" data-nav="#slick-nav-5">
             <div>
-              <!-- product widgets -->
+
               <ProductWidget
                 v-for="(widget, index) in new_products"
                 :key="index"
@@ -364,11 +368,11 @@
                 :productPrice="widget.productPrice"
                 :oldPrice="widget.oldPrice"
               />
-              <!-- /product widgets -->
+     
             </div>
 
             <div>
-              <!-- product widgets -->
+
               <ProductWidget
                 v-for="(widget, index) in new_products"
                 :key="index"
@@ -380,22 +384,22 @@
                 :productPrice="widget.productPrice"
                 :oldPrice="widget.oldPrice"
               />
-              <!-- /product widgets -->
+
             </div>
           </div>
         </div>
       </div>
-      <!-- /row -->
+
     </div>
-    <!-- /container -->
-  </div>
+
+  </div> -->
   <!-- /SECTION -->
 
   <!-- NEWSLETTER -->
-  <div id="newsletter" class="section">
-    <!-- container -->
+  <!-- <div id="newsletter" class="section">
+   
     <div class="container">
-      <!-- row -->
+ 
       <div class="row">
         <div class="col-md-12">
           <div class="newsletter">
@@ -427,10 +431,10 @@
           </div>
         </div>
       </div>
-      <!-- /row -->
+   
     </div>
-    <!-- /container -->
-  </div>
+
+  </div> -->
   <!-- /NEWSLETTER -->
 </template>
   
@@ -439,29 +443,32 @@
 // import BreadcrumbPage from "@/components/BreadCrumbPage.vue";
 import ShopItem from "@/components/shop_item/ShopItem.vue";
 import ProductItem from "@/components/shop_item/ProductItem.vue";
-import ProductWidget from "@/components/shop_item/ProductWidget.vue";
+// import ProductWidget from "@/components/shop_item/ProductWidget.vue";
 import SectionTitle from "@/components/filter/SectionTitle.vue";
+import { fetchAllProducts } from '@/api/api';
 
-import axios from "axios";
+// import axios from "axios";
 
 export default {
-  components: {
+  name: 'HomePage',
+    components: {
     // NavPage,
     // BreadcrumbPage,
     ShopItem,
     ProductItem,
-    ProductWidget,
+    // ProductWidget,
     SectionTitle,
   },
   data() {
     return {
+      allProducts: [],
+      loadingCart: true,
+
       searchQuery: "",
       selectedCategory: "0",
       wishlistCount: 2,
       cartDropdown: false,
       cartProducts: [],
-      allProducts: [],
-      loadingCart: true,
       userInfo: null,
       // cartProducts: [
       //   { id: 1, name: 'Product 1', quantity: 1, price: '$980.00', image: require('@/assets/img/product01.png') },
@@ -469,6 +476,69 @@ export default {
       // ],
 
       shops: [
+        {
+          imgSrc: "shop03.png",
+          imgAlt: "Accessories Collection",
+          title: "Accessories",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop02.png",
+          imgAlt: "Cameras Collection",
+          title: "Cameras",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop01.png",
+          imgAlt: "Laptops Collection",
+          title: "Laptops",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop03.png",
+          imgAlt: "Accessories Collection",
+          title: "Accessories",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop02.png",
+          imgAlt: "Cameras Collection",
+          title: "Cameras",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop01.png",
+          imgAlt: "Laptops Collection",
+          title: "Laptops",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop03.png",
+          imgAlt: "Accessories Collection",
+          title: "Accessories",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop02.png",
+          imgAlt: "Cameras Collection",
+          title: "Cameras",
+          subtitle: "Collection",
+          link: "#",
+        },
+        {
+          imgSrc: "shop01.png",
+          imgAlt: "Laptops Collection",
+          title: "Laptops",
+          subtitle: "Collection",
+          link: "#",
+        },
         {
           imgSrc: "shop03.png",
           imgAlt: "Accessories Collection",
@@ -550,82 +620,12 @@ export default {
       ],
     };
   },
-  // watch: {
-  //   cartProducts: {
-  //     handler(newVal) {
-  //       console.log("Cart products updated:", newVal);
-  //     },
-  //     deep: true, // Ensures the watcher reacts to nested changes in the array
-  //     immediate: true, // Runs the watcher immediately on component mount
-  //   },
-  // },
-  computed: {
-    // quantityTotal() {
-    //   return this.cartProducts.reduce((total, product) => {
-    //     return total + product.quantity;
-    //   }, 0);
-    // },
-    // cartTotal() {
-    //   return this.cartProducts.reduce((total, product) => {
-    //     return total + product.product.price * product.quantity;
-    //   }, 0);
-    // },
-  },
-  async mounted() {
-    // await this.login();
-    await this.fetchAllProducts();
-
-    // if (this.userInfo != null) await this.fetchCarts();
-  },
   methods: {
-    // onSearch() {
-    //   console.log(
-    //     `Searching for ${this.searchQuery} in category ${this.selectedCategory}`
-    //   );
-    // },
-    // toggleCartDropdown() {
-    //   this.cartDropdown = !this.cartDropdown;
-    // },
-    // removeFromCart(productId) {
-    //   this.cartProducts = this.cartProducts.filter(
-    //     (product) => product.product.id !== productId
-    //   );
-    // },
-    // async login() {
-    //   try {
-    //     const response = await axios.post("http://127.0.0.1:8000/login_email", {
-    //       email: "aryaxdm9604@gmail.com",
-    //       password: "inipassword",
-    //     });
-
-    //     this.userInfo = response.data;
-    //   } catch (error) {
-    //     console.error(error);
-    //   } finally {
-    //     this.loadingCart = false;
-    //   }
-    // },
-    // async fetchCarts() {
-    //   try {
-    //     const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
-    //       headers: {
-    //         Authorization: `Bearer ${this.userInfo.access_token}`,
-    //       },
-    //     });
-
-    //     this.cartProducts.push(...response.data);
-    //     console.log(this.cartProducts.product.name);
-    //   } catch (error) {
-    //     console.error(error);
-    //   } finally {
-    //     this.loadingCart = false;
-    //   }
-    // },
     async fetchAllProducts() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/get_products");
-
-        this.allProducts = response.data;
+        this.allProducts = await fetchAllProducts();
+        console.log("jawa");
+        console.log(this.allProducts);
       } catch (error) {
         console.error(error);
       } finally {
@@ -633,7 +633,201 @@ export default {
       }
     },
   },
+  created() {
+    this.fetchAllProducts();
+  },
 };
+
+// export default {
+//   components: {
+//     // NavPage,
+//     // BreadcrumbPage,
+//     ShopItem,
+//     ProductItem,
+//     ProductWidget,
+//     SectionTitle,
+//   },
+//   data() {
+//     return {
+//       searchQuery: "",
+//       selectedCategory: "0",
+//       wishlistCount: 2,
+//       cartDropdown: false,
+//       cartProducts: [],
+//       allProducts: [],
+//       loadingCart: true,
+//       userInfo: null,
+//       // cartProducts: [
+//       //   { id: 1, name: 'Product 1', quantity: 1, price: '$980.00', image: require('@/assets/img/product01.png') },
+//       //   { id: 2, name: 'Product 2', quantity: 3, price: '$980.00', image: require('@/assets/img/product02.png') },
+//       // ],
+
+//       shops: [
+//         {
+//           imgSrc: "shop03.png",
+//           imgAlt: "Accessories Collection",
+//           title: "Accessories",
+//           subtitle: "Collection",
+//           link: "#",
+//         },
+//         {
+//           imgSrc: "shop02.png",
+//           imgAlt: "Cameras Collection",
+//           title: "Cameras",
+//           subtitle: "Collection",
+//           link: "#",
+//         },
+//         {
+//           imgSrc: "shop01.png",
+//           imgAlt: "Laptops Collection",
+//           title: "Laptops",
+//           subtitle: "Collection",
+//           link: "#",
+//         },
+//       ],
+
+//       new_products: [
+//         {
+//           imgSrc: "product01.png",
+//           imgAlt: "Product Image",
+//           saleLabel: "-30%",
+//           newLabel: "NEW",
+//           category: "Category",
+//           productName: "product name goes here",
+//           productLink: "#",
+//           productPrice: "$980.00",
+//           oldPrice: "$990.00",
+//           rating: 5,
+//         },
+//         {
+//           imgSrc: "product02.png",
+//           imgAlt: "Product Image",
+//           newLabel: "NEW",
+//           category: "Category",
+//           productName: "product name goes here",
+//           productLink: "#",
+//           productPrice: "$980.00",
+//           oldPrice: "$990.00",
+//           rating: 4,
+//         },
+//         {
+//           imgSrc: "product03.png",
+//           imgAlt: "Product Image",
+//           saleLabel: "-30%",
+//           category: "Category",
+//           productName: "product name goes here",
+//           productLink: "#",
+//           productPrice: "$980.00",
+//           oldPrice: "$990.00",
+//           rating: 0,
+//         },
+//         {
+//           imgSrc: "product04.png",
+//           imgAlt: "Product Image",
+//           category: "Category",
+//           productName: "product name goes here",
+//           productLink: "#",
+//           productPrice: "$980.00",
+//           oldPrice: "$990.00",
+//           rating: 5,
+//         },
+//         {
+//           imgSrc: "product05.png",
+//           imgAlt: "Product Image",
+//           category: "Category",
+//           productName: "product name goes here",
+//           productLink: "#",
+//           productPrice: "$980.00",
+//           oldPrice: "$990.00",
+//           rating: 5,
+//         },
+//       ],
+//     };
+//   },
+//   // watch: {
+//   //   cartProducts: {
+//   //     handler(newVal) {
+//   //       console.log("Cart products updated:", newVal);
+//   //     },
+//   //     deep: true, // Ensures the watcher reacts to nested changes in the array
+//   //     immediate: true, // Runs the watcher immediately on component mount
+//   //   },
+//   // },
+//   computed: {
+//     // quantityTotal() {
+//     //   return this.cartProducts.reduce((total, product) => {
+//     //     return total + product.quantity;
+//     //   }, 0);
+//     // },
+//     // cartTotal() {
+//     //   return this.cartProducts.reduce((total, product) => {
+//     //     return total + product.product.price * product.quantity;
+//     //   }, 0);
+//     // },
+//   },
+//   async mounted() {
+//     // await this.login();
+//     await this.fetchAllProducts();
+
+//     // if (this.userInfo != null) await this.fetchCarts();
+//   },
+//   methods: {
+//     // onSearch() {
+//     //   console.log(
+//     //     `Searching for ${this.searchQuery} in category ${this.selectedCategory}`
+//     //   );
+//     // },
+//     // toggleCartDropdown() {
+//     //   this.cartDropdown = !this.cartDropdown;
+//     // },
+//     // removeFromCart(productId) {
+//     //   this.cartProducts = this.cartProducts.filter(
+//     //     (product) => product.product.id !== productId
+//     //   );
+//     // },
+//     // async login() {
+//     //   try {
+//     //     const response = await axios.post("http://127.0.0.1:8000/login_email", {
+//     //       email: "aryaxdm9604@gmail.com",
+//     //       password: "inipassword",
+//     //     });
+
+//     //     this.userInfo = response.data;
+//     //   } catch (error) {
+//     //     console.error(error);
+//     //   } finally {
+//     //     this.loadingCart = false;
+//     //   }
+//     // },
+//     // async fetchCarts() {
+//     //   try {
+//     //     const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
+//     //       headers: {
+//     //         Authorization: `Bearer ${this.userInfo.access_token}`,
+//     //       },
+//     //     });
+
+//     //     this.cartProducts.push(...response.data);
+//     //     console.log(this.cartProducts.product.name);
+//     //   } catch (error) {
+//     //     console.error(error);
+//     //   } finally {
+//     //     this.loadingCart = false;
+//     //   }
+//     // },
+//     async fetchAllProducts() {
+//       try {
+//         const response = await axios.get("http://127.0.0.1:8000/get_products");
+
+//         this.allProducts = response.data;
+//       } catch (error) {
+//         console.error(error);
+//       } finally {
+//         this.loadingCart = false;
+//       }
+//     },
+//   },
+// };
 </script>
   
   <style scoped>
