@@ -2,7 +2,7 @@
     <div>
         <HeaderPage />
         <!-- <img src="@/assets/img/product01.png"> -->
-         		<!-- SECTION -->
+        <!-- SECTION -->
 		<div class="section">
 			<!-- container -->
 			<div class="container">

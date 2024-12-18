@@ -11,7 +11,7 @@
       <div class="product-body">
         <p class="product-category">{{ category }}</p>
         <h3 class="product-name">
-          <router-link :to="{ path: '/product' }">{{
+          <router-link :to="{ path: `/product/${id}` }">{{
             productName
           }}</router-link>
         </h3>

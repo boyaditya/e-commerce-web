@@ -6,9 +6,8 @@
 # kalau deploy di server: pip install gunicorn
 # gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000 --daemon
 # mematikan gunicorn (saat mau update):
-# ps ax|grep gunicorn 
+# ps ax|grep gunicorn
 # pkill gunicorn
-
 
 
 from os import path
@@ -57,7 +56,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def root():
     return {"message": "Dokumentasi API: [url]:8000/docs"}
 
-# create user 
+# create user
 # @app.post("/create_user/", response_model=schemas.User)
 # def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 #     db_user_email = crud.get_user_by_email(db, email=user.email_user)
@@ -70,7 +69,7 @@ async def root():
 #     return crud.create_user(db=db, user=user)
 
 
-# hasil adalah akses token    
+# hasil adalah akses token
 @app.post("/login_email") #,response_model=schemas.Token
 async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db)):
     if not authenticate_by_email(db,user):
@@ -84,7 +83,7 @@ async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db
         return {"user_id":user_id,"access_token": access_token}
     else:
         raise HTTPException(status_code=400, detail="User tidak ditemukan, kontak admin")
-    
+
 # @app.post("/login_no_telp") #,response_model=schemas.Token
 # async def login_no_telp(user: schemas.UserLoginPhone, db: Session = Depends(get_db)):
 #     if not authenticate_by_no_telp(db,user):
@@ -102,7 +101,7 @@ async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db
 # # #lihat detil user_id
 # @app.get("/get_user_by_id/{id_user}", response_model=schemas.User)
 # def read_user(id_user: int, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
-#     usr =  verify_token(token) 
+#     usr =  verify_token(token)
 #     db_user = crud.get_user(db, id_user=id_user)
 #     if db_user is None:
 #         raise HTTPException(status_code=404, detail="User not found")
@@ -111,7 +110,7 @@ async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db
 # # update user
 # @app.put("/update_user/{id_user}", response_model=schemas.User)
 # def update_user(id_user: int, user_update: schemas.UserBase, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
-#     usr =  verify_token(token) 
+#     usr =  verify_token(token)
 
 #     db_user_old = crud.get_user(db, id_user)
 #     db_user_email = crud.get_user_by_email(db, email=user_update.email_user)
@@ -135,17 +134,17 @@ async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db
 #     update_user_password =  crud.update_password(db,id_user,passwords.new_password)
 #     if update_user_password:
 #         return JSONResponse(status_code=200, content={"message" : "Password updated successfully"})
-        
+
 # # tambah item ke keranjang
 # # response ada id (cart), sedangkan untuk paramater input  tidak ada id (cartbase)
-# @app.post("/create_relasi/", response_model=schemas.Relasi ) # response_model=schemas.Cart 
+# @app.post("/create_relasi/", response_model=schemas.Relasi ) # response_model=schemas.Cart
 # def create_relasi(
 #     relasi: schemas.RelasiCreate, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
 #     # print(usr)
 #     return crud.create_relasi(db=db, relasi=relasi)
 
-#ambil isi cart milik user
+# ambil isi cart milik user
 @app.get("/get_cart/{user_id}", response_model=list[schemas.Carts])
 def read_cart(user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
@@ -169,6 +168,31 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
     products = crud.get_products(db, skip, limit)
     return products
 
+
+@app.get("/product/{product_id}", response_model=schemas.Products)
+async def read_products(
+    product_id: int, db: Session = Depends(get_db)
+):
+    products = crud.get_product_by_id(db, product_id)
+    if products is None:
+        raise HTTPException(status_code=404, detail="Products not found")
+    return products
+
+
+@app.get("/get_categories/", response_model=list[schemas.Categories])
+def read_categories(db: Session = Depends(get_db)):
+    categories = crud.get_categories(db)
+    return categories
+
+
+@app.get("/get_category/{category_id}", response_model=schemas.Categories)
+def read_category(category_id: int, db: Session = Depends(get_db)):
+    category = crud.get_category_by_id(db, category_id)
+    if category is None:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
+
+
 # @app.get("/get_item/{id_user}", response_model=list[schemas.Item])
 # def read_item(id_user:int, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
@@ -176,7 +200,7 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     item = crud.get_item(db, id_user=id_user)
 #     return item
 
-#ambil isi cart milik seorang user
+# ambil isi cart milik seorang user
 # @app.get("/get_relasi_by_id/{id_relasi}", response_model=schemas.Relasi)
 # def read_relasi(id_relasi:int, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
@@ -190,7 +214,7 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
 #     return crud.delete_relasi_by_id(db,id_relasi)
 
-# @app.post("/create_dokter/", response_model=schemas.Dokter ) # response_model=schemas.Cart 
+# @app.post("/create_dokter/", response_model=schemas.Dokter ) # response_model=schemas.Cart
 # def create_dokter(
 #     dokter: schemas.DokterCreate, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
@@ -220,7 +244,7 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     return crud.delete_dokter_by_id(db,id_dokter)
 
 # # obat
-# @app.post("/create_obat/", response_model=schemas.Obat ) # response_model=schemas.Cart 
+# @app.post("/create_obat/", response_model=schemas.Obat ) # response_model=schemas.Cart
 # def create_obat(
 #     obat: schemas.ObatCreate, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
@@ -262,7 +286,7 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     jadwal_dokter = crud.get_jadwal_dokter_by_id(db, id_dokter=id_dokter)
 #     return jadwal_dokter
 
-# @app.post("/create_janji_temu/", response_model=schemas.JanjiTemu ) # response_model=schemas.Cart 
+# @app.post("/create_janji_temu/", response_model=schemas.JanjiTemu ) # response_model=schemas.Cart
 # def create_janji_temu(
 #     janji_temu: schemas.JanjiTemuCreate, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
@@ -283,10 +307,10 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     janji_temu = crud.get_janji_temu_by_id(db, id_janji_temu=id_janji_temu)
 #     return janji_temu
 
-# @app.post("/create_janji_temu_as_orang_lain/", response_model=schemas.JanjiTemuAsOrangLain ) # response_model=schemas.Cart 
+# @app.post("/create_janji_temu_as_orang_lain/", response_model=schemas.JanjiTemuAsOrangLain ) # response_model=schemas.Cart
 # def create_janji_temu_as_orang_lain(
 #     janji_temu_as_orang_lain: schemas.JanjiTemuAsOrangLainCreate, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
-#     usr =  verify_token(token) 
+#     usr =  verify_token(token)
 #     return crud.create_janji_temu_as_orang_lain(db=db, janji_temu_as_orang_lain=janji_temu_as_orang_lain)
 
 # @app.get("/get_janji_temu_as_orang_lain_by_id/{id_user}", response_model=schemas.JanjiTemuAsOrangLain)
@@ -323,10 +347,10 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     pengingat_minum_obat = crud.get_pengingat_minum_obat_by_id(db, id_pengingat=id_pengingat)
 #     return pengingat_minum_obat
 
-# @app.post("/create_pengingat_minum_obat/", response_model=schemas.PengingatMinumObat ) # response_model=schemas.Cart 
+# @app.post("/create_pengingat_minum_obat/", response_model=schemas.PengingatMinumObat ) # response_model=schemas.Cart
 # def create_pengingat_minum_obat(
 #     pengingat_minum_obat: schemas.PengingatMinumObatCreate, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
-#     usr =  verify_token(token) 
+#     usr =  verify_token(token)
 #     return crud.create_pengingat_minum_obat(db=db, pengingat_minum_obat=pengingat_minum_obat)
 
 # # # hapus item cart berdasarkan user id
@@ -363,10 +387,10 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     nama_image =  dokter.foto_dokter
 #     if not(path.exists(path_img + "cariDokterPage/" + nama_image)):
 #         raise HTTPException(status_code=404, detail="File dengan nama tersebut tidak ditemukan")
-    
+
 #     fr =  FileResponse(path_img + "cariDokterPage/" + nama_image)
 #     return fr
-   
+
 # @app.get("/user_image/{id_user}")
 # def read_image(id_user:int,  db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token)
@@ -376,10 +400,10 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     nama_image =  user.foto_user
 #     if not(path.exists(path_img + "profilePage/" + nama_image)):
 #         raise HTTPException(status_code=404, detail="File dengan nama tersebut tidak ditemukan")
-    
+
 #     fr =  FileResponse(path_img + "profilePage/" + nama_image)
-#     return fr   
-   
+#     return fr
+
 # @app.get("/relasi_image/{id_relasi}")
 # def read_image(id_relasi:int,  db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token)
@@ -389,10 +413,10 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     nama_image =  relasi.foto_relasi
 #     if not(path.exists(path_img + "relasiPage/" + nama_image)):
 #         raise HTTPException(status_code=404, detail="File dengan nama tersebut tidak ditemukan")
-    
+
 #     fr =  FileResponse(path_img + "relasiPage/" + nama_image)
-#     return fr   
-   
+#     return fr
+
 # @app.get("/obat_image/{id_obat}")
 # def read_image(id_obat:int,  db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token)
@@ -402,9 +426,9 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 #     nama_image =  obat.foto_obat
 #     if not(path.exists(path_img + "cariObatPage/" + nama_image)):
 #         raise HTTPException(status_code=404, detail="File dengan nama tersebut tidak ditemukan")
-    
+
 #     fr =  FileResponse(path_img + "cariObatPage/" + nama_image)
-#     return fr   
+#     return fr
 
 # # get rekam_medis by id
 # @app.get("/rekam_medis/{rekam_medis_id}", response_model=schemas.RekamMedis)
@@ -446,7 +470,7 @@ def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100
 # #     return crud.pembayaran(db=db,user_id=user_id)
 
 
-# # #user sudah bayar --> penjual menerima 
+# # #user sudah bayar --> penjual menerima
 # # @app.post("/set_status_penjual_terima/{user_id}")
 # # def set_status_penjual_terima(user_id:int,  db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 # #     return crud.insert_status(db=db,user_id=user_id,status="pesanan_diterima")
@@ -495,14 +519,14 @@ def authenticate_by_email(db,user: schemas.UserCreate):
         return (user_cari.password == crud.hashPassword(user.password))
     else:
         return False  
-      
+
 # def authenticate_by_no_telp(db,user: schemas.UserCreate):
 #     user_cari = crud.get_user_by_no_telp(db=db, no_telp=user.no_telp_user)
 #     if user_cari:
 #         return (user_cari.password == crud.hashPassword(user.password))
 #     else:
-#         return False    
-    
+#         return False
+
 def match_password(db, id, typedPassword: schemas.Password):
     user = crud.get_user(db, id)
     if user:
@@ -540,8 +564,6 @@ def verify_token(token: str):
     return {"email": email}
 
 
-
-    
 # internal untuk testing, jangan dipanggil langsung
 # untuk swagger  .../doc supaya bisa auth dengan tombol gembok di kanan atas
 # kalau penggunaan standard, gunakan /login

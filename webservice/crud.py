@@ -20,8 +20,21 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Products).offset(skip).limit(limit).all()
 
+def get_product_by_id(db: Session, product_id: int):
+    return db.query(models.Products).filter(models.Products.id == product_id).first()
+
 def get_cart(db: Session, user_id: int):
     return db.query(models.Carts).filter(models.Carts.user_id == user_id).all()
+
+def get_categories(db: Session):
+    return db.query(models.Categories).all()
+
+
+def get_category_by_id(db: Session, category_id: int):
+    return (
+        db.query(models.Categories).filter(models.Categories.id == category_id).first()
+    )
+
 
 # def get_item(db: Session, id_user: int):
 #     return db.query(models.Relasi).filter(models.Relasi.id_user == id_user).all()
@@ -72,7 +85,7 @@ def hashPassword(passwd: str):
     pwd_hash = bcrypt.hashpw(bytePwd, SALT).decode('utf-8')
     print(pwd_hash)
     return pwd_hash
-       
+
 
 # #==============
 
@@ -98,25 +111,25 @@ def hashPassword(passwd: str):
 
 # def update_user(db: Session, id_user: int, user_update: schemas.UserBase):
 #     db_user = db.query(models.User).filter(models.User.id_user == id_user).first()
-    
+
 #     if not db_user:
 #         return None
 
 #     update_data = user_update.model_dump()
-    
+
 #     for key, value in update_data.items():
 #         setattr(db_user, key, value)
-    
+
 #     db.commit()
 #     db.refresh(db_user)
-    
+
 #     return db_user
 
 # def update_password(db: Session, id_user: int, newPassword: str):
 #     db_user = db.query(models.User).filter(models.User.id_user == id_user).first()
 #     if not db_user:
 #         return None
-    
+
 #     hashed_password = hashPassword(newPassword)
 #     db_user.password_user = hashed_password
 #     db.commit()
@@ -138,7 +151,7 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # def delete_relasi_by_id(db: Session, id_relasi: int):
 #     hasil = db.query(models.Relasi).filter(models.Relasi.id_relasi == id_relasi).delete()
 #     db.commit()
-#     return {"record_dihapus":hasil} 
+#     return {"record_dihapus":hasil}
 
 # ## dokter
 # def create_dokter(db: Session, dokter: schemas.DokterCreate):
@@ -161,7 +174,7 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # def delete_dokter_by_id(db: Session, id_dokter: int):
 #     hasil = db.query(models.Dokter).filter(models.Dokter.id_dokter == id_dokter).delete()
 #     db.commit()
-#     return {"record_dihapus":hasil} 
+#     return {"record_dihapus":hasil}
 
 # ## obat
 # def create_obat(db: Session, obat: schemas.ObatCreate):
@@ -183,7 +196,7 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # def delete_obat_by_id(db: Session, id_obat: int):
 #     hasil = db.query(models.Obat).filter(models.Obat.id_obat == id_obat).delete()
 #     db.commit()
-#     return {"record_dihapus":hasil} 
+#     return {"record_dihapus":hasil}
 
 # ## janji_temu
 # def create_janji_temu(db: Session, janji_temu: schemas.JanjiTemuCreate):
@@ -206,7 +219,7 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # def alter_status(db: Session, id_janji_temu: int):
 #     # Fetch the current JanjiTemu record
 #     janji_temu = db.query(models.JanjiTemu).filter(models.JanjiTemu.id_janji_temu == id_janji_temu).one()
-    
+
 #     # Define the sequence of status values
 #     status_sequence = [
 #         models.StatusEnum.MENUNGGU_AMBIL_ANTRIAN,
@@ -215,10 +228,10 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 #         models.StatusEnum.MENUNGGU_PEMBAYARAN,
 #         models.StatusEnum.SELESAI
 #     ]
-    
+
 #     # Get the current status
 #     current_status = janji_temu.status
-    
+
 #     # Determine the next status value
 #     if current_status in status_sequence:
 #         current_index = status_sequence.index(current_status)
@@ -228,16 +241,16 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 #             new_status = status_sequence[current_index]  # Already at the last status, no change
 #     else:
 #         new_status = status_sequence[0]  # Default to the first status if current status is invalid
-    
+
 #     # Update the status
 #     janji_temu.status = new_status
-    
+
 #     # Commit the transaction
 #     db.commit()
-    
+
 #     # Refresh the instance to reflect changes
 #     db.refresh(janji_temu)
-    
+
 #     return janji_temu
 
 # ## janji_temu
@@ -258,7 +271,7 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # def delete_janji_temu_by_id(db: Session, id_janji_temu: int):
 #     hasil = db.query(models.JanjiTemu).filter(models.JanjiTemu.id_janji_temu == id_janji_temu).delete()
 #     db.commit()
-#     return {"record_dihapus":hasil} 
+#     return {"record_dihapus":hasil}
 
 # ## pengingat_minum_obat
 # def create_pengingat_minum_obat(db: Session, pengingat_minum_obat: schemas.PengingatMinumObatCreate):
@@ -322,14 +335,6 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # #     return jum_rec
 
 
-
-
-
-
-
-
-
-
 # # # gagal euy
 # # # def insert_cart(db:Session, cart: schemas.CartBase ):
 # # #     #cart_record = models.Cart(user_id=cart.user_id, item_id=cart.item_id, quantity = cart.quantity)
@@ -342,6 +347,3 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
 # # #     db.commit()
 # # #     #db.refresh(cart_record)
 # # #     return user
-
-
-

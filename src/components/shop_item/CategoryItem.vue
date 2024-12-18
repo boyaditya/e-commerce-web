@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "ShopItem",
+  name: "CategoryItem",
   props: {
     imgSrc: {
       type: String,

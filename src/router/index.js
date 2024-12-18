@@ -41,7 +41,7 @@ const routes = [
     component: StoreView,
   },
   {
-    path: "/product",
+    path: "/product/:id", // Tambahkan parameter :id pada path
     name: "Product",
     component: ProductView,
   },
@@ -58,7 +58,7 @@ const router = createRouter({
 });
 router.afterEach((to, from) => {
   if (from.name) {
-    window.location.reload();
+    // window.location.reload();
      window.scrollTo(0, 0);
   }
 });

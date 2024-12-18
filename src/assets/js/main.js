@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOMContentLoaded event triggered"); // Tambahkan log ini
   (function ($) {
     "use strict";
 

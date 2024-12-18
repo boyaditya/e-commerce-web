@@ -4,20 +4,23 @@
     <!-- container -->
     <div class="container">
       <!-- row -->
-      <div class="row">
-        <SectionTitle
-          title="Category"
-        />
+          <div class="row" v-if="isLoading">
+        <div class="col-md-12 loading-container">
+          <div class="spinner"></div>
+        </div>
+      </div>
+      <div class="row" v-else>
+        <SectionTitle title="Category" />
 
         <!-- shop items -->
-        <ShopItem
-          v-for="(shop, index) in shops"
+        <CategoryItem
+          v-for="(category, index) in categories"
           :key="index"
-          :imgSrc="shop.imgSrc"
-          :imgAlt="shop.imgAlt"
-          :title="shop.title"
-          :subtitle="shop.subtitle"
-          :link="shop.link"
+          :imgSrc="category.imgSrc"
+          :imgAlt="category.imgAlt"
+          :title="category.title"
+          :subtitle="category.subtitle"
+          :link="category.link"
         />
         <!-- /shop items -->
       </div>
@@ -44,76 +47,6 @@
           ]"
         />
         <!-- /section title -->
-
-        <!-- Products tab & slick -->
-        <!-- <div class="col-md-12">
-          <div class="row">
-            <div class="products-tabs">
-              <div id="tab1" class="tab-pane active">
-                <div class="products-slick" data-nav="#slick-nav-1">
-                  <div
-                    v-for="product in allProducts"
-                    :key="product.id"
-                    class="product"
-                  >
-                    <div class="product-img">
-                      <img :src="product.image_url" :alt="product.name" />
-                      <div class="product-label">
-                        <span class="sale">-30%</span>
-                        <span class="new">NEW</span>
-                      </div>
-                    </div>
-                    <div class="product-body">
-                      <p class="product-category">
-                        {{ product.category.name }}
-                      </p>
-                      <h3 class="product-name">
-                        <a href="#">{{ product.name }}</a>
-                      </h3>
-                      <h4 class="product-price">
-                        Rp{{ product.price }}
-                        <del class="product-old-price"
-                          >Rp{{ product.price - 50000 }}</del
-                        >
-                      </h4>
-                      <div class="product-rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                      </div>
-                      <div class="product-btns">
-                        <button class="add-to-wishlist">
-                          <i class="fa fa-heart-o"></i
-                          ><span class="tooltipp">add to wishlist</span>
-                        </button>
-                        <button class="add-to-compare">
-                          <i class="fa fa-exchange"></i
-                          ><span class="tooltipp">add to compare</span>
-                        </button>
-                        <button class="quick-view">
-                          <i class="fa fa-eye"></i
-                          ><span class="tooltipp">quick view</span>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="add-to-cart">
-                      <button
-                        @click="addCartItemHandler(product.id, 1)"
-                        class="add-to-cart-btn"
-                      >
-                        <i class="fa fa-shopping-cart"></i> add to cart
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div id="slick-nav-1" class="products-slick-nav"></div>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
         <div class="col-md-12">
           <div class="row">
             <div class="products-tabs">
@@ -121,10 +54,11 @@
               <div id="tab1" class="tab-pane active">
                 <div class="products-slick" data-nav="#slick-nav-1">
                   <!-- products -->
-                   
+
                   <ProductItem
                     v-for="product in allProducts"
                     :key="product.id"
+                    :id="product.id"
                     :imgSrc="product.image_url || 'default-image.jpg'"
                     :imgAlt="product.name"
                     :saleLabel="'-30%'"
@@ -441,20 +375,21 @@
   <script>
 // import NavPage from "@/components/NavPage.vue";
 // import BreadcrumbPage from "@/components/BreadCrumbPage.vue";
-import ShopItem from "@/components/shop_item/ShopItem.vue";
+import CategoryItem from "@/components/shop_item/CategoryItem.vue";
 import ProductItem from "@/components/shop_item/ProductItem.vue";
 // import ProductWidget from "@/components/shop_item/ProductWidget.vue";
 import SectionTitle from "@/components/filter/SectionTitle.vue";
-import { fetchAllProducts } from '@/api/api';
+import { fetchAllProducts, fetchCategories } from "@/api/api";
+import "@/assets/css/loading.css"; // Impor file CSS
 
 // import axios from "axios";
 
 export default {
-  name: 'HomePage',
-    components: {
+  name: "HomePage",
+  components: {
     // NavPage,
     // BreadcrumbPage,
-    ShopItem,
+    CategoryItem,
     ProductItem,
     // ProductWidget,
     SectionTitle,
@@ -462,8 +397,9 @@ export default {
   data() {
     return {
       allProducts: [],
+      categories: [],
       loadingCart: true,
-
+      isLoading: true,
       searchQuery: "",
       selectedCategory: "0",
       wishlistCount: 2,
@@ -474,150 +410,6 @@ export default {
       //   { id: 1, name: 'Product 1', quantity: 1, price: '$980.00', image: require('@/assets/img/product01.png') },
       //   { id: 2, name: 'Product 2', quantity: 3, price: '$980.00', image: require('@/assets/img/product02.png') },
       // ],
-
-      shops: [
-        {
-          imgSrc: "shop03.png",
-          imgAlt: "Accessories Collection",
-          title: "Accessories",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop02.png",
-          imgAlt: "Cameras Collection",
-          title: "Cameras",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop01.png",
-          imgAlt: "Laptops Collection",
-          title: "Laptops",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop03.png",
-          imgAlt: "Accessories Collection",
-          title: "Accessories",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop02.png",
-          imgAlt: "Cameras Collection",
-          title: "Cameras",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop01.png",
-          imgAlt: "Laptops Collection",
-          title: "Laptops",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop03.png",
-          imgAlt: "Accessories Collection",
-          title: "Accessories",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop02.png",
-          imgAlt: "Cameras Collection",
-          title: "Cameras",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop01.png",
-          imgAlt: "Laptops Collection",
-          title: "Laptops",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop03.png",
-          imgAlt: "Accessories Collection",
-          title: "Accessories",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop02.png",
-          imgAlt: "Cameras Collection",
-          title: "Cameras",
-          subtitle: "Collection",
-          link: "#",
-        },
-        {
-          imgSrc: "shop01.png",
-          imgAlt: "Laptops Collection",
-          title: "Laptops",
-          subtitle: "Collection",
-          link: "#",
-        },
-      ],
-
-      new_products: [
-        {
-          imgSrc: "product01.png",
-          imgAlt: "Product Image",
-          saleLabel: "-30%",
-          newLabel: "NEW",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 5,
-        },
-        {
-          imgSrc: "product02.png",
-          imgAlt: "Product Image",
-          newLabel: "NEW",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 4,
-        },
-        {
-          imgSrc: "product03.png",
-          imgAlt: "Product Image",
-          saleLabel: "-30%",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 0,
-        },
-        {
-          imgSrc: "product04.png",
-          imgAlt: "Product Image",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 5,
-        },
-        {
-          imgSrc: "product05.png",
-          imgAlt: "Product Image",
-          category: "Category",
-          productName: "product name goes here",
-          productLink: "#",
-          productPrice: "$980.00",
-          oldPrice: "$990.00",
-          rating: 5,
-        },
-      ],
     };
   },
   methods: {
@@ -633,8 +425,23 @@ export default {
       }
     },
   },
-  created() {
-    this.fetchAllProducts();
+  async created() {
+    await this.fetchAllProducts();
+
+    try {
+      const categories_api = await fetchCategories();
+      this.categories = categories_api.map((category) => ({
+        id: category.id,
+        imgSrc: "shop03.png", // Ganti dengan gambar default atau sesuai kebutuhan
+        imgAlt: `${category.name} Gaming`,
+        title: category.name,
+        link: `/category/${category.id}`, // Sesuaikan dengan rute kategori Anda
+      }));
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    } finally {
+      this.isLoading = false;
+    }
   },
 };
 
@@ -662,7 +469,7 @@ export default {
 //       //   { id: 2, name: 'Product 2', quantity: 3, price: '$980.00', image: require('@/assets/img/product02.png') },
 //       // ],
 
-//       shops: [
+//       categories: [
 //         {
 //           imgSrc: "shop03.png",
 //           imgAlt: "Accessories Collection",

@@ -33,3 +33,36 @@ export async function fetchAllProducts() {
   }
 }
 
+export async function fetchProductById(productId) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/product/${productId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchCategories() {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/get_categories");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchCategoryById(categoryId) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/get_category/${categoryId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

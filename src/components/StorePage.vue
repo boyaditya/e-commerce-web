@@ -4,64 +4,29 @@
     <!-- container -->
     <div class="container">
       <!-- row -->
-      <div class="row">
+      <div class="row" v-if="isLoading">
+        <div class="col-md-12 loading-container">
+          <div class="spinner"></div>
+        </div>
+      </div>
+      <div class="row" v-else>
         <!-- ASIDE -->
         <div id="aside" class="col-md-3">
           <!-- aside Widget -->
           <div class="aside">
             <h3 class="aside-title">Categories</h3>
             <div class="checkbox-filter">
-              <div class="input-checkbox">
-                <input type="checkbox" id="category-1" />
-                <label for="category-1">
+              <div
+                v-for="category in categories"
+                :key="category.id"
+                class="input-checkbox"
+              >
+                <input type="checkbox" :id="'category-' + category.id" />
+                <label :for="'category-' + category.id">
                   <span></span>
-                  Laptops
-                  <small>(120)</small>
-                </label>
-              </div>
-
-              <div class="input-checkbox">
-                <input type="checkbox" id="category-2" />
-                <label for="category-2">
-                  <span></span>
-                  Smartphones
-                  <small>(740)</small>
-                </label>
-              </div>
-
-              <div class="input-checkbox">
-                <input type="checkbox" id="category-3" />
-                <label for="category-3">
-                  <span></span>
-                  Cameras
-                  <small>(1450)</small>
-                </label>
-              </div>
-
-              <div class="input-checkbox">
-                <input type="checkbox" id="category-4" />
-                <label for="category-4">
-                  <span></span>
-                  Accessories
-                  <small>(578)</small>
-                </label>
-              </div>
-
-              <div class="input-checkbox">
-                <input type="checkbox" id="category-5" />
-                <label for="category-5">
-                  <span></span>
-                  Laptops
-                  <small>(120)</small>
-                </label>
-              </div>
-
-              <div class="input-checkbox">
-                <input type="checkbox" id="category-6" />
-                <label for="category-6">
-                  <span></span>
-                  Smartphones
-                  <small>(740)</small>
+                  {{ category.name }}
+                  <small>(0)</small>
+                  <!-- Replace 0 with actual count if available -->
                 </label>
               </div>
             </div>
@@ -126,6 +91,7 @@
             <ProductItem
               v-for="product in allProducts"
               :key="product.id"
+              :id="product.id"
               :imgSrc="product.image_url || 'default-image.jpg'"
               :imgAlt="product.name"
               :saleLabel="'-30%'"
@@ -169,7 +135,8 @@
 // import ShopItem from "@/components/shop_item/ShopItem.vue";
 import ProductItem from "@/components/shop_item/ProductItem.vue";
 // import ProductWidget from "@/components/shop_item/ProductWidget.vue";
-import { fetchAllProducts } from "@/api/api";
+import { fetchAllProducts, fetchCategories } from "@/api/api";
+import "@/assets/css/loading.css"; // Impor file CSS
 
 export default {
   name: "StorePage",
@@ -179,23 +146,34 @@ export default {
   data() {
     return {
       allProducts: [],
+      categories: [],
+      isLoading: true, // Tambahkan properti isLoading
     };
   },
   methods: {
     async fetchAllProducts() {
       try {
         this.allProducts = await fetchAllProducts();
-        console.log("jawa");
-        console.log(this.allProducts);
       } catch (error) {
         console.error(error);
       } finally {
         this.loadingCart = false;
       }
     },
+    async fetchCategories() {
+      try {
+        const categories = await fetchCategories();
+        this.categories = categories;
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
-  created() {
-    this.fetchAllProducts();
+  async created() {
+    await this.fetchAllProducts();
+    await this.fetchCategories();
   },
 };
 </script>
