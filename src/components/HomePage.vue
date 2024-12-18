@@ -4,7 +4,7 @@
     <!-- container -->
     <div class="container">
       <!-- row -->
-          <div class="row" v-if="isLoading">
+      <div class="row" v-if="isLoading">
         <div class="col-md-12 loading-container">
           <div class="spinner"></div>
         </div>
@@ -424,7 +424,18 @@ export default {
         this.loadingCart = false;
       }
     },
+    getCategoryImage(categoryName) {
+      const categoryImages = {
+        Headset: "headset-cat.png",
+        Keyboard: "keyboard-cat.png",
+        Mouse: "mouse-cat.png",
+        Microphone: "microphone-cat.png",
+        Gamepad: "gamepad-cat.png",
+        Deskmat: "deskmat-cat.png",
+      };
+      return categoryImages[categoryName] || "default-cat.png"; // Gambar default jika kategori tidak ditemukan
   },
+},
   async created() {
     await this.fetchAllProducts();
 
@@ -432,7 +443,7 @@ export default {
       const categories_api = await fetchCategories();
       this.categories = categories_api.map((category) => ({
         id: category.id,
-        imgSrc: "shop03.png", // Ganti dengan gambar default atau sesuai kebutuhan
+      imgSrc: this.getCategoryImage(category.name), // Ganti dengan gambar default atau sesuai kebutuhan
         imgAlt: `${category.name} Gaming`,
         title: category.name,
         link: `/category/${category.id}`, // Sesuaikan dengan rute kategori Anda

@@ -41,7 +41,7 @@ export default {
   computed: {
     resolvedImgSrc() {
       // Use require to dynamically resolve the image path
-      return require(`@/assets/img/${this.imgSrc}`);
+      return require(`@/assets/img/category/${this.imgSrc}`);
     },
   },
 };
