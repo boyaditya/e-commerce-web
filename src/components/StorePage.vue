@@ -66,9 +66,10 @@
             <div class="store-sort">
               <label>
                 Sort By:
-                <select class="input-select">
-                  <option value="0">Popular</option>
-                  <option value="1">Position</option>
+                <select class="input-select" v-model="selectedSort" @change="sortProducts">
+                  <option value="newest">Newest</option>
+                  <option value="lowest">Lowest Price</option>
+                  <option value="highest">Highest Price</option>
                 </select>
               </label>
 
@@ -155,6 +156,7 @@ export default {
       categories: [],
       selectedCategories: [],
       filteredProducts: [],
+      selectedSort: 'newest', // Add selectedSort property
       isLoading: true, // Add isLoading property
     };
   },
@@ -163,8 +165,11 @@ export default {
       try {
         this.allProducts = await fetchAllProducts();
         this.filteredProducts = this.allProducts;
+        this.sortProducts(); // Sort products after fetching
       } catch (error) {
         console.error(error);
+      } finally {
+        this.isLoading = false;
       }
     },
     async fetchCategories() {
@@ -191,8 +196,18 @@ export default {
           const results = await Promise.all(promises);
           this.filteredProducts = results.flat();
         }
+        this.sortProducts(); // Sort products after filtering
       } catch (error) {
-        console.error("Failed to fetch products by category:", error);
+        console.error('Failed to fetch products by category:', error);
+      }
+    },
+    sortProducts() {
+      if (this.selectedSort === 'newest') {
+        this.filteredProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      } else if (this.selectedSort === 'lowest') {
+        this.filteredProducts.sort((a, b) => a.price - b.price);
+      } else if (this.selectedSort === 'highest') {
+        this.filteredProducts.sort((a, b) => b.price - a.price);
       }
     },
   },
@@ -209,7 +224,6 @@ export default {
       this.selectedCategories = [parseInt(categoryId)];
       await this.fetchProductsByCategory();
     }
-    this.isLoading = false;
   },
 };
 </script>
