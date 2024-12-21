@@ -95,9 +95,14 @@
               <div class="qty-label">
                 Qty
                 <div class="input-number">
-                  <input type="number" />
-                  <span class="qty-up">+</span>
-                  <span class="qty-down">-</span>
+                  <input
+                    type="number"
+                    v-model.number="quantity"
+                    min="1"
+                    :max="product.stock"
+                  />
+                  <span class="qty-up" @click="increaseQuantity">+</span>
+                  <span class="qty-down" @click="decreaseQuantity">-</span>
                 </div>
               </div>
               <button class="add-to-cart-btn">
@@ -149,9 +154,7 @@
               <div id="tab1" class="tab-pane fade in active">
                 <div class="row">
                   <div class="col-md-12">
-                    <p v-html="formattedDescription">
-                
-                    </p>
+                    <p v-html="formattedDescription"></p>
                   </div>
                 </div>
               </div>
@@ -389,6 +392,7 @@ export default {
       productPrice: 0,
       isLoading: true, // Tambahkan properti isLoading
       shippingDuration: { min: 3, max: 5 }, // Estimated shipping duration in days
+      quantity: 1, // Default quantity
     };
   },
   computed: {
@@ -444,6 +448,30 @@ export default {
         this.categoryName = category.name;
       } catch (error) {
         console.error("Failed to fetch category:", error);
+      }
+    },
+    increaseQuantity() {
+      if (this.quantity < this.product.stock) {
+        this.quantity++;
+      }
+    },
+    decreaseQuantity() {
+      if (this.quantity > 1) {
+        this.quantity--;
+      }
+    },
+    addToCart() {
+      // Implement the add-to-cart functionality here
+      // For example, you can emit an event or call an API to add the product to the cart
+      console.log(`Added ${this.quantity} items to the cart`);
+    },
+  },
+    watch: {
+    quantity(newQuantity) {
+      if (newQuantity > this.product.stock) {
+        this.quantity = this.product.stock;
+      } else if (newQuantity < 1) {
+        this.quantity = 1;
       }
     },
   },
