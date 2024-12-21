@@ -38,7 +38,7 @@
           <!-- /aside Widget -->
 
           <!-- aside Widget -->
-          <div class="aside">
+          <!-- <div class="aside">
             <h3 class="aside-title">Price</h3>
             <div class="price-filter">
               <div id="price-slider"></div>
@@ -54,7 +54,7 @@
                 <span class="qty-down">-</span>
               </div>
             </div>
-          </div>
+          </div> -->
           <!-- /aside Widget -->
         </div>
         <!-- /ASIDE -->
@@ -66,20 +66,24 @@
             <div class="store-sort">
               <label>
                 Sort By:
-                <select class="input-select" v-model="selectedSort" @change="sortProducts">
+                <select
+                  class="input-select"
+                  v-model="selectedSort"
+                  @change="sortProducts"
+                >
                   <option value="newest">Newest</option>
                   <option value="lowest">Lowest Price</option>
                   <option value="highest">Highest Price</option>
                 </select>
               </label>
 
-              <label>
+              <!-- <label>
                 Show:
                 <select class="input-select">
                   <option value="0">20</option>
                   <option value="1">50</option>
                 </select>
-              </label>
+              </label> -->
             </div>
             <!-- <ul class="store-grid">
               <li class="active"><i class="fa fa-th"></i></li>
@@ -156,7 +160,7 @@ export default {
       categories: [],
       selectedCategories: [],
       filteredProducts: [],
-      selectedSort: 'newest', // Add selectedSort property
+      selectedSort: "newest", // Add selectedSort property
       isLoading: true, // Add isLoading property
     };
   },
@@ -168,8 +172,6 @@ export default {
         this.sortProducts(); // Sort products after fetching
       } catch (error) {
         console.error(error);
-      } finally {
-        this.isLoading = false;
       }
     },
     async fetchCategories() {
@@ -198,15 +200,17 @@ export default {
         }
         this.sortProducts(); // Sort products after filtering
       } catch (error) {
-        console.error('Failed to fetch products by category:', error);
+        console.error("Failed to fetch products by category:", error);
       }
     },
     sortProducts() {
-      if (this.selectedSort === 'newest') {
-        this.filteredProducts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      } else if (this.selectedSort === 'lowest') {
+      if (this.selectedSort === "newest") {
+        this.filteredProducts.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+      } else if (this.selectedSort === "lowest") {
         this.filteredProducts.sort((a, b) => a.price - b.price);
-      } else if (this.selectedSort === 'highest') {
+      } else if (this.selectedSort === "highest") {
         this.filteredProducts.sort((a, b) => b.price - a.price);
       }
     },
@@ -224,6 +228,7 @@ export default {
       this.selectedCategories = [parseInt(categoryId)];
       await this.fetchProductsByCategory();
     }
+    this.isLoading = false;
   },
 };
 </script>

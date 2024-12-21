@@ -1,6 +1,6 @@
 <template>
   <BreadCrumbPage :categoryName="categoryName" :productName="product.name" />
-  
+
   <div class="section">
     <!-- container -->
     <div class="container">
@@ -62,15 +62,20 @@
                 {{ formattedTotalPrice }}
                 <!-- <del class="product-old-price">$990.00</del> -->
               </h3>
-              <span class="product-available">In Stock</span>
+              <span class="product-available">Stock: {{ product.stock }}</span>
             </div>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
 
+            <hr class="hr" />
+            <p>
+              <i class="fa fa-map-marker icon"></i> Dikirim dari
+              <b>Kota Bandung</b>
+            </p>
+            <p><i class="fa fa-truck icon"></i> <b>Ongkir mulai Rp12.000</b></p>
+            <small style="margin-left: 30px"
+              >Reguler • Estimasi tiba {{ estimatedArrival }}</small
+            >
+            <br />
+            <hr class="hr" />
             <!-- <div class="product-options">
 								<label>
 									Size
@@ -109,7 +114,9 @@
 
             <ul class="product-links">
               <li>Category:</li>
-              <li><a href="#">{{ categoryName }}</a></li>
+              <li>
+                <a href="#">{{ categoryName }}</a>
+              </li>
             </ul>
 
             <!-- <ul class="product-links">
@@ -131,7 +138,7 @@
               <li class="active">
                 <a data-toggle="tab" href="#tab1">Description</a>
               </li>
-              <li><a data-toggle="tab" href="#tab2">Details</a></li>
+              <!-- <li><a data-toggle="tab" href="#tab2">Details</a></li> -->
               <!-- <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li> -->
             </ul>
             <!-- /product tab nav -->
@@ -142,15 +149,8 @@
               <div id="tab1" class="tab-pane fade in active">
                 <div class="row">
                   <div class="col-md-12">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                      ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Duis aute irure dolor in reprehenderit in voluptate velit
-                      esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                      sint occaecat cupidatat non proident, sunt in culpa qui
-                      officia deserunt mollit anim id est laborum.
+                    <p v-html="formattedDescription">
+                
                     </p>
                   </div>
                 </div>
@@ -158,7 +158,7 @@
               <!-- /tab1  -->
 
               <!-- tab2  -->
-              <div id="tab2" class="tab-pane fade in">
+              <!-- <div id="tab2" class="tab-pane fade in">
                 <div class="row">
                   <div class="col-md-12">
                     <p>
@@ -173,7 +173,7 @@
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- /tab2  -->
 
               <!-- tab3  -->
@@ -388,6 +388,7 @@ export default {
       product: {},
       productPrice: 0,
       isLoading: true, // Tambahkan properti isLoading
+      shippingDuration: { min: 3, max: 5 }, // Estimated shipping duration in days
     };
   },
   computed: {
@@ -401,7 +402,25 @@ export default {
         .format(this.productPrice)
         .replace(/\s/g, "");
     },
+
+    estimatedArrival() {
+      const today = new Date();
+      const minArrival = new Date(today);
+      const maxArrival = new Date(today);
+      minArrival.setDate(today.getDate() + this.shippingDuration.min);
+      maxArrival.setDate(today.getDate() + this.shippingDuration.max);
+      const options = { day: "numeric", month: "short" }; // Format options
+      return `${minArrival.toLocaleDateString(
+        "id",
+        options
+      )} - ${maxArrival.toLocaleDateString("id", options)}`;
+    },
+
+    formattedDescription() {
+      return this.product.description.replace(/\n/g, "<br>");
+    },
   },
+
   async created() {
     await this.fetchProduct();
   },
@@ -438,5 +457,15 @@ export default {
 
 .product-price {
   font-size: 36px; /* Adjust the value as needed */
+}
+
+.icon {
+  width: 20px; /* Set a consistent width for the icons */
+  text-align: center; /* Center align the icons */
+  margin-right: 5px; /* Add some space between the icon and the text */
+}
+
+p {
+  white-space: pre-line; /* Preserve new lines */
 }
 </style>
