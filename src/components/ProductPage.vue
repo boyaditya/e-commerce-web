@@ -1,5 +1,5 @@
 <template>
-  <BreadCrumbPage :categoryName="categoryName" :productName="product.name" />
+  <BreadCrumbPage :categoryName="categoryName" :productName="product.name" :categoryId="product.category_id" />
 
   <div class="section">
     <!-- container -->

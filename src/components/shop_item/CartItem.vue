@@ -16,17 +16,17 @@
       <p class="product-price">{{ formattedPrice }}</p>
     </div>
     <div class="product-quantity">
-      <button @click="decrementQuantity">-</button>
+      <button class="quantity-btn" @click="decrementQuantity">-</button>
       <input
         type="number"
         :value="quantity"
         @input="updateQuantity($event.target.value)"
         min="1"
       />
-      <button @click="incrementQuantity">+</button>
+      <button class="quantity-btn" @click="incrementQuantity">+</button>
     </div>
     <div class="remove-item">
-      <button @click="removeItem">Hapus</button>
+      <button class="remove-btn" @click="removeItem">Hapus</button>
     </div>
   </div>
 </template>
@@ -96,50 +96,47 @@ export default {
 .cart-item {
   display: flex;
   align-items: center;
+  padding: 15px;
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #e4e7ed;
 }
 
 .select-item {
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
 .product-img img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
 }
 
 .product-details {
-  margin-left: 20px;
+  margin-left: 10px;
   flex-grow: 1;
 }
 
 .product-name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .product-price {
+  font-size: 14px;
   color: #888;
+  margin-bottom: 10px;
 }
+
 
 .product-quantity {
   display: flex;
   align-items: center;
-}
-
-.product-quantity button {
-  background-color: #ddd;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.3s;
-}
-
-.product-quantity button:hover {
-  background-color: #ccc;
 }
 
 .product-quantity input {
@@ -157,8 +154,20 @@ export default {
   outline: none;
 }
 
+.quantity-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.quantity-btn:hover {
+  background-color: #e0e0e0;
+}
+
 .remove-item {
-  margin-left: 20px;
+  margin-left: 15px;
 }
 
 .remove-item button {
@@ -167,7 +176,7 @@ export default {
   padding: 5px 10px;
   cursor: pointer;
   color: white;
-  border-radius: 12px;
+  border-radius: 3px;
   transition: background-color 0.3s;
 }
 

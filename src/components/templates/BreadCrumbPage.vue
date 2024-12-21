@@ -9,7 +9,7 @@
           <ul class="breadcrumb-tree">
             <li><router-link to="/">Home</router-link></li>
             <li>
-              <a href="#">{{ categoryName }}</a>
+              <a href="#" @click.prevent="navigateToCategory">{{ categoryName }}</a>
             </li>
             <li class="active">{{ productName }}</li>
           </ul>
@@ -30,14 +30,23 @@ export default {
       type: String,
       required: true,
     },
+    categoryId: {
+      type: Number,
+      required: true,
+    },
     productName: {
       type: String,
       required: true,
     },
   },
+  methods: {
+    navigateToCategory() {
+      this.$router.push({ path: "/store", query: { category: this.categoryId } });
+    },
+  },
 };
 </script>
-  <style scoped>
+
+<style scoped>
 /* Add relevant styles here */
 </style>
-  

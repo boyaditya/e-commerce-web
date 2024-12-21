@@ -1,29 +1,19 @@
 <template>
-  <!-- BREADCRUMB -->
   <div id="breadcrumb" class="section">
-    <!-- container -->
     <div class="container">
-      <!-- row -->
       <div class="row">
         <div class="col-md-12">
-          <h3 class="breadcrumb-header">Cart</h3>
+          <h3 class="breadcrumb-header">Keranjang Belanja</h3>
         </div>
       </div>
-      <!-- /row -->
     </div>
-    <!-- /container -->
   </div>
-  <!-- /BREADCRUMB -->
 
-  <!-- SECTION -->
   <div class="section">
-    <!-- container -->
     <div class="container">
-      <!-- row -->
       <div class="row">
         <div class="col-md-8">
           <div class="caption">
-            <!-- Cart Items -->
             <div class="cart-items">
               <CartItem
                 v-for="item in cartItems"
@@ -37,11 +27,9 @@
                 @toggle-selection="toggleSelection(item.id, $event)"
               />
             </div>
-            <!-- /Cart Items -->
           </div>
         </div>
 
-        <!-- Order Details -->
         <div class="col-md-4 order-details">
           <div class="section-title text-center">
             <h4 class="title">Ringkasan Belanja</h4>
@@ -57,13 +45,9 @@
 
           <a href="#" class="primary-btn order-submit">Checkout</a>
         </div>
-        <!-- /Order Details -->
       </div>
-      <!-- /row -->
     </div>
-    <!-- /container -->
   </div>
-  <!-- /SECTION -->
 </template>
 
 <script>

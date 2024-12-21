@@ -97,7 +97,6 @@ ul, ol {
   border: none;
   border-radius: 40px;
   color: #FFF;
-  text-transform: uppercase;
   font-weight: 700;
   text-align: center;
   -webkit-transition: 0.2s all;
@@ -304,7 +303,6 @@ textarea.input {
 
 .section-title .title {
   display: inline-block;
-  text-transform: uppercase;
   margin: 0px;
 }
 
@@ -369,7 +367,6 @@ textarea.input {
   margin-top: 0px;
   margin-bottom: 0px;
   margin-right: 15px;
-  text-transform: uppercase;
 }
 
 #breadcrumb .breadcrumb-tree {
