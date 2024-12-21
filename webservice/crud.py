@@ -29,10 +29,21 @@ def get_cart(db: Session, user_id: int):
 def get_categories(db: Session):
     return db.query(models.Categories).all()
 
-
 def get_category_by_id(db: Session, category_id: int):
     return (
         db.query(models.Categories).filter(models.Categories.id == category_id).first()
+    )
+
+
+def get_products_by_category(
+    db: Session, category_id: int, skip: int = 0, limit: int = 100
+):
+    return (
+        db.query(models.Products)
+        .filter(models.Products.category_id == category_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
     )
 
 

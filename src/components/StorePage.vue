@@ -21,12 +21,16 @@
                 :key="category.id"
                 class="input-checkbox"
               >
-                <input type="checkbox" :id="'category-' + category.id" />
+                <input
+                  type="checkbox"
+                  :id="'category-' + category.id"
+                  :value="category.id"
+                  v-model="selectedCategories"
+                />
                 <label :for="'category-' + category.id">
                   <span></span>
                   {{ category.name }}
-                  <small>(0)</small>
-                  <!-- Replace 0 with actual count if available -->
+                  <small>({{ category.productCount }})</small>
                 </label>
               </div>
             </div>
@@ -89,7 +93,7 @@
           <div class="row">
             <!-- products -->
             <ProductItem
-              v-for="product in allProducts"
+              v-for="product in filteredProducts"
               :key="product.id"
               :id="product.id"
               :imgSrc="product.image_url || 'default-image.jpg'"
@@ -132,11 +136,13 @@
 </template>
 
 <script>
-// import ShopItem from "@/components/shop_item/ShopItem.vue";
 import ProductItem from "@/components/shop_item/ProductItem.vue";
-// import ProductWidget from "@/components/shop_item/ProductWidget.vue";
-import { fetchAllProducts, fetchCategories } from "@/api/api";
-import "@/assets/css/loading.css"; // Impor file CSS
+import {
+  fetchAllProducts,
+  fetchCategories,
+  fetchProductsByCategory,
+} from "@/api/api";
+import "@/assets/css/loading.css"; // Import CSS file
 
 export default {
   name: "StorePage",
@@ -147,36 +153,67 @@ export default {
     return {
       allProducts: [],
       categories: [],
-      isLoading: true, // Tambahkan properti isLoading
+      selectedCategories: [],
+      filteredProducts: [],
+      isLoading: true, // Add isLoading property
     };
   },
   methods: {
     async fetchAllProducts() {
       try {
         this.allProducts = await fetchAllProducts();
+        this.filteredProducts = this.allProducts;
       } catch (error) {
         console.error(error);
-      } finally {
-        this.loadingCart = false;
       }
     },
     async fetchCategories() {
       try {
         const categories = await fetchCategories();
+        // Fetch product count for each category
+        for (const category of categories) {
+          const products = await fetchProductsByCategory(category.id);
+          category.productCount = products.length;
+        }
         this.categories = categories;
       } catch (error) {
         console.error("Failed to fetch categories:", error);
-      } finally {
-        this.isLoading = false;
       }
+    },
+    async fetchProductsByCategory() {
+      try {
+        if (this.selectedCategories.length === 0) {
+          this.filteredProducts = this.allProducts;
+        } else {
+          const promises = this.selectedCategories.map((categoryId) =>
+            fetchProductsByCategory(categoryId)
+          );
+          const results = await Promise.all(promises);
+          this.filteredProducts = results.flat();
+        }
+      } catch (error) {
+        console.error("Failed to fetch products by category:", error);
+      }
+    },
+  },
+  watch: {
+    selectedCategories() {
+      this.fetchProductsByCategory();
     },
   },
   async created() {
     await this.fetchAllProducts();
     await this.fetchCategories();
+    const categoryId = this.$route.query.category;
+    if (categoryId) {
+      this.selectedCategories = [parseInt(categoryId)];
+      await this.fetchProductsByCategory();
+    }
+    this.isLoading = false;
   },
 };
 </script>
 
 <style>
+/* Add your styles here */
 </style>

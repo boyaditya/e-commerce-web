@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #121212; /* Black dove background */
+    background-color: #f0f0f0; /* Light background */
     margin: 0;
     font-family: Arial, sans-serif;
 }
@@ -14,16 +14,16 @@
     width: 100%;
     max-width: 600px;
     padding: 7.5rem;
-    background-color: #242424; /* Form background */
+    background-color: #ffffff; /* Form background */
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 1rem auto;
     box-sizing: border-box;
 }
 
 /* Title styling */
 .auth-page .auth-title {
-    color: #fff;
+    color: #333; /* Dark text color */
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
@@ -42,10 +42,10 @@
 .auth-page .auth-form .form-input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #333;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    background-color: #1a1a1a;
-    color: #fff;
+    background-color: #f9f9f9;
+    color: #333;
     transition: border-color 0.3s;
     font-size: 1rem;
     box-sizing: border-box;
@@ -53,14 +53,14 @@
 
 .auth-page .auth-form .form-input:focus {
     outline: none;
-    border-color: #ff4757;
+    border-color: #007bff;
 }
 
 /* Button styling */
 .auth-page .auth-form .auth-button {
     width: 100%;
     padding: 0.75rem;
-    background-color: #ff4757;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -71,7 +71,7 @@
 }
 
 .auth-page .auth-form .auth-button:hover {
-    background-color: #ff3748;
+    background-color: #0056b3;
 }
 
 /* Error message styling */
@@ -87,13 +87,13 @@
     display: block;
     text-align: center;
     margin-top: 1rem;
-    color: #888;
+    color: #007bff;
     text-decoration: none;
     font-size: 0.9rem;
 }
 
 .auth-page .auth-link:hover {
-    color: #ff4757;
+    color: #0056b3;
 }
 
 /* Mobile responsiveness */

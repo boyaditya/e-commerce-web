@@ -193,6 +193,20 @@ def read_category(category_id: int, db: Session = Depends(get_db)):
     return category
 
 
+@app.get(
+    "/get_products_by_category/{category_id}", response_model=list[schemas.Products]
+)
+def read_products_by_category(
+    category_id: int, db: Session = Depends(get_db), skip: int = 0, limit: int = 100
+):
+    products = crud.get_products_by_category(db, category_id, skip, limit)
+    if not products:
+        raise HTTPException(
+            status_code=404, detail="No products found for this category"
+        )
+    return products
+
+
 # @app.get("/get_item/{id_user}", response_model=list[schemas.Item])
 # def read_item(id_user:int, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 #     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)

@@ -34,11 +34,11 @@
           </button>
         </div> -->
       </div>
-      <div class="add-to-cart">
+      <!-- <div class="add-to-cart">
         <button @click="handleAddToCart" class="add-to-cart-btn">
           <i class="fa fa-shopping-cart"></i> +cart
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

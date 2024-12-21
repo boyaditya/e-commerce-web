@@ -68,6 +68,7 @@
 
 <script>
 import CartItem from "./shop_item/CartItem.vue";
+import { fetchCarts } from "@/api/api";
 
 export default {
   components: {
@@ -94,21 +95,29 @@ export default {
       selectedItems: [],
     };
   },
+  async mounted() {
+    try {
+      const data = await fetchCarts();
+      console.log(data);
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+    }
+  },
   computed: {
     totalPrice() {
-      return this.cartItems.reduce(
-        (total, item) => {
-          if (this.selectedItems.includes(item.id)) {
-            return total + item.price * item.quantity;
-          }
-          return total;
-        },
-        0
-      );
+      return this.cartItems.reduce((total, item) => {
+        if (this.selectedItems.includes(item.id)) {
+          return total + item.price * item.quantity;
+        }
+        return total;
+      }, 0);
     },
     formattedTotalPrice() {
-      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(this.totalPrice);
-    }
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(this.totalPrice);
+    },
   },
   methods: {
     updateQuantity(id, newQuantity) {
@@ -118,17 +127,19 @@ export default {
       }
     },
     removeItem(id) {
-      this.cartItems = this.cartItems.filter(item => item.id !== id);
-      this.selectedItems = this.selectedItems.filter(itemId => itemId !== id);
+      this.cartItems = this.cartItems.filter((item) => item.id !== id);
+      this.selectedItems = this.selectedItems.filter((itemId) => itemId !== id);
     },
     toggleSelection(id, isSelected) {
       if (isSelected) {
         this.selectedItems.push(id);
       } else {
-        this.selectedItems = this.selectedItems.filter(itemId => itemId !== id);
+        this.selectedItems = this.selectedItems.filter(
+          (itemId) => itemId !== id
+        );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

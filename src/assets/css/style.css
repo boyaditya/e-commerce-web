@@ -507,7 +507,7 @@ textarea.input {
 }
 
 .header-ctn>div+div {
-  margin-left: 15px;
+  margin-left: 1px;
 }
 
 .header-ctn>div>a {
@@ -2068,7 +2068,6 @@ textarea.input {
 }
 
 .copyright {
-  margin-top: 30px;
   display: block;
   font-size: 12px;
 }

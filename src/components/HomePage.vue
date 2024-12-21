@@ -21,6 +21,7 @@
           :title="category.title"
           :subtitle="category.subtitle"
           :link="category.link"
+          @click="navigateToStore(category.id)"
         />
         <!-- /shop items -->
       </div>
@@ -37,15 +38,7 @@
       <!-- row -->
       <div class="row">
         <!-- section title -->
-        <SectionTitle
-          title="New Products"
-          :tabs="[
-            { label: 'Laptops', href: '#tab1', active: true },
-            { label: 'Smartphones', href: '#tab1', active: false },
-            { label: 'Cameras', href: '#tab1', active: false },
-            { label: 'Accessories', href: '#tab1', active: false },
-          ]"
-        />
+        <SectionTitle title="New Products" />
         <!-- /section title -->
         <div class="col-md-12">
           <div class="row">
@@ -138,15 +131,7 @@
       <!-- row -->
       <div class="row">
         <!-- section title -->
-        <SectionTitle
-          title="Top selling"
-          :tabs="[
-            { label: 'Laptops', href: '#tab2', active: true },
-            { label: 'Smartphones', href: '#tab2', active: false },
-            { label: 'Cameras', href: '#tab2', active: false },
-            { label: 'Accessories', href: '#tab2', active: false },
-          ]"
-        />
+        <SectionTitle title="Top selling" />
         <!-- /section title -->
 
         <!-- Products tab & slick -->
@@ -434,8 +419,21 @@ export default {
         Deskmat: "deskmat-cat.png",
       };
       return categoryImages[categoryName] || "default-cat.png"; // Gambar default jika kategori tidak ditemukan
+    },
+    navigateToStore(categoryId) {
+      this.$router.push({ path: "/store", query: { category: categoryId } });
+    },
+    async fetchCategories() {
+      try {
+        // Fetch categories from API
+        this.categories = await fetchCategories();
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
-},
   async created() {
     await this.fetchAllProducts();
 
@@ -443,7 +441,7 @@ export default {
       const categories_api = await fetchCategories();
       this.categories = categories_api.map((category) => ({
         id: category.id,
-      imgSrc: this.getCategoryImage(category.name), // Ganti dengan gambar default atau sesuai kebutuhan
+        imgSrc: this.getCategoryImage(category.name), // Ganti dengan gambar default atau sesuai kebutuhan
         imgAlt: `${category.name} Gaming`,
         title: category.name,
         link: `/category/${category.id}`, // Sesuaikan dengan rute kategori Anda
