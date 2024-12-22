@@ -18,10 +18,12 @@
               <CartItem
                 v-for="item in cartItems"
                 :key="item.id"
-                :name="item.name"
-                :price="item.price"
+                :id="item.id"
+                :name="item.product.name"
+                :price="item.product.price"
                 :quantity="item.quantity"
-                :imgSrc="item.image"
+                :imgSrc="item.product.image_url"
+                :isSelected="selectedItems.includes(item.id)"
                 @update-quantity="updateQuantity(item.id, $event)"
                 @remove-item="removeItem(item.id)"
                 @toggle-selection="toggleSelection(item.id, $event)"
@@ -36,7 +38,7 @@
           </div>
           <div class="order-summary">
             <div class="order-col">
-              <div><strong>TOTAL</strong></div>
+              <div><strong>Total</strong></div>
               <div>
                 <strong class="order-total">{{ formattedTotalPrice }}</strong>
               </div>
@@ -51,78 +53,148 @@
 </template>
 
 <script>
+import { computed, onMounted, ref } from "vue";
+import { useGlobalState } from "@/globalState";
 import CartItem from "./shop_item/CartItem.vue";
-import { fetchCarts } from "@/api/api";
-
 export default {
+  //   components: {
+  //     CartItem,
+  //   },
+  //   data() {
+  //     return {
+  //       cartItems: [
+  //         {
+  //           id: 1,
+  //           name: "Product 1",
+  //           price: 100,
+  //           quantity: 1,
+  //           image: "shop03.png",
+  //         },
+  //         {
+  //           id: 2,
+  //           name: "Product 2",
+  //           price: 200,
+  //           quantity: 2,
+  //           image: "shop03.png",
+  //         },
+  //       ],
+  //       selectedItems: [],
+  //     };
+  //   },
+  //   async mounted() {
+  //     try {
+  //       const data = await fetchCarts();
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.error("Failed to fetch cart items:", error);
+  //     }
+  //   },
+  //   computed: {
+  //     totalPrice() {
+  //       return this.cartItems.reduce((total, item) => {
+  //         if (this.selectedItems.includes(item.id)) {
+  //           return total + item.price * item.quantity;
+  //         }
+  //         return total;
+  //       }, 0);
+  //     },
+  //     formattedTotalPrice() {
+  //       return new Intl.NumberFormat("id-ID", {
+  //         style: "currency",
+  //         currency: "IDR",
+  //       }).format(this.totalPrice);
+  //     },
+  //   },
+  //   methods: {
+  //     updateQuantity(id, newQuantity) {
+  //       const item = this.cartItems.find((item) => item.id === id);
+  //       if (item) {
+  //         item.quantity = newQuantity;
+  //       }
+  //     },
+  //     removeItem(id) {
+  //       this.cartItems = this.cartItems.filter((item) => item.id !== id);
+  //       this.selectedItems = this.selectedItems.filter((itemId) => itemId !== id);
+  //     },
+  //     toggleSelection(id, isSelected) {
+  //       if (isSelected) {
+  //         this.selectedItems.push(id);
+  //       } else {
+  //         this.selectedItems = this.selectedItems.filter(
+  //           (itemId) => itemId !== id
+  //         );
+  //       }
+  //     },
+  //   },
+  // };
+
   components: {
     CartItem,
   },
-  data() {
-    return {
-      cartItems: [
-        {
-          id: 1,
-          name: "Product 1",
-          price: 100,
-          quantity: 1,
-          image: "shop03.png",
-        },
-        {
-          id: 2,
-          name: "Product 2",
-          price: 200,
-          quantity: 2,
-          image: "shop03.png",
-        },
-      ],
-      selectedItems: [],
-    };
-  },
-  async mounted() {
-    try {
-      const data = await fetchCarts();
-      console.log(data);
-    } catch (error) {
-      console.error("Failed to fetch cart items:", error);
-    }
-  },
-  computed: {
-    totalPrice() {
-      return this.cartItems.reduce((total, item) => {
-        if (this.selectedItems.includes(item.id)) {
-          return total + item.price * item.quantity;
+  setup() {
+    const { state, fetchCarts, removeFromCart } = useGlobalState();
+    const selectedItems = ref([]);
+
+    onMounted(async () => {
+      if (state.userInfo) {
+        await fetchCarts(state.userInfo.user_id, state.userInfo.access_token);
+        console.log("User logged in");
+      } else {
+        console.log("User not logged in");
+      }
+    });
+
+    const cartItems = computed(() => state.cartProducts);
+
+    const totalPrice = computed(() => {
+      return cartItems.value.reduce((total, item) => {
+        if (selectedItems.value.includes(item.id)) {
+          return total + item.product.price * item.quantity;
         }
         return total;
       }, 0);
-    },
-    formattedTotalPrice() {
+    });
+
+    const formattedTotalPrice = computed(() => {
       return new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
-      }).format(this.totalPrice);
-    },
-  },
-  methods: {
-    updateQuantity(id, newQuantity) {
-      const item = this.cartItems.find((item) => item.id === id);
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+        .format(totalPrice.value)
+        .replace(/\s/g, "");
+    });
+
+    const updateQuantity = (id, newQuantity) => {
+      const item = state.cartProducts.find((item) => item.id === id);
       if (item) {
         item.quantity = newQuantity;
       }
-    },
-    removeItem(id) {
-      this.cartItems = this.cartItems.filter((item) => item.id !== id);
-      this.selectedItems = this.selectedItems.filter((itemId) => itemId !== id);
-    },
-    toggleSelection(id, isSelected) {
+    };
+
+    const removeItem = (id) => {
+      removeFromCart(id);
+    };
+
+    const toggleSelection = (id, isSelected) => {
       if (isSelected) {
-        this.selectedItems.push(id);
+        selectedItems.value.push(id);
       } else {
-        this.selectedItems = this.selectedItems.filter(
+        selectedItems.value = selectedItems.value.filter(
           (itemId) => itemId !== id
         );
       }
-    },
+    };
+
+    return {
+      cartItems,
+      formattedTotalPrice,
+      updateQuantity,
+      removeItem,
+      toggleSelection,
+      selectedItems,
+    };
   },
 };
 </script>

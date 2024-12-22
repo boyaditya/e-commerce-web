@@ -35,6 +35,10 @@
 export default {
   name: "CartItem",
   props: {
+    id: {
+      type: Number,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -49,7 +53,7 @@ export default {
     },
     imgSrc: {
       type: String,
-      required: true,
+      // required: true,
     },
     isSelected: {
       type: Boolean,
@@ -58,14 +62,22 @@ export default {
   },
   computed: {
     resolvedImgSrc() {
-      // Use require to dynamically resolve the image path
-      return require(`@/assets/img/${this.imgSrc}`);
+      try {
+        return require(`@/assets/img/${this.imgSrc}`);
+      } catch (e) {
+        console.error(`Image not found: ${this.imgSrc}`);
+        return require("@/assets/img/default-image.jpg");
+      }
     },
     formattedPrice() {
       return new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
-      }).format(this.price);
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+        .format(this.price)
+        .replace(/\s/g, "");
     },
   },
   methods: {
@@ -132,7 +144,6 @@ export default {
   color: #888;
   margin-bottom: 10px;
 }
-
 
 .product-quantity {
   display: flex;

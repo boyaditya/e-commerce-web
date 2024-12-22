@@ -31,7 +31,6 @@ export default {
     },
     subtitle: {
       type: String,
-      required: true,
     },
     link: {
       type: String,

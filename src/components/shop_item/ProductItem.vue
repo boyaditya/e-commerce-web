@@ -84,11 +84,11 @@ export default {
       required: true,
     },
     productLink: {
-      type: String,
+      type: Number,
       required: true,
     },
     productPrice: {
-      type: String,
+      type: Number,
       required: true,
     },
     oldPrice: {
@@ -97,7 +97,6 @@ export default {
     },
     addCartItemHandler: {
       type: Function,
-      required: true,
     },
     colClass: {
       type: String,

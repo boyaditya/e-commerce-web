@@ -23,7 +23,6 @@ export default {
     },
     tabs: {
       type: Array,
-      required: true,
       default: () => []
     }
   }

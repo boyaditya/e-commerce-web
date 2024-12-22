@@ -36,7 +36,12 @@
     <!-- container -->
     <div class="container">
       <!-- row -->
-      <div class="row">
+      <div class="row" v-if="isLoading">
+        <div class="col-md-12 loading-container">
+          <div class="spinner"></div>
+        </div>
+      </div>
+      <div class="row" v-else>
         <!-- section title -->
         <SectionTitle title="New Products" />
         <!-- /section title -->
@@ -60,7 +65,6 @@
                     :productName="product.name"
                     :productLink="product.id"
                     :productPrice="product.price"
-                    :addCartItemHandler="addCartItemHandler"
                   />
                   <!-- /products -->
                 </div>
@@ -145,15 +149,15 @@
                   <ProductItem
                     v-for="product in allProducts"
                     :key="product.id"
-                    :imgSrc="product.imgSrc"
-                    :imgAlt="product.productName"
-                    :saleLabel="'-20%'"
-                    :category="product.category"
-                    :productName="product.productName"
-                    :productLink="product.productLink"
-                    :productPrice="product.productPrice"
-                    :oldPrice="product.oldPrice"
-                    :addCartItemHandler="addCartItemHandler"
+                    :id="product.id"
+                    :imgSrc="product.image_url || 'default-image.jpg'"
+                    :imgAlt="product.name"
+                    :saleLabel="'-30%'"
+                    :newLabel="'NEW'"
+                    :category="product.category.name"
+                    :productName="product.name"
+                    :productLink="product.id"
+                    :productPrice="product.price"
                   />
                   <!-- /products -->
                 </div>

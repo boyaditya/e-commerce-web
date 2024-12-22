@@ -1,5 +1,34 @@
 import axios from "axios";
 
+
+
+export async function login(email, password) {
+  try {
+    const response = await axios.post("http://127.0.0.1:8000/login_email", {
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchCarts(userId, accessToken) {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/get_cart/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function addCartItem(userInfo, product_id, quantity) {
   try {
     const response = await axios.post(
@@ -66,19 +95,19 @@ export async function fetchCategoryById(categoryId) {
   }
 }
 
-export async function fetchCarts() {
-  try {
-    const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
-      headers: {
-        Authorization: `Bearer ${this.userInfo.access_token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
+// export async function fetchCarts() {
+//   try {
+//     const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
+//       headers: {
+//         Authorization: `Bearer ${this.userInfo.access_token}`,
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// }
 
 export async function fetchProductsByCategory(categoryId) {
   try {

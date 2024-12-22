@@ -784,7 +784,7 @@ textarea.input {
 
 .shop .shop-body .cta-btn {
   color: #FFF;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 
 /*=========================================================
@@ -837,12 +837,12 @@ textarea.input {
 .hot-deal .hot-deal-countdown>li>div span {
   display: block;
   font-size: 10px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: #FFF;
 }
 
 .hot-deal p {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 24px;
 }
 
@@ -919,7 +919,7 @@ textarea.input {
 }
 
 .product .product-body .product-category {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 12px;
   color: #8D99AE;
 }
@@ -1020,7 +1020,7 @@ textarea.input {
   line-height: 10px;
   background: #1e1f29;
   color: #FFF;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   z-index: 10;
   opacity: 0;
   visibility: hidden;
@@ -1065,7 +1065,7 @@ textarea.input {
   padding: 0 30px;
   background-color: #ef233c;
   color: #FFF;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-weight: 700;
   border-radius: 40px;
   -webkit-transition: 0.2s all;
@@ -1125,13 +1125,13 @@ textarea.input {
 }
 
 .product-widget .product-body .product-category {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 10px;
   color: #8D99AE;
 }
 
 .product-widget .product-body .product-name {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 12px;
 }
 
@@ -1237,7 +1237,7 @@ textarea.input {
 }
 
 .aside>.aside-title {
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 18px;
   margin: 15px 0px 30px;
 }
@@ -1317,7 +1317,7 @@ textarea.input {
 .store-sort label {
   font-weight: 500;
   font-size: 12px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   margin-right: 15px;
 }
 
@@ -1401,7 +1401,7 @@ textarea.input {
 .store-qty {
   margin-right: 30px;
   font-weight: 500;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 12px;
 }
 
@@ -1524,7 +1524,7 @@ textarea.input {
 
 .product-details .product-available {
   font-size: 12px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-weight: 700;
   margin-left: 30px;
   color: #D10024;
@@ -1538,7 +1538,7 @@ textarea.input {
 .product-details .product-options label {
   font-weight: 500;
   font-size: 12px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   margin-right: 15px;
   margin-bottom: 0px;
 }
@@ -1558,7 +1558,7 @@ textarea.input {
   padding: 0 30px;
   background-color: #ef233c;
   color: #FFF;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-weight: 700;
   border-radius: 40px;
   -webkit-transition: 0.2s all;
@@ -1593,7 +1593,7 @@ textarea.input {
   display: inline-block;
   font-weight: 500;
   font-size: 12px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   margin-right: 15px;
   margin-bottom: 0px;
 }
@@ -1605,7 +1605,7 @@ textarea.input {
 
 .product-details .product-btns li {
   display: inline-block;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 12px;
 }
 
@@ -1619,7 +1619,7 @@ textarea.input {
 
 .product-details .product-links li {
   display: inline-block;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 12px;
 }
 
@@ -1874,11 +1874,12 @@ textarea.input {
   /* position: relative; */
   position: -webkit-sticky; /* For Safari */
   position: sticky;
-  top: 40px;
+  top: 80px;
   padding: 0px 30px 30px;
   border-right: 1px solid #E4E7ED;
   border-left: 1px solid #E4E7ED;
   border-bottom: 1px solid #E4E7ED;
+  margin-bottom: 100px;
 }
 
 .order-details:before {
@@ -2040,7 +2041,7 @@ textarea.input {
 
 .footer .footer-title {
   color: #FFF;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-size: 18px;
   margin: 0px 0px 30px;
 }

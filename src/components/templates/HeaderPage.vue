@@ -73,7 +73,7 @@
                 <div class="cart-dropdown">
                   <div class="cart-items">
                     <div
-                      v-for="product in cartProducts"
+                      v-for="product in state.cartProducts"
                       :key="product.product.id"
                       class="product-widget"
                     >
@@ -148,16 +148,18 @@
 </template>
 
 <script>
-import axios from "axios";
+// import { login, fetchCarts } from "@/api/api";
+import { onMounted, computed } from "vue";
+import { useGlobalState } from "@/globalState";
 
 export default {
   data() {
     return {
-      searchQuery: "",
-      selectedCategory: "0",
+      // searchQuery: "",
+      // selectedCategory: "0",
       wishlistCount: 2,
       cartDropdown: false,
-      cartProducts: [],
+      // cartProducts: [],
       allProducts: [],
       loadingCart: true,
       userInfo: null,
@@ -167,67 +169,79 @@ export default {
       // ],
     };
   },
-  computed: {
-    quantityTotal() {
-      return this.cartProducts.reduce((total, product) => {
+
+  //   computed: {
+  //     quantityTotal() {
+  //       return this.cartProducts.reduce((total, product) => {
+  //         return total + product.quantity;
+  //       }, 0);
+  //     },
+  //     cartTotal() {
+  //       return this.cartProducts.reduce((total, product) => {
+  //         return total + product.product.price * product.quantity;
+  //       }, 0);
+  //     },
+  //   },
+  //   async mounted() {
+  //     // await this.login();
+
+  //     // if (this.userInfo != null) await this.fetchCarts();
+  //   },
+  //   methods: {
+  //     // onSearch() {
+  //     //   console.log(
+  //     //     `Searching for ${this.searchQuery} in category ${this.selectedCategory}`
+  //     //   );
+  //     // },
+  //     // toggleCartDropdown() {
+  //     //   this.cartDropdown = !this.cartDropdown;
+  //     // },
+  //     removeFromCart(productId) {
+  //       this.cartProducts = this.cartProducts.filter(
+  //         (product) => product.product.id !== productId
+  //       );
+  //     },
+
+  //   },
+  //   created() {
+  //     this.loadingCart = false;
+  //   },
+
+  setup() {
+    const { state, login, fetchCarts, removeFromCart } = useGlobalState();
+
+    onMounted(async () => {
+      await login("aryaxdm9604@gmail.com", "inipassword");
+      if (state.userInfo) {
+        await fetchCarts(state.userInfo.user_id, state.userInfo.access_token);
+      }
+    });
+
+    const quantityTotal = computed(() => {
+      return state.cartProducts.reduce((total, product) => {
         return total + product.quantity;
       }, 0);
-    },
-    cartTotal() {
-      return this.cartProducts.reduce((total, product) => {
+    });
+
+    const cartTotal = computed(() => {
+      return state.cartProducts.reduce((total, product) => {
         return total + product.product.price * product.quantity;
       }, 0);
-    },
-  },
-  async mounted() {
-    await this.login();
+    });
 
-    if (this.userInfo != null) await this.fetchCarts();
-  },
-  methods: {
-    onSearch() {
-      console.log(
-        `Searching for ${this.searchQuery} in category ${this.selectedCategory}`
-      );
-    },
-    // toggleCartDropdown() {
-    //   this.cartDropdown = !this.cartDropdown;
-    // },
-    removeFromCart(productId) {
-      this.cartProducts = this.cartProducts.filter(
-        (product) => product.product.id !== productId
-      );
-    },
-    async login() {
-      try {
-        const response = await axios.post("http://127.0.0.1:8000/login_email", {
-          email: "aryaxdm9604@gmail.com",
-          password: "inipassword",
-        });
+    const formattedCartTotal = computed(() => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(cartTotal.value);
+    });
 
-        this.userInfo = response.data;
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loadingCart = false;
-      }
-    },
-    async fetchCarts() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/get_cart/1", {
-          headers: {
-            Authorization: `Bearer ${this.userInfo.access_token}`,
-          },
-        });
-
-        this.cartProducts.push(...response.data);
-        console.log(this.cartProducts.product.name);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.loadingCart = false;
-      }
-    },
+    return {
+      state,
+      quantityTotal,
+      formattedCartTotal,
+      removeFromCart,
+    };
   },
 };
 </script>
