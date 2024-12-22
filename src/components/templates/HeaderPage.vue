@@ -155,7 +155,7 @@ import { useGlobalState } from "@/globalState";
 export default {
   data() {
     return {
-      // searchQuery: "",
+      searchQuery: "",
       // selectedCategory: "0",
       wishlistCount: 2,
       cartDropdown: false,
@@ -243,6 +243,58 @@ export default {
       removeFromCart,
     };
   },
+
+  methods: {
+    onSearch() {
+      if (this.searchQuery.trim()) {
+        this.$router.push({
+          name: 'store',
+          query: { search: this.searchQuery },
+        });
+      }
+    },
+  },
+  watch: {
+    searchQuery(newSearch) {
+      if (this.$route.name === 'store') {
+        if (newSearch.trim()) {
+          this.$router.push({
+            name: 'store',
+            query: { search: newSearch },
+          });
+        } else {
+          this.$router.push({
+            name: 'store',
+            query: {},
+          });
+        }
+      }
+    },
+    '$route.query.search'(newSearch) {
+      this.searchQuery = newSearch || '';
+    },
+  },
+  created() {
+    this.searchQuery = this.$route.query.search || '';
+  },
+//   methods: {
+//     onSearch() {
+//       if (this.searchQuery.trim()) {
+//         this.$router.push({
+//           name: "store",
+//           query: { search: this.searchQuery },
+//         });
+//       }
+//     },
+//   },
+//   watch: {
+//     "$route.query.search"(newSearch) {
+//       this.searchQuery = newSearch || "";
+//     },
+//   },
+//   created() {
+//     this.searchQuery = this.$route.query.search || "";
+//   },
 };
 </script>
 

@@ -15,12 +15,12 @@ import CartView from "@/views/CartView.vue";
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: HomeView,
   },
   {
     path: "/checkout",
-    name: "Checkout",
+    name: "checkout",
     component: CheckoutPage,
   },
   {
@@ -37,23 +37,23 @@ const routes = [
   },
   {
     path: "/store",
-    name: "StoreView",
+    name: "store",
     component: StoreView,
   },
   {
     path: "/product/:id", // Tambahkan parameter :id pada path
-    name: "Product",
+    name: "product",
     component: ProductView,
   },
   {
     path: "/cart",
-    name: "Cart",
+    name: "cart",
     component: CartView,
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(), // Enables history mode without hash in URLs
+  history: createWebHistory(process.env.BASE_URL), // Enables history mode without hash in URLs
   routes,
 });
 router.afterEach((to, from) => {

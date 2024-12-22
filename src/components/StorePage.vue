@@ -203,6 +203,13 @@ export default {
         console.error("Failed to fetch products by category:", error);
       }
     },
+    filterProducts() {
+      const searchQuery = this.$route.query.search?.toLowerCase() || "";
+      this.filteredProducts = this.allProducts.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery)
+      );
+      this.sortProducts();
+    },
     sortProducts() {
       if (this.selectedSort === "newest") {
         this.filteredProducts.sort(
@@ -216,8 +223,10 @@ export default {
     },
   },
   watch: {
+    "$route.query.search": "filterProducts",
     selectedCategories() {
       this.fetchProductsByCategory();
+      this.filterProducts();
     },
   },
   async created() {
@@ -228,6 +237,7 @@ export default {
       this.selectedCategories = [parseInt(categoryId)];
       await this.fetchProductsByCategory();
     }
+    this.filterProducts();
     this.isLoading = false;
   },
 };
