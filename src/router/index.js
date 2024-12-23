@@ -11,6 +11,8 @@ import RegisterForm from "@/components/RegisterForm.vue";
 import HomeView from "@/views/HomeView.vue";
 import StoreView from "@/views/StoreView.vue";
 import CartView from "@/views/CartView.vue";
+import UserView from "@/views/UserView.vue";
+import ProfileSection from "@/components/user/ProfileSection.vue";
 
 const routes = [
   {
@@ -49,6 +51,26 @@ const routes = [
     path: "/cart",
     name: "cart",
     component: CartView,
+  },
+  {
+    path: "/user",
+    name: "user",
+    component: UserView,
+    children: [
+      {
+        path: "profile",
+        name: "profile",
+        component: ProfileSection,
+        props: () => ({
+          userInfo: JSON.parse(localStorage.getItem("userInfo")),
+        }),
+      },
+      {
+        path: "edit",
+        name: "edit",
+        
+      }
+    ],
   },
 ];
 

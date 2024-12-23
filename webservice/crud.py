@@ -6,16 +6,16 @@ from sqlalchemy import desc
 SALT = b'$2b$12$0nFckzktMD0Fb16a8JsNA.'
 
 def get_user(db: Session, id_user: int):
-    return db.query(models.User).filter(models.User.id_user == id_user).first()
+    return db.query(models.Users).filter(models.Users.id == id_user).first()
 
 def get_user_by_email(db: Session, email: str):
     return db.query(models.Users).filter(models.Users.email == email).first()
 
-def get_user_by_no_telp(db: Session, no_telp: str):
-    return db.query(models.User).filter(models.User.no_telp_user == no_telp).first()
+# def get_user_by_no_telp(db: Session, no_telp: str):
+#     return db.query(models.Users).filter(models.Users.no_telp_user == no_telp).first()
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
+# def get_users(db: Session, skip: int = 0, limit: int = 100):
+#     return db.query(models.Users).offset(skip).limit(limit).all()
 
 def get_products(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Products).offset(skip).limit(limit).all()
@@ -45,6 +45,7 @@ def get_products_by_category(
         .limit(limit)
         .all()
     )
+
 
 
 # def get_item(db: Session, id_user: int):

@@ -15,6 +15,23 @@ export async function login(email, password) {
   }
 }
 
+export async function fetchUserById(userId, accessToken) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/get_user/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function fetchCarts(userId, accessToken) {
   try {
     const response = await axios.get(`http://127.0.0.1:8000/get_cart/${userId}`, {

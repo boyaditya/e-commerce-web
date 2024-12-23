@@ -1,5 +1,9 @@
 import { reactive } from "vue";
-import { login as apiLogin, fetchCarts as apiFetchCarts } from "@/api/api";
+import {
+  login as apiLogin,
+  fetchUserById,
+  fetchCarts as apiFetchCarts,
+} from "@/api/api";
 
 const state = reactive({
   userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
@@ -9,8 +13,15 @@ const state = reactive({
 export const useGlobalState = () => {
   const login = async (email, password) => {
     try {
-      const userInfo = await apiLogin(email, password);
+      const loginResponse = await apiLogin(email, password);
+      const userInfo = await fetchUserById(
+        loginResponse.user_id,
+        loginResponse.access_token
+      );
       state.userInfo = userInfo;
+      state.userInfo.access_token = loginResponse.access_token;
+      state.userInfo.user_id = loginResponse.user_id;
+      delete userInfo.id;
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
     } catch (error) {
       console.error(error);

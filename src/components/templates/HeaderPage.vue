@@ -111,10 +111,10 @@
                 </div>
               </div>
               <div>
-                <a href="#">
+                <router-link to="/user/profile" class="nav-link">
                   <i class="fa fa-user-o"></i>
                   <span>My Account</span>
-                </a>
+                </router-link>
               </div>
 
               <div class="menu-toggle">
@@ -248,7 +248,7 @@ export default {
     onSearch() {
       if (this.searchQuery.trim()) {
         this.$router.push({
-          name: 'store',
+          name: "store",
           query: { search: this.searchQuery },
         });
       }
@@ -256,45 +256,45 @@ export default {
   },
   watch: {
     searchQuery(newSearch) {
-      if (this.$route.name === 'store') {
+      if (this.$route.name === "store") {
         if (newSearch.trim()) {
           this.$router.push({
-            name: 'store',
+            name: "store",
             query: { search: newSearch },
           });
         } else {
           this.$router.push({
-            name: 'store',
+            name: "store",
             query: {},
           });
         }
       }
     },
-    '$route.query.search'(newSearch) {
-      this.searchQuery = newSearch || '';
+    "$route.query.search"(newSearch) {
+      this.searchQuery = newSearch || "";
     },
   },
   created() {
-    this.searchQuery = this.$route.query.search || '';
+    this.searchQuery = this.$route.query.search || "";
   },
-//   methods: {
-//     onSearch() {
-//       if (this.searchQuery.trim()) {
-//         this.$router.push({
-//           name: "store",
-//           query: { search: this.searchQuery },
-//         });
-//       }
-//     },
-//   },
-//   watch: {
-//     "$route.query.search"(newSearch) {
-//       this.searchQuery = newSearch || "";
-//     },
-//   },
-//   created() {
-//     this.searchQuery = this.$route.query.search || "";
-//   },
+  //   methods: {
+  //     onSearch() {
+  //       if (this.searchQuery.trim()) {
+  //         this.$router.push({
+  //           name: "store",
+  //           query: { search: this.searchQuery },
+  //         });
+  //       }
+  //     },
+  //   },
+  //   watch: {
+  //     "$route.query.search"(newSearch) {
+  //       this.searchQuery = newSearch || "";
+  //     },
+  //   },
+  //   created() {
+  //     this.searchQuery = this.$route.query.search || "";
+  //   },
 };
 </script>
 

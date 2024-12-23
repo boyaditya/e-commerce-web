@@ -84,6 +84,21 @@ async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db
     else:
         raise HTTPException(status_code=400, detail="User tidak ditemukan, kontak admin")
 
+
+@app.get("/get_user/{user_id}", response_model=schemas.User)
+def read_user(
+    user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
+    try:
+        usr =  verify_token(token)
+    except HTTPException as e:
+        raise e
+    user = crud.get_user(db, user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
 # @app.post("/login_no_telp") #,response_model=schemas.Token
 # async def login_no_telp(user: schemas.UserLoginPhone, db: Session = Depends(get_db)):
 #     if not authenticate_by_no_telp(db,user):
