@@ -187,6 +187,20 @@ def read_wishlist(user_id: int, db: Session = Depends(get_db), token: str = Depe
     wishlist = crud.get_wishlist(db, user_id)
     return wishlist
 
+@app.post("/add_wishlist_item", response_model=schemas.Wishlists)
+def add_wishlist_item(wishlists: schemas.WishlistsCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(user_id)
+    wishlist = crud.add_wishlist_item(db, wishlists)
+    return wishlist
+
+@app.delete("/delete_wishlist_item/{wishlist_id}")
+def delete_wishlist_item(wishlist_id:int,db: Session = Depends(get_db),token: str = Depends(oauth2_scheme) ):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    return crud.delete_wishlist_item(db,wishlist_id)
+
 @app.get("/get_products/", response_model=list[schemas.Products])
 def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     products = crud.get_products(db, skip, limit)

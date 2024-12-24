@@ -163,10 +163,21 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
     db.refresh(db_carts)
     return db_carts
 
-# def delete_relasi_by_id(db: Session, id_relasi: int):
-#     hasil = db.query(models.Relasi).filter(models.Relasi.id_relasi == id_relasi).delete()
-#     db.commit()
-#     return {"record_dihapus":hasil}
+## wishlist
+def add_wishlist_item(db: Session, wishlists: schemas.WishlistsCreate):
+    db_wishlists = models.Wishlists(
+        user_id = wishlists.user_id,
+        product_id = wishlists.product_id,
+    )
+    db.add(db_wishlists)
+    db.commit()
+    db.refresh(db_wishlists)
+    return db_wishlists
+
+def delete_wishlist_item(db: Session, wishlist_id: int):
+    deleted = db.query(models.Wishlists).filter(models.Wishlists.id == wishlist_id).delete()
+    db.commit()
+    return deleted
 
 # ## dokter
 # def create_dokter(db: Session, dokter: schemas.DokterCreate):

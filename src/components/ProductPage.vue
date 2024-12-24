@@ -112,7 +112,16 @@
 
             <ul class="product-btns">
               <li>
-                <a @click="toggleWishlist"><i v-if="!isWishlist" class="fa fa-heart-o"></i> <i v-else class="fa fa-heart" style="color:red;"></i> add to wishlist</a>
+                <a @click="toggleWishlist">
+                  <div v-if="!isWishlist">
+                    <i class="fa fa-heart-o"></i>
+                    add to wishlist
+                  </div>
+                  <div v-else>
+                    <i class="fa fa-heart" style="color:red;"></i>
+                    remove from wishlist
+                  </div>
+                </a>
               </li>
               <!-- <li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li> -->
             </ul>
@@ -398,10 +407,10 @@ export default {
     };
   },
   setup() {
-    const { state, login, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
+    const globalState = useGlobalState();
 
     return {
-      state
+      globalState
     };
   },
   computed: {
@@ -434,7 +443,7 @@ export default {
     },
 
     isWishlist(){
-      return this.state.wishlistProducts.some(item => item.id === this.product.id);
+      return this.globalState.state.wishlistProducts.some(item => item.product_id === this.product.id);
     }
   },
 
@@ -478,8 +487,14 @@ export default {
       // For example, you can emit an event or call an API to add the product to the cart
       console.log(`Added ${this.quantity} items to the cart`);
     },
-    toggleWishlist() {
-      // this.isWishlist = !this.isWishlist;
+    async toggleWishlist() {
+      if(this.isWishlist){
+        const item = this.globalState.state.wishlistProducts.find(item => item.product.id === this.product.id);
+        await this.globalState.removeFromWishlist(item.id);
+      }
+      else{
+        await this.globalState.addToWishlist(this.product.id);
+      }
     }
   },
     watch: {

@@ -172,13 +172,13 @@ class User(UserBase):
 class CartsBase(BaseModel):
     user_id: int
     product_id: int
-    product: Optional[Products] = None
     quantity: int
 
 class CartsCreate(CartsBase):
     pass
 
 class Carts(CartsBase):
+    product: Optional[Products] = None
     id: int
     created_at: datetime
     updated_at: datetime
@@ -190,12 +190,12 @@ class Carts(CartsBase):
 class WishlistsBase(BaseModel):
     user_id: int
     product_id: int
-    product: Optional[Products] = None
 
 class WishlistsCreate(WishlistsBase):
     pass
 
 class Wishlists(WishlistsBase):
+    product: Optional[Products] = None
     id: int
     created_at: datetime
     updated_at: datetime

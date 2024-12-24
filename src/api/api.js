@@ -46,20 +46,6 @@ export async function fetchCarts(userId, accessToken) {
   }
 }
 
-export async function fetchWishlist(userId, accessToken) {
-  try {
-    const response = await axios.get(`http://127.0.0.1:8000/get_wishlist/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
 export async function addCartItem(userInfo, product_id, quantity) {
   try {
     const response = await axios.post(
@@ -76,6 +62,54 @@ export async function addCartItem(userInfo, product_id, quantity) {
       }
     );
     return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchWishlist(userId, accessToken) {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/get_wishlist/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function addWishlistItem(item, userInfo) {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/add_wishlist_item",
+      item,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteWishlistItem(wishlist_id, accessToken) {
+  try {
+    const response = await axios.delete(`http://127.0.0.1:8000/delete_wishlist_item/${wishlist_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data
   } catch (error) {
     console.error(error);
     throw error;
