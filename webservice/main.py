@@ -178,6 +178,15 @@ def add_cart_item(carts: schemas.CartsCreate, db: Session = Depends(get_db), tok
     cart = crud.add_cart_item(db, carts)
     return cart
 
+@app.get("/get_wishlist/{user_id}", response_model=list[schemas.Wishlists])
+def read_wishlist(user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(user_id)
+    wishlist = crud.get_wishlist(db, user_id)
+    return wishlist
+
 @app.get("/get_products/", response_model=list[schemas.Products])
 def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     products = crud.get_products(db, skip, limit)

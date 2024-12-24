@@ -21,6 +21,7 @@ class Products(BaseDB):
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime, nullable=False)
     cart = relationship("Carts", back_populates="product")
+    wishlist = relationship("Wishlists", back_populates="product")
     # id_dokter = Column(Integer, primary_key=True, index=True)
     # nama_lengkap_dokter = Column(String(127), nullable=False)
     # spesialisasi_dokter = Column(String(32), nullable=False)
@@ -73,6 +74,16 @@ class Carts(BaseDB):
     product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
     product = relationship("Products", back_populates="cart")
     quantity = Column(Integer, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+    updated_at = Column(DateTime, nullable=False)
+
+class Wishlists(BaseDB):
+    __tablename__ = "wishlists"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    product = relationship("Products", back_populates="wishlist")
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime, nullable=False)
 

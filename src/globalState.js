@@ -3,11 +3,13 @@ import {
   login as apiLogin,
   fetchUserById,
   fetchCarts as apiFetchCarts,
+  fetchWishlist as apiFetchWishlist,
 } from "@/api/api";
 
 const state = reactive({
   userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
   cartProducts: JSON.parse(localStorage.getItem("cartProducts")) || [],
+  wishlistProducts: JSON.parse(localStorage.getItem("wishlistProducts")) || [],
 });
 
 export const useGlobalState = () => {
@@ -42,7 +44,7 @@ export const useGlobalState = () => {
       console.error(error);
     }
   };
-
+  
   const removeFromCart = (cartId) => {
     state.cartProducts = state.cartProducts.filter(
       (cart) => cart.id !== cartId
@@ -50,10 +52,26 @@ export const useGlobalState = () => {
     localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
   };
 
+  const fetchWishlist = async () => {
+    try {
+      if (state.userInfo) {
+        const wishlistData = await apiFetchWishlist(
+          state.userInfo.user_id,
+          state.userInfo.access_token
+        );
+        state.wishlistProducts = wishlistData;
+        localStorage.setItem("wishlistProducts", JSON.stringify(wishlistData));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     state,
     login,
     fetchCarts,
     removeFromCart,
+    fetchWishlist,
   };
 };

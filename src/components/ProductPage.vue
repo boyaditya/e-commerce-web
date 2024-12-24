@@ -112,7 +112,7 @@
 
             <ul class="product-btns">
               <li>
-                <a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a>
+                <a @click="toggleWishlist"><i v-if="!isWishlist" class="fa fa-heart-o"></i> <i v-else class="fa fa-heart" style="color:red;"></i> add to wishlist</a>
               </li>
               <!-- <li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li> -->
             </ul>
@@ -380,6 +380,7 @@
 import BreadCrumbPage from "@/components/templates/BreadCrumbPage.vue";
 import { fetchProductById, fetchCategoryById } from "@/api/api.js";
 import "@/assets/css/loading.css"; // Impor file CSS
+import { useGlobalState } from "@/globalState";
 
 export default {
   name: "ProductPage",
@@ -393,6 +394,14 @@ export default {
       isLoading: true, // Tambahkan properti isLoading
       shippingDuration: { min: 3, max: 5 }, // Estimated shipping duration in days
       quantity: 1, // Default quantity
+      // isWishlist: false,
+    };
+  },
+  setup() {
+    const { state, login, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
+
+    return {
+      state
     };
   },
   computed: {
@@ -423,6 +432,10 @@ export default {
     formattedDescription() {
       return this.product.description.replace(/\n/g, "<br>");
     },
+
+    isWishlist(){
+      return this.state.wishlistProducts.some(item => item.id === this.product.id);
+    }
   },
 
   async created() {
@@ -465,6 +478,9 @@ export default {
       // For example, you can emit an event or call an API to add the product to the cart
       console.log(`Added ${this.quantity} items to the cart`);
     },
+    toggleWishlist() {
+      // this.isWishlist = !this.isWishlist;
+    }
   },
     watch: {
     quantity(newQuantity) {

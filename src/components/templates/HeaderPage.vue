@@ -53,12 +53,47 @@
           </div>
           <div class="col-md-4 clearfix">
             <div class="header-ctn">
-              <div>
+              <!-- <div>
                 <a href="#">
                   <i class="fa fa-heart-o"></i>
                   <span>Your Wishlist</span>
                   <div class="qty">{{ wishlistCount }}</div>
                 </a>
+              </div> -->
+              <div class="dropdown">
+                <a
+                  class="dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-expanded="true"
+                >
+                  <i class="fa fa-heart-o"></i>
+                  <span>Your Wishlist</span>
+                  <div class="qty">{{ wishlistCount }}</div>
+                </a>
+                <div class="cart-dropdown">
+                  <div class="cart-items">
+                    <div
+                      v-for="product in state.wishlistProducts"
+                      :key="product.product.id"
+                      class="product-widget"
+                    >
+                      <div class="product-img">
+                        <img
+                          :src="product.product.image_url"
+                          :alt="product.product.name"
+                        />
+                      </div>
+                      <div class="product-body">
+                        <h3 class="product-name">
+                          <a href="#">{{ product.product.name }}</a>
+                        </h3>
+                        <h4 class="product-price">
+                          {{ product.product.price }}
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="dropdown">
                 <a
@@ -157,7 +192,7 @@ export default {
     return {
       searchQuery: "",
       // selectedCategory: "0",
-      wishlistCount: 2,
+      // wishlistCount: 0,
       cartDropdown: false,
       // cartProducts: [],
       allProducts: [],
@@ -208,11 +243,12 @@ export default {
   //   },
 
   setup() {
-    const { state, login, fetchCarts, removeFromCart } = useGlobalState();
+    const { state, login, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
 
     onMounted(async () => {
       await login("aryaxdm9604@gmail.com", "inipassword");
       if (state.userInfo) {
+        await fetchWishlist(state.userInfo.user_id, state.userInfo.access_token);
         await fetchCarts(state.userInfo.user_id, state.userInfo.access_token);
       }
     });
@@ -222,7 +258,7 @@ export default {
         return total + product.quantity;
       }, 0);
     });
-
+    
     const cartTotal = computed(() => {
       return state.cartProducts.reduce((total, product) => {
         return total + product.product.price * product.quantity;
@@ -236,11 +272,18 @@ export default {
       }).format(cartTotal.value);
     });
 
+    const wishlistCount = computed(() => {
+      return state.wishlistProducts.reduce((total, product) => {
+        return total + 1;
+      }, 0);
+    });
+    
     return {
       state,
       quantityTotal,
       formattedCartTotal,
       removeFromCart,
+      wishlistCount,
     };
   },
 

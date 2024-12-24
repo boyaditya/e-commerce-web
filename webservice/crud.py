@@ -26,6 +26,9 @@ def get_product_by_id(db: Session, product_id: int):
 def get_cart(db: Session, user_id: int):
     return db.query(models.Carts).filter(models.Carts.user_id == user_id).all()
 
+def get_wishlist(db: Session, user_id: int):
+    return db.query(models.Wishlists).filter(models.Wishlists.user_id == user_id).all()
+
 def get_categories(db: Session):
     return db.query(models.Categories).all()
 

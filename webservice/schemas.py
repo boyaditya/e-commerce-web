@@ -186,6 +186,23 @@ class Carts(CartsBase):
     class Config:
         orm_mode = True
 
+# Wishlist
+class WishlistsBase(BaseModel):
+    user_id: int
+    product_id: int
+    product: Optional[Products] = None
+
+class WishlistsCreate(WishlistsBase):
+    pass
+
+class Wishlists(WishlistsBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
 class Password(BaseModel):
     old_password: str
     new_password: str
