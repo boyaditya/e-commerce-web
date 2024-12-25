@@ -105,7 +105,7 @@
                   <span class="qty-down" @click="decreaseQuantity">-</span>
                 </div>
               </div>
-              <button class="add-to-cart-btn">
+              <button @click="handleAddToCart" class="add-to-cart-btn">
                 <i class="fa fa-shopping-cart"></i> add to cart
               </button>
             </div>
@@ -482,10 +482,18 @@ export default {
         this.quantity--;
       }
     },
-    addToCart() {
+    async handleAddToCart() {
       // Implement the add-to-cart functionality here
       // For example, you can emit an event or call an API to add the product to the cart
       console.log(`Added ${this.quantity} items to the cart`);
+
+      try {
+        const index = this.globalState.findProductInCart(this.product.id);
+        await this.globalState.addOrUpdate(this.product.id, this.quantity + this.globalState.state.cartProducts[index].quantity);
+
+      } catch (error) {
+        console.error(error);
+      }
     },
     async toggleWishlist() {
       if(this.globalState.state.isAuthenticated){

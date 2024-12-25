@@ -157,6 +157,20 @@ def add_cart_item(db: Session, carts: schemas.CartsCreate):
     db.refresh(db_carts)
     return db_carts
 
+def delete_cart_item(db: Session, cart_id: int):
+    deleted = db.query(models.Carts).filter(models.Carts.id == cart_id).delete()
+    db.commit()
+    return deleted
+
+def update_cart_item(db: Session, cart: models.Carts, quantity):
+    cart.quantity = quantity
+    db.commit()
+    db.refresh(cart)
+    return cart
+
+def get_cart_by_id(db: Session, id: int):
+    return db.query(models.Carts).filter(models.Carts.id == id).first()
+
 ## wishlist
 def add_wishlist_item(db: Session, wishlists: schemas.WishlistsCreate):
     db_wishlists = models.Wishlists(

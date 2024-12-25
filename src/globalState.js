@@ -4,6 +4,9 @@ import {
   register as apiRegister,
   fetchUserById,
   fetchCarts as apiFetchCarts,
+  addCartItem as apiAddCartItem,
+  deleteCartItem as apiDeleteCartItem,
+  updateCartItem as apiUpdateCartItem,
   fetchWishlist as apiFetchWishlist,
   addWishlistItem as apiAddWishlistItem,
   deleteWishlistItem as apiDeleteWishlistItem,
@@ -75,12 +78,77 @@ export const useGlobalState = () => {
       console.error(error);
     }
   };
-  
-  const removeFromCart = (cartId) => {
-    state.cartProducts = state.cartProducts.filter(
-      (cart) => cart.id !== cartId
+
+  const addToCart = async (product_id, quantity) => {
+    const item = { // Initialize item here
+      user_id: state.userInfo.user_id,
+      product_id: product_id,
+      quantity: quantity,
+    };
+
+    try {
+      if (state.userInfo) {
+        const cartData = await apiAddCartItem(item, state.userInfo);
+        state.cartProducts.push(cartData);
+        localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateCartItem = async (cart_id, quantity, index) => {
+    const cart = {
+      user_id: state.userInfo.user_id,
+      product_id: state.cartProducts[index].product_id,
+      quantity: quantity
+    };
+    console.log(cart);
+
+    try {
+      if (state.userInfo) {
+        const cartData = await apiUpdateCartItem(cart_id, cart, state.userInfo);
+
+        state.cartProducts[index].quantity = quantity;
+        localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const findProductInCart = (product_id) => {
+    return state.cartProducts.findIndex(
+      (item) => item.product_id === product_id
     );
-    localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+  }
+
+  const addOrUpdate = async (product_id, quantity) => {
+    const index = findProductInCart(product_id);
+
+    if (index !== -1) {
+      await updateCartItem(state.cartProducts[index].id, quantity, index);
+    } else {
+      // Add a new product to the cart
+      await addToCart(product_id, quantity);
+    }
+  }
+  
+  const removeFromCart = async (cart_id) => {
+    try {
+      if (state.userInfo) {
+        const cartData = await apiDeleteCartItem(
+          cart_id,
+          state.userInfo.access_token,
+        );
+        state.cartProducts = state.cartProducts.filter(
+          (cart) => cart.id !== cart_id
+        );
+        localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const fetchWishlist = async () => {
@@ -142,6 +210,8 @@ export const useGlobalState = () => {
     register,
     logout,
     fetchCarts,
+    findProductInCart,
+    addOrUpdate,
     removeFromCart,
     fetchWishlist,
     addToWishlist,

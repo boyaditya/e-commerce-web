@@ -60,15 +60,11 @@ export async function fetchCarts(userId, accessToken) {
   }
 }
 
-export async function addCartItem(userInfo, product_id, quantity) {
+export async function addCartItem(item, userInfo) {
   try {
     const response = await axios.post(
       "http://127.0.0.1:8000/add_cart_item",
-      {
-        user_id: userInfo.user_id,
-        product_id: product_id,
-        quantity: quantity,
-      },
+      item,
       {
         headers: {
           Authorization: `Bearer ${userInfo.access_token}`,
@@ -76,6 +72,40 @@ export async function addCartItem(userInfo, product_id, quantity) {
       }
     );
     return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function updateCartItem(cart_id, cart, userInfo) {
+  try {
+    const response = await axios.put(
+      `http://127.0.0.1:8000/update_cart_item/${cart_id}`,
+      cart,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function deleteCartItem(cart_id, accessToken) {
+  try {
+    const response = await axios.delete(`http://127.0.0.1:8000/delete_cart_item/${cart_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data
   } catch (error) {
     console.error(error);
     throw error;

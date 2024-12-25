@@ -24,7 +24,7 @@
                 :quantity="item.quantity"
                 :imgSrc="item.product.image_url"
                 :isSelected="selectedItems.includes(item.id)"
-                @update-quantity="updateQuantity(item.id, $event)"
+                @update-quantity="updateQuantity(item, $event)"
                 @remove-item="removeItem(item.id)"
                 @toggle-selection="toggleSelection(item.id, $event)"
               />
@@ -132,7 +132,7 @@ export default {
     CartItem,
   },
   setup() {
-    const { state, fetchCarts, removeFromCart } = useGlobalState();
+    const { state, findProductInCart, addOrUpdate, fetchCarts, removeFromCart } = useGlobalState();
     const selectedItems = ref([]);
 
     onMounted(async () => {
@@ -166,11 +166,13 @@ export default {
         .replace(/\s/g, "");
     });
 
-    const updateQuantity = (id, newQuantity) => {
-      const item = state.cartProducts.find((item) => item.id === id);
-      if (item) {
-        item.quantity = newQuantity;
-      }
+    const updateQuantity = async (item, newQuantity) => {
+      // console.log(item.product_id);
+      await addOrUpdate(item.product_id, newQuantity);
+      // const item = state.cartProducts.find((item) => item.id === id);
+      // if (item) {
+      //   item.quantity = newQuantity;
+      // }
     };
 
     const removeItem = (id) => {

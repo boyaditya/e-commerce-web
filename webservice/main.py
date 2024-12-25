@@ -176,6 +176,24 @@ def add_cart_item(carts: schemas.CartsCreate, db: Session = Depends(get_db), tok
     cart = crud.add_cart_item(db, carts)
     return cart
 
+@app.delete("/delete_cart_item/{cart_id}")
+def delete_cart_item(cart_id:int,db: Session = Depends(get_db),token: str = Depends(oauth2_scheme) ):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    return crud.delete_cart_item(db,cart_id)
+
+@app.put("/update_cart_item/{cart_id}", response_model=schemas.Carts)
+def update_cart_quantity(cart_id: int, cart: schemas.CartsCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    print(cart.quantity)
+    usr =  verify_token(token)
+    result = crud.get_cart_by_id(db, cart_id)
+    # cart_item = db.query(CartItem).filter(CartItem.id == cart_item_id).first()
+    # if not cart_item:
+    #     raise HTTPException(status_code=404, detail="Cart item not found")
+    # cart_item.quantity = quantity
+    # db.commit()
+    # db.refresh(cart_item)
+    return crud.update_cart_item(db, result, cart.quantity)
+
 @app.get("/get_wishlist/{user_id}", response_model=list[schemas.Wishlists])
 def read_wishlist(user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
