@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { useGlobalState } from "@/globalState";
+
 export default {
   name: 'LoginForm',
   data() {
@@ -47,13 +49,24 @@ export default {
       errorMessage: ''
     }
   },
+  setup(){
+    const { login } = useGlobalState();
+    return { login };
+  },
   methods: {
-    handleLogin() {
+    async handleLogin() {
       if (!this.email || !this.password) {
         this.errorMessage = 'Please fill in all fields';
         return;
       }
-      console.log('Login attempt:', { email: this.email, password: this.password });
+      
+      try {
+        // console.log('Login attempt:', { email: this.email, password: this.password });
+        await this.login(this.email, this.password);
+        this.$router.back();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 }

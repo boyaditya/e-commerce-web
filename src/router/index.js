@@ -1,5 +1,6 @@
 // router/index.js
 import { createRouter, createWebHistory } from "vue-router";
+import { useGlobalState } from "@/globalState";
 
 // import HomePage from '@/components/HomePage.vue';
 import CheckoutPage from "@/components/CheckoutPage.vue";
@@ -27,11 +28,30 @@ const routes = [
   },
   {
     path: "/login",
+    name: "login",
     component: LoginForm,
+    beforeEnter: (to, from, next) => {
+      const { state } = useGlobalState();
+      if(state.isAuthenticated){
+        next(from);
+      }
+      else{
+        next();
+      }
+    },
   },
   {
     path: "/register",
     component: RegisterForm,
+    beforeEnter: (to, from, next) => {
+      const { state } = useGlobalState();
+      if(state.isAuthenticated){
+        next(from);
+      }
+      else{
+        next();
+      }
+    },
   },
   {
     path: "/view",
@@ -71,6 +91,15 @@ const routes = [
         
       }
     ],
+    beforeEnter: (to, from, next) => {
+      const { state } = useGlobalState();
+      if(!state.isAuthenticated){
+        next({ name: "login" });
+      }
+      else{
+        next();
+      }
+    },
   },
 ];
 

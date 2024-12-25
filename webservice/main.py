@@ -72,6 +72,7 @@ async def root():
 # hasil adalah akses token
 @app.post("/login_email") #,response_model=schemas.Token
 async def login_email(user: schemas.UserLoginEmail, db: Session = Depends(get_db)):
+    # print("lewat")
     if not authenticate_by_email(db,user):
         raise HTTPException(status_code=400, detail="Username atau password tidak cocok")
 
