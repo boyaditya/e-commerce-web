@@ -63,7 +63,13 @@ export default {
       try {
         // console.log('Login attempt:', { email: this.email, password: this.password });
         await this.login(this.email, this.password);
-        this.$router.back();
+        const prevRoute = this.$router.options.history.state.back;
+        if(prevRoute != "/register"){
+          this.$router.back();
+        }
+        else{
+          this.$router.push("/home");
+        }
       } catch (error) {
         console.error(error);
       }
