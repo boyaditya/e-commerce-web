@@ -104,25 +104,19 @@ def hashPassword(passwd: str):
 
 # #==============
 
-# ######### user
+######### user
 
-# def create_user(db: Session, user: schemas.UserCreate):
-#     hashed_password = hashPassword(user.password_user)
-#     db_user = models.User(
-#         nama_lengkap_user=user.nama_lengkap_user,
-#         tgl_lahir_user=user.tgl_lahir_user,
-#         gender_user=user.gender_user,
-#         alamat_user=user.alamat_user,
-#         no_bpjs_user=user.no_bpjs_user,
-#         no_telp_user=user.no_telp_user,
-#         email_user=user.email_user,
-#         password_user=hashed_password,
-#         foto_user=user.foto_user,
-#     )
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
+def register_email(db: Session, user: schemas.UserCreate):
+    hashed_password = hashPassword(user.password)
+    db_user = models.Users(
+        username = user.username,
+        email = user.email,
+        password = user.password
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
 
 # def update_user(db: Session, id_user: int, user_update: schemas.UserBase):
 #     db_user = db.query(models.User).filter(models.User.id_user == id_user).first()

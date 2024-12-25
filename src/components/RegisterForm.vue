@@ -14,7 +14,7 @@
           >
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <input 
             type="text" 
             v-model="name" 
@@ -23,7 +23,7 @@
             autocomplete="name"
             required
           >
-        </div>
+        </div> -->
         
         <div class="form-group">
           <input 
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { useGlobalState } from "@/globalState";
+
 export default {
   name: 'RegisterForm',
   data() {
@@ -71,18 +73,29 @@ export default {
       errorMessage: ''
     }
   },
+  setup(){
+    const { register } = useGlobalState();
+    return { register };
+  },
   methods: {
-    handleRegister() {
-      if (!this.username || !this.name || !this.email || !this.password) {
+    async handleRegister() {
+      if (!this.username || !this.email || !this.password) {
         this.errorMessage = 'Please fill in all fields';
         return;
       }
-      console.log('Register attempt:', {
-        username: this.username,
-        name: this.name,
-        email: this.email,
-        password: this.password
-      });
+
+      // console.log('Register attempt:', {
+      //   username: this.username,
+      //   email: this.email,
+      //   password: this.password
+      // });
+
+      try {
+        await this.register(this.username, this.email, this.password);
+        this.$router.push("/login");
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 }

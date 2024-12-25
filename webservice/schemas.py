@@ -151,9 +151,6 @@ class Products(ProductsBase):
 class UserBase(BaseModel):
     username: str
     email: str
-    is_admin: bool
-    created_at: datetime
-    updated_at: datetime
 
 class UserCreate(UserBase):
     password: str
@@ -163,6 +160,9 @@ class UserLoginEmail(BaseModel):
     password: str
 
 class User(UserBase):
+    is_admin: bool
+    created_at: datetime
+    updated_at: datetime
     id: int
 
     class Config:

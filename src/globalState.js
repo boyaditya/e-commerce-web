@@ -1,6 +1,7 @@
 import { reactive } from "vue";
 import {
   login as apiLogin,
+  register as apiRegister,
   fetchUserById,
   fetchCarts as apiFetchCarts,
   fetchWishlist as apiFetchWishlist,
@@ -18,7 +19,6 @@ const state = reactive({
 export const useGlobalState = () => {
   const login = async (email, password) => {
     try {
-      console.log(email);
       const loginResponse = await apiLogin(email, password);
       const userInfo = await fetchUserById(
         loginResponse.user_id,
@@ -30,6 +30,14 @@ export const useGlobalState = () => {
       delete userInfo.id;
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       state.isAuthenticated = true;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const register = async (username, email, password) => {
+    try {
+      const registerResponse = await apiRegister(username, email, password);
     } catch (error) {
       console.error(error);
     }
@@ -131,6 +139,7 @@ export const useGlobalState = () => {
   return {
     state,
     login,
+    register,
     logout,
     fetchCarts,
     removeFromCart,

@@ -57,16 +57,13 @@ async def root():
     return {"message": "Dokumentasi API: [url]:8000/docs"}
 
 # create user
-# @app.post("/create_user/", response_model=schemas.User)
-# def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-#     db_user_email = crud.get_user_by_email(db, email=user.email_user)
-#     db_user_no_telp = crud.get_user_by_no_telp(db, no_telp=user.no_telp_user)
-#     if db_user_email:
-#         raise HTTPException(status_code=400, detail="Error: Email sudah digunakan")
-#     elif db_user_no_telp:
-#         raise HTTPException(status_code=400, detail="Error: No telp sudah digunakan")
+@app.post("/register_email/", response_model=schemas.User)
+def register_email(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    db_user_email = crud.get_user_by_email(db, email=user.email)
+    if db_user_email:
+        raise HTTPException(status_code=400, detail="Error: Email sudah digunakan")
 
-#     return crud.create_user(db=db, user=user)
+    return crud.register_email(db=db, user=user)
 
 
 # hasil adalah akses token
