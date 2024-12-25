@@ -111,7 +111,7 @@ def register_email(db: Session, user: schemas.UserCreate):
     db_user = models.Users(
         username = user.username,
         email = user.email,
-        password = user.password
+        password = hashed_password
     )
     db.add(db_user)
     db.commit()
