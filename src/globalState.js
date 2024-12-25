@@ -12,11 +12,13 @@ const state = reactive({
   userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
   cartProducts: JSON.parse(localStorage.getItem("cartProducts")) || [],
   wishlistProducts: JSON.parse(localStorage.getItem("wishlistProducts")) || [],
+  isAuthenticated: !!localStorage.getItem("userInfo"),
 });
 
 export const useGlobalState = () => {
   const login = async (email, password) => {
     try {
+      console.log(email);
       const loginResponse = await apiLogin(email, password);
       const userInfo = await fetchUserById(
         loginResponse.user_id,
@@ -27,10 +29,29 @@ export const useGlobalState = () => {
       state.userInfo.user_id = loginResponse.user_id;
       delete userInfo.id;
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      state.isAuthenticated = true;
     } catch (error) {
       console.error(error);
     }
   };
+  
+  const logout = async () => {
+    try {
+      // Clear user-related data from the state
+      state.userInfo = null;
+      state.cartProducts = [];
+      state.wishlistProducts = [];
+  
+      // Remove user-related data from localStorage
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("cartProducts");
+      localStorage.removeItem("wishlistProducts");
+
+      state.isAuthenticated = false;
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };  
 
   const fetchCarts = async () => {
     try {
@@ -110,6 +131,7 @@ export const useGlobalState = () => {
   return {
     state,
     login,
+    logout,
     fetchCarts,
     removeFromCart,
     fetchWishlist,

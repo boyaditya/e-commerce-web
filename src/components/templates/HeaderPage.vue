@@ -145,10 +145,22 @@
                   </div>
                 </div>
               </div>
-              <div>
-                <router-link to="/user/profile" class="nav-link">
-                  <i class="fa fa-user-o"></i>
-                  <span>My Account</span>
+              <div v-if="state.isAuthenticated">
+                <div>
+                  <router-link to="/user/profile" class="nav-link">
+                    <i class="fa fa-user-o"></i>
+                    <span>My Account</span>
+                  </router-link>
+                </div>
+                <button @click="handleLogout" class="btn btn-danger">
+                  Logout
+                </button>
+              </div>
+              <div v-else>
+                <router-link to="/login">  
+                  <button class="btn btn-primary">
+                    Login
+                  </button>
                 </router-link>
               </div>
 
@@ -243,10 +255,10 @@ export default {
   //   },
 
   setup() {
-    const { state, login, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
+    const { state, login, logout, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
 
     onMounted(async () => {
-      await login("aryaxdm9604@gmail.com", "inipassword");
+      // await login("aryaxdm9604@gmail.com", "inipassword");
       if (state.userInfo) {
         await fetchWishlist(state.userInfo.user_id, state.userInfo.access_token);
         await fetchCarts(state.userInfo.user_id, state.userInfo.access_token);
@@ -280,6 +292,7 @@ export default {
     
     return {
       state,
+      logout,
       quantityTotal,
       formattedCartTotal,
       removeFromCart,
@@ -296,6 +309,11 @@ export default {
         });
       }
     },
+    async handleLogout() {
+      if(this.state.userInfo){
+        await this.logout();
+      }
+    }
   },
   watch: {
     searchQuery(newSearch) {

@@ -488,12 +488,17 @@ export default {
       console.log(`Added ${this.quantity} items to the cart`);
     },
     async toggleWishlist() {
-      if(this.isWishlist){
-        const item = this.globalState.state.wishlistProducts.find(item => item.product.id === this.product.id);
-        await this.globalState.removeFromWishlist(item.id);
+      if(this.globalState.state.isAuthenticated){
+        if(this.isWishlist){
+          const item = this.globalState.state.wishlistProducts.find(item => item.product.id === this.product.id);
+          await this.globalState.removeFromWishlist(item.id);
+        }
+        else{
+          await this.globalState.addToWishlist(this.product.id);
+        }
       }
       else{
-        await this.globalState.addToWishlist(this.product.id);
+        this.$router.push({ name: "login" });
       }
     }
   },
