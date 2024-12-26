@@ -13,7 +13,7 @@
 
     <div class="container mb-12">
       <div class="row">
-        <div class="col-md-4 mb-5">
+        <div class="col-md-4">
           <div class="menu-wrapper shadow-sm p-3 bg-light rounded">
             <ul class="nav flex-column">
               <li class="nav-item">
@@ -26,7 +26,7 @@
                   &nbsp; My Profile
                 </router-link>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <router-link
                   to="/user/edit"
                   class="nav-link"
@@ -35,8 +35,8 @@
                   <i class="fa fa-fw fa-pencil-square"></i>
                   &nbsp; Edit Profile
                 </router-link>
-              </li>
-              <li class="nav-item">
+              </li> -->
+              <!-- <li class="nav-item">
                 <router-link
                   to="/user/bookings"
                   class="nav-link"
@@ -50,7 +50,7 @@
                   <i class="fa fa-fw fa-list-alt"></i>
                   &nbsp; My Bookings
                 </router-link>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <router-link
                   to="/user/changepassword"
@@ -75,7 +75,7 @@
             </ul>
           </div>
         </div>
-
+        
         <router-view></router-view>
       </div>
     </div>
@@ -114,6 +114,7 @@ export default {
 <style scoped>
 .menu-wrapper {
   background-color: #f8f9fa;
+  height: 200px;
   border-radius: 5px;
   padding: 15px;
   border: 1px solid #dee2e6;
