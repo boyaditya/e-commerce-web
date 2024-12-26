@@ -420,7 +420,7 @@ export default {
         Mouse: "mouse-cat.png",
         Microphone: "microphone-cat.png",
         Gamepad: "gamepad-cat.png",
-        Deskmat: "deskmat-cat.png",
+        Mousepad: "mousepad-cat.png",
       };
       return categoryImages[categoryName] || "default-cat.png"; // Gambar default jika kategori tidak ditemukan
     },
