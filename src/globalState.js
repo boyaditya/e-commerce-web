@@ -91,6 +91,7 @@ export const useGlobalState = () => {
         const cartData = await apiAddCartItem(item, state.userInfo);
         state.cartProducts.push(cartData);
         localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+        return cartData;
       }
     } catch (error) {
       console.error(error);
@@ -111,6 +112,7 @@ export const useGlobalState = () => {
 
         state.cartProducts[index].quantity = quantity;
         localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+        return cartData;
       }
     } catch (error) {
       console.error(error);
@@ -127,10 +129,9 @@ export const useGlobalState = () => {
     const index = findProductInCart(product_id);
 
     if (index !== -1) {
-      await updateCartItem(state.cartProducts[index].id, quantity, index);
+      return await updateCartItem(state.cartProducts[index].id, quantity + state.cartProducts[index].quantity, index);
     } else {
-      // Add a new product to the cart
-      await addToCart(product_id, quantity);
+      return await addToCart(product_id, quantity);
     }
   }
   

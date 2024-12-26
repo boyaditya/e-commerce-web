@@ -488,9 +488,11 @@ export default {
       console.log(`Added ${this.quantity} items to the cart`);
 
       try {
-        const index = this.globalState.findProductInCart(this.product.id);
-        await this.globalState.addOrUpdate(this.product.id, this.quantity + this.globalState.state.cartProducts[index].quantity);
-
+        const responseData = await this.globalState.addOrUpdate(this.product.id, this.quantity);
+        if(responseData){
+          this.quantity = 1;
+          alert("Added " + this.quantity + " item(s) to your cart");
+        }
       } catch (error) {
         console.error(error);
       }

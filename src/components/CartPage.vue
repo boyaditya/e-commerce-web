@@ -54,7 +54,7 @@
 
 <script>
 import { computed, onMounted, ref } from "vue";
-import { useGlobalState } from "@/globalState";
+import { useGlobalState } from "@/globalState.js";
 import CartItem from "./shop_item/CartItem.vue";
 export default {
   //   components: {
@@ -168,7 +168,7 @@ export default {
 
     const updateQuantity = async (item, newQuantity) => {
       // console.log(item.product_id);
-      await addOrUpdate(item.product_id, newQuantity);
+      const responseData = await addOrUpdate(item.product_id, newQuantity);
       // const item = state.cartProducts.find((item) => item.id === id);
       // if (item) {
       //   item.quantity = newQuantity;
