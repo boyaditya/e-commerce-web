@@ -1,12 +1,17 @@
+:root {
+    --animation-start: 0%;
+}
+
 /* Body background style */
 .auth-page {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #260909; /* Light background */
+    /* background-color: #260909; */
     background: linear-gradient(135deg, #260909, #ff6f61);
     background-size: 400% 400%;
+    background-position: var(--animation-start) 50%;
     animation: gradientAnimation 8s ease infinite;
     margin: 0;
     font-family: Arial, sans-serif;

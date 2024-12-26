@@ -61,6 +61,17 @@
                   &nbsp; Change Password
                 </router-link>
               </li>
+              <li class="nav-item">
+                <a
+                  href="#"
+                  class="nav-link"
+                  :class="{ active: $route.path === '/logout' }"
+                  @click.prevent="handleLogout"
+                >
+                  <i class="fa fa-fw fa-warning"></i>
+                  &nbsp; Logout
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -82,6 +93,15 @@ export default {
     HeaderPage,
     FooterPage,
   },
+  methods: {
+    handleLogout() {
+      const confirmed = confirm("Apakah Anda yakin ingin logout?");
+      
+      if (confirmed) {
+        this.$router.push('/logout');
+      }
+    }
+  }
 };
 </script>
 
@@ -103,12 +123,12 @@ export default {
 
 .nav-link:hover {
   background-color: #e9ecef;
-  color: #007bff;
+  color: #d90a34;
   border: 1px solid #dee2e6;
 }
 
 .nav-link.active {
-  background-color: #007bff;
+  background-color: #d90a34;
   color: #fff;
 }
 

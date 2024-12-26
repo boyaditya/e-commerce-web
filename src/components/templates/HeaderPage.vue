@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="col-md-4 clearfix">
-            <div class="header-ctn">
+            <div class="header-ctn button-container">
               <!-- <div>
                 <a href="#">
                   <i class="fa fa-heart-o"></i>
@@ -145,24 +145,23 @@
                   </div>
                 </div>
               </div>
-              <div v-if="state.isAuthenticated">
-                <div>
-                  <router-link to="/user/profile" class="nav-link">
-                    <i class="fa fa-user-o"></i>
-                    <span>My Account</span>
+                <div v-if="state.isAuthenticated">
+                    <router-link to="/user/profile" class="nav-link">
+                      <i class="fa fa-user-o"></i>
+                      <span>My Account</span>
+                    </router-link>
+                  <!-- <button @click="handleLogout" class="btn btn-danger btn-login"> 
+                    Logout
+                  </button> -->
+                </div>
+                <div v-else>
+                  <router-link to="/login">  
+                    <button class="btn-login">
+                      Login
+                    </button>
                   </router-link>
                 </div>
-                <button @click="handleLogout" class="btn btn-danger">
-                  Logout
-                </button>
-              </div>
-              <div v-else>
-                <router-link to="/login">  
-                  <button class="btn btn-primary">
-                    Login
-                  </button>
-                </router-link>
-              </div>
+              
 
               <div class="menu-toggle">
                 <a href="#">
@@ -381,6 +380,49 @@ export default {
   overflow-y: auto;
 }
 
+.btn-login {
+  background-color:rgb(222, 14, 14);
+  color: white;
+  font-size: 12px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-login {
+  padding: 1em 2em;
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+  background-color: #fff;
+  /* border: none; */
+  border:solid 1px #e3e3e3cb;
+  width: 100%;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-login:hover {
+    /* background-color: #0056b3; */
+    background-color:rgb(196, 2, 50);
+    box-shadow: 0px 15px 20px rgba(181, 0, 42, 0.57);
+    color: #fff;
+    transform: translateY(-7px);
+}
+
+.btn-login:active {
+    transform: translateY(-1px);
+}
+
+.button-container {
+  display: flex;
+}
+
 .product-widget {
   display: flex;
   align-items: center;
@@ -428,7 +470,7 @@ export default {
 }
 
 .cart-btns a {
-  color: #42b983;
+  color:rgb(255, 255, 255);
   text-decoration: none;
 }
 
@@ -436,3 +478,5 @@ export default {
   text-decoration: underline;
 }
 </style>
+
+{% comment %} btn btn-primary {% endcomment %}
