@@ -46,7 +46,7 @@ export const useGlobalState = () => {
     }
   };
   
-  const logout = async () => {
+  const logout = () => {
     try {
       // Clear user-related data from the state
       state.userInfo = null;

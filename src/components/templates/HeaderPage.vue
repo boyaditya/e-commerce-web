@@ -307,11 +307,6 @@ export default {
           query: { search: this.searchQuery },
         });
       }
-    },
-    async handleLogout() {
-      if(this.state.userInfo){
-        await this.logout();
-      }
     }
   },
   watch: {

@@ -86,6 +86,7 @@
 <script>
 import HeaderPage from "@/components/templates/HeaderPage.vue";
 import FooterPage from "@/components/templates/FooterPage.vue";
+import { useGlobalState } from "@/globalState.js";
 
 export default {
   name: "AccountView",
@@ -93,12 +94,17 @@ export default {
     HeaderPage,
     FooterPage,
   },
+  setup() {
+    const { logout } = useGlobalState();
+    return { logout };
+  },  
   methods: {
     handleLogout() {
       const confirmed = confirm("Apakah Anda yakin ingin logout?");
-      
-      if (confirmed) {
-        this.$router.push('/logout');
+
+      if(confirmed){
+        this.logout();
+        this.$router.push("/");
       }
     }
   }
