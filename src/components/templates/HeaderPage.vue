@@ -79,13 +79,15 @@
                     >
                       <div class="product-img">
                         <img
-                          :src="product.product.image_url"
+                          :src="require('@/assets/img/' + product.product.image_url)"
                           :alt="product.product.name"
                         />
                       </div>
                       <div class="product-body">
                         <h3 class="product-name">
-                          <a href="#">{{ product.product.name }}</a>
+                          <router-link :to="{ path: `/product/${product.product.id}` }">
+                            {{ product.product.name }}
+                          </router-link>
                         </h3>
                         <h4 class="product-price">
                           {{ product.product.price }}
@@ -114,25 +116,27 @@
                     >
                       <div class="product-img">
                         <img
-                          :src="product.product.image_url"
+                          :src="require('@/assets/img/' + product.product.image_url)"
                           :alt="product.product.name"
                         />
                       </div>
                       <div class="product-body">
                         <h3 class="product-name">
-                          <a href="#">{{ product.product.name }}</a>
+                          <router-link :to="{ path: `/product/${product.product.id}` }">
+                            {{ product.product.name }}
+                          </router-link>
                         </h3>
                         <h4 class="product-price">
                           <span class="qty">{{ product.quantity }}x</span>
                           {{ product.product.price }}
                         </h4>
                       </div>
-                      <button
+                      <!-- <button
                         @click="removeFromCart(product.product.id)"
                         class="delete"
                       >
                         <i class="fa fa-close"></i>
-                      </button>
+                      </button> -->
                     </div>
                   </div>
                   <!-- <div class="cart-summary">

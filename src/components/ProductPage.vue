@@ -15,7 +15,8 @@
         <div class="col-md-5">
           <div id="product-main-img">
             <div class="product-preview">
-              <img src="@/assets/img/product01.png" alt="" />
+              <!-- <img src="@/assets/img/product01.png" alt="" /> -->
+               <img :src="require('@/assets/img/' + product.image_url)" :alt="product.name">
             </div>
           </div>
         </div>
