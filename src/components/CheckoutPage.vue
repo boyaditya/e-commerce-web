@@ -1,142 +1,223 @@
 <template>
-  <HeaderPage/>
-  <NavPage/>
-  <BreadcrumbPage/>
-  <div class="checkout-section container mt-4">
-    <!-- Billing Details -->
-    <div class="billing-details">
-      <h3>Billing Address</h3>
-      <div class="form-group">
-        <input type="text" class="form-control" v-model="firstName" placeholder="First Name">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" v-model="lastName" placeholder="Last Name">
-      </div>
-      <div class="form-group">
-        <input type="email" class="form-control" v-model="email" placeholder="Email">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" v-model="address" placeholder="Address">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" v-model="city" placeholder="City">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" v-model="country" placeholder="Country">
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" v-model="zipCode" placeholder="ZIP Code">
-      </div>
-      <div class="form-group">
-        <input type="tel" class="form-control" v-model="telephone" placeholder="Telephone">
-      </div>
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" v-model="createAccount" id="createAccount">
-        <label class="form-check-label" for="createAccount">Create Account?</label>
-      </div>
-      <div v-if="createAccount" class="form-group">
-        <input type="password" class="form-control" v-model="password" placeholder="Enter Your Password">
+  <div id="breadcrumb" class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="breadcrumb-header">Checkout</h3>
+        </div>
       </div>
     </div>
-    <!-- </div> -->
-
-    <!-- Shipping Details -->
-    <div class="shipping-details">
-      <h3>Shipping Address</h3>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" v-model="differentShipping" id="differentShipping">
-        <label class="form-check-label" for="differentShipping">Ship to a different address?</label>
-      </div>
-      <div v-if="differentShipping">
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="shippingFirstName" placeholder="First Name">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="shippingLastName" placeholder="Last Name">
-        </div>
-        <div class="form-group">
-          <input type="email" class="form-control" v-model="shippingEmail" placeholder="Email">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="shippingAddress" placeholder="Address">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="shippingCity" placeholder="City">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" v-model="shippingCountry" placeholder="Country">
-        </div>
-      </div>
-    </div> 
   </div>
-  <ShippingDetails/>
-  <FooterPage/>
+
+  <div class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="address-card">
+            <div class="section-title">
+              <h3 class="title">Shipping Address</h3>
+            </div>
+            <div class="address-details">
+              <p><strong>Full Name:</strong> John Doe</p>
+              <p><strong>Email:</strong> johndoe@example.com</p>
+              <p><strong>Address:</strong> 1234 Main St, Apt 101</p>
+              <p><strong>City:</strong> Jakarta</p>
+              <p><strong>Country:</strong> Indonesia</p>
+              <p><strong>ZIP Code:</strong> 12345</p>
+              <p><strong>Phone:</strong> +62 812-3456-7890</p>
+            </div>
+          </div>
+          <div class="caption">
+            <div class="cart-items">
+              <CheckoutItem
+                v-for="item in selectedCartItems"
+                :key="item.id"
+                :id="item.id"
+                :name="item.product.name"
+                :price="item.product.price"
+                :quantity="item.quantity"
+                :imgSrc="item.product.image_url"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 order-details">
+          <div class="section-title text-center">
+            <h4 class="title">Order Summary</h4>
+          </div>
+          <div class="order-summary">
+            <div class="order-col header">
+              <div class="product-name"><strong>Product</strong></div>
+              <div class="product-price"><strong>Price</strong></div>
+              <div class="product-quantity"><strong>Quantity</strong></div>
+              <div class="product-total"><strong>Total</strong></div>
+            </div>
+            <div v-for="item in selectedCartItems" :key="item.id" class="order-products">
+              <div class="order-col">
+                <div class="product-name">{{ item.product.name }}</div>
+                <div class="product-price">{{ formatPrice(item.product.price) }}</div>
+                <div class="product-quantity">{{ item.quantity }}</div>
+                <div class="product-total">{{ formatPrice(item.product.price * item.quantity) }}</div>
+              </div>
+            </div>
+            <hr />
+            <div class="order-col">
+              <div><strong>Subtotal</strong></div>
+              <div></div>
+              <div><strong>{{ formatPrice(totalPriceProduct) }}</strong></div>
+            </div>
+            <div class="order-col">
+              <div><strong>Shipping Cost</strong></div>
+              <div></div>
+              <div><strong>{{ formatPrice(shippingCost) }}</strong></div>
+            </div>
+            <div class="order-col">
+              <div><strong>Total Payment</strong></div>
+              <div></div>
+              <div><strong>{{ formatPrice(totalPayment) }}</strong></div>
+            </div>
+          </div>
+          <a href="#" class="primary-btn order-submit" @click.prevent="submitOrder">Place Order</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import HeaderPage from '@/components/templates/HeaderPage.vue';
-import NavPage from '@/components/templates/NavPage.vue';
-import BreadcrumbPage from '@/components/templates/BreadCrumbPage.vue';
-import FooterPage from '@/components/templates/FooterPage.vue';
-import ShippingDetails from '@/components/ShippingDetails.vue';
+import { computed, onMounted, ref } from "vue";
+import { useGlobalState } from "@/globalState.js";
+import CheckoutItem from "./shop_item/CheckoutItem.vue";
 
 export default {
-
-  name: 'CheckoutPage',
   components: {
-    HeaderPage,
-    NavPage,
-    BreadcrumbPage,
-    FooterPage,
-    ShippingDetails,
+    CheckoutItem,
   },
-  data() {
-    return {
-      firstName: '',
-      lastName: '',
-      email: '',
-      address: '',
-      city: '',
-      country: '',
-      zipCode: '',
-      telephone: '',
-      createAccount: false,
-      password: '',
-      differentShipping: false,
-      shippingFirstName: '',
-      shippingLastName: '',
-      shippingEmail: '',
-      shippingAddress: '',
-      shippingCity: '',
-      shippingCountry: ''
+  setup() {
+    const { state } = useGlobalState();
+    const shippingCost = ref(12000);
+
+    const selectedCartItems = computed(() => {
+      return state.cartProducts.filter((item) =>
+        state.selectedItems.includes(item.id)
+      );
+    });
+
+    const totalPriceProduct = computed(() => {
+      return selectedCartItems.value.reduce((total, item) => {
+        return total + item.product.price * item.quantity;
+      }, 0);
+    });
+
+    const totalPayment = computed(() => {
+      return totalPriceProduct.value + shippingCost.value;
+    });
+
+    const formatPrice = (price) => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+        .format(price)
+        .replace(/\s/g, "");
     };
-  }
+
+    const submitOrder = () => {
+      console.log("Order submitted", {
+        selectedCartItems: selectedCartItems.value,
+      });
+    };
+
+    return {
+      selectedCartItems,
+      totalPriceProduct,
+      totalPayment,
+      formatPrice,
+      submitOrder,
+      shippingCost,
+    };
+  },
 };
 </script>
-<!-- .red-checkbox:checked {
-  accent-color: red; /* Mengubah warna centang menjadi merah pada checkbox */
-} -->
+
 <style scoped>
-.form-check-input {
-  position: relative;
+.cart-items {
+  margin-bottom: 30px;
+}
+
+.address-card {
+  background: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #e4e7ed;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.address-details p {
+  margin: 0 0 10px;
+}
+
+.order-details .order-summary {
+  margin-bottom: 30px;
+}
+
+.order-details .order-summary .order-col {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.order-details .order-summary .order-products .order-col {
+  margin-bottom: 10px;
+}
+
+.order-details .order-summary .order-col div {
+  flex: 1;
+}
+
+.order-details .order-summary .order-col .product-name {
+  flex: 2;
+}
+
+.order-details .order-summary .order-col .product-price {
+  flex: 1;
+  text-align: center;
+}
+
+.order-details .order-summary .order-col .product-quantity {
+  flex: 1;
+  text-align: center;
+}
+
+.order-details .order-summary .order-col .product-total {
+  flex: 1;
+  text-align: right;
+}
+
+.order-details .order-summary .order-total {
+  font-size: 24px;
+  font-weight: 700;
+  color: #d10024;
+}
+
+.primary-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #d10024;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 700;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.form-check-input:checked {
-  outline: none;
-}
-
-.form-check-input:checked::before {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px; /* Mengatur border radius agar sudut melengkung */
-  top: -2px; /* Atur posisi vertikal */
-  left: -2px; /* Atur posisi horizontal */
-}
-
-.form-check-input:checked + .form-check-label {
-  color: red; /* Mengubah warna label centang jika dicentang */
+.primary-btn:hover {
+  background-color: #a0001b;
 }
 </style>

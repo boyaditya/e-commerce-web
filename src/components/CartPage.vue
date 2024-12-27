@@ -45,7 +45,9 @@
             </div>
           </div>
 
-          <a href="#" class="primary-btn order-submit">Checkout</a>
+          <router-link to="/checkout" class="primary-btn order-submit" @click.prevent="proceedToCheckout">
+            Checkout
+          </router-link>
         </div>
       </div>
     </div>
@@ -132,7 +134,13 @@ export default {
     CartItem,
   },
   setup() {
-    const { state, findProductInCart, addOrUpdate, addOrUpdateCart, fetchCarts, removeFromCart } = useGlobalState();
+    const {
+      state,
+      addOrUpdateCart,
+      fetchCarts,
+      removeFromCart,
+      setSelectedItems,
+    } = useGlobalState();
     const selectedItems = ref([]);
 
     onMounted(async () => {
@@ -189,6 +197,10 @@ export default {
       }
     };
 
+    const proceedToCheckout = () => {
+      setSelectedItems(selectedItems.value);
+    };
+
     return {
       cartItems,
       formattedTotalPrice,
@@ -196,6 +208,7 @@ export default {
       removeItem,
       toggleSelection,
       selectedItems,
+      proceedToCheckout,
     };
   },
 };

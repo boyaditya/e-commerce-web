@@ -17,6 +17,7 @@ const state = reactive({
   cartProducts: JSON.parse(localStorage.getItem("cartProducts")) || [],
   wishlistProducts: JSON.parse(localStorage.getItem("wishlistProducts")) || [],
   isAuthenticated: !!localStorage.getItem("userInfo"),
+  selectedItems: [],
 });
 
 export const useGlobalState = () => {
@@ -45,14 +46,14 @@ export const useGlobalState = () => {
       console.error(error);
     }
   };
-  
+
   const logout = () => {
     try {
       // Clear user-related data from the state
       state.userInfo = null;
       state.cartProducts = [];
       state.wishlistProducts = [];
-  
+
       // Remove user-related data from localStorage
       localStorage.removeItem("userInfo");
       localStorage.removeItem("cartProducts");
@@ -62,7 +63,11 @@ export const useGlobalState = () => {
     } catch (error) {
       console.error("Error during logout:", error);
     }
-  };  
+  };
+
+  const setSelectedItems = (items) => {
+    state.selectedItems = items;
+  };
 
   const fetchCarts = async () => {
     try {
@@ -80,7 +85,8 @@ export const useGlobalState = () => {
   };
 
   const addToCart = async (product_id, quantity) => {
-    const item = { // Initialize item here
+    const item = {
+      // Initialize item here
       user_id: state.userInfo.user_id,
       product_id: product_id,
       quantity: quantity,
@@ -90,7 +96,10 @@ export const useGlobalState = () => {
       if (state.userInfo) {
         const cartData = await apiAddCartItem(item, state.userInfo);
         state.cartProducts.push(cartData);
-        localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+        localStorage.setItem(
+          "cartProducts",
+          JSON.stringify(state.cartProducts)
+        );
         return cartData;
       }
     } catch (error) {
@@ -102,7 +111,7 @@ export const useGlobalState = () => {
     const cart = {
       user_id: state.userInfo.user_id,
       product_id: state.cartProducts[index].product_id,
-      quantity: quantity
+      quantity: quantity,
     };
     console.log(cart);
 
@@ -111,7 +120,10 @@ export const useGlobalState = () => {
         const cartData = await apiUpdateCartItem(cart_id, cart, state.userInfo);
 
         state.cartProducts[index].quantity = quantity;
-        localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+        localStorage.setItem(
+          "cartProducts",
+          JSON.stringify(state.cartProducts)
+        );
         return cartData;
       }
     } catch (error) {
@@ -123,39 +135,50 @@ export const useGlobalState = () => {
     return state.cartProducts.findIndex(
       (item) => item.product_id === product_id
     );
-  }
+  };
 
   const addOrUpdate = async (product_id, quantity) => {
     const index = findProductInCart(product_id);
 
     if (index !== -1) {
-      return await updateCartItem(state.cartProducts[index].id, quantity + state.cartProducts[index].quantity, index);
+      return await updateCartItem(
+        state.cartProducts[index].id,
+        quantity + state.cartProducts[index].quantity,
+        index
+      );
     } else {
       return await addToCart(product_id, quantity);
     }
-  }
+  };
 
   const addOrUpdateCart = async (product_id, quantity) => {
     const index = findProductInCart(product_id);
 
     if (index !== -1) {
-      return await updateCartItem(state.cartProducts[index].id, quantity, index);
+      return await updateCartItem(
+        state.cartProducts[index].id,
+        quantity,
+        index
+      );
     } else {
       return await addToCart(product_id, quantity);
     }
-  }
-  
+  };
+
   const removeFromCart = async (cart_id) => {
     try {
       if (state.userInfo) {
         const cartData = await apiDeleteCartItem(
           cart_id,
-          state.userInfo.access_token,
+          state.userInfo.access_token
         );
         state.cartProducts = state.cartProducts.filter(
           (cart) => cart.id !== cart_id
         );
-        localStorage.setItem("cartProducts", JSON.stringify(state.cartProducts));
+        localStorage.setItem(
+          "cartProducts",
+          JSON.stringify(state.cartProducts)
+        );
       }
     } catch (error) {
       console.error(error);
@@ -178,41 +201,44 @@ export const useGlobalState = () => {
   };
 
   const addToWishlist = async (product_id) => {
-    const item = { // Initialize item here
+    const item = {
+      // Initialize item here
       user_id: state.userInfo.user_id,
       product_id: product_id,
     };
 
     try {
       if (state.userInfo) {
-        const wishlistData = await apiAddWishlistItem(
-          item,
-          state.userInfo,
-        );
+        const wishlistData = await apiAddWishlistItem(item, state.userInfo);
         state.wishlistProducts.push(wishlistData);
-        localStorage.setItem("wishlistProducts", JSON.stringify(state.wishlistProducts));
+        localStorage.setItem(
+          "wishlistProducts",
+          JSON.stringify(state.wishlistProducts)
+        );
       }
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const removeFromWishlist = async (wishlist_id) => {
     try {
       if (state.userInfo) {
         const wishlistData = await apiDeleteWishlistItem(
           wishlist_id,
-          state.userInfo.access_token,
+          state.userInfo.access_token
         );
         state.wishlistProducts = state.wishlistProducts.filter(
           (wishlist) => wishlist.id !== wishlist_id
         );
-        localStorage.setItem("wishlistProducts", JSON.stringify(state.wishlistProducts));
+        localStorage.setItem(
+          "wishlistProducts",
+          JSON.stringify(state.wishlistProducts)
+        );
       }
     } catch (error) {
       console.error(error);
     }
-
   };
 
   return {
@@ -228,5 +254,6 @@ export const useGlobalState = () => {
     fetchWishlist,
     addToWishlist,
     removeFromWishlist,
+    setSelectedItems,
   };
 };

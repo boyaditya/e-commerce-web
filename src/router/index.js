@@ -3,10 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useGlobalState } from "@/globalState";
 
 // import HomePage from '@/components/HomePage.vue';
-import CheckoutPage from "@/components/CheckoutPage.vue";
-import QuickViewPage from "@/components/QuickViewPage";
 import ProductView from "@/views/ProductView.vue";
-
 import LoginForm from "@/components/LoginForm.vue";
 import RegisterForm from "@/components/RegisterForm.vue";
 import HomeView from "@/views/HomeView.vue";
@@ -15,6 +12,7 @@ import CartView from "@/views/CartView.vue";
 import UserView from "@/views/UserView.vue";
 import ProfileSection from "@/components/user/ProfileSection.vue";
 import ChangePassword from "@/components/user/ChangePassword.vue";
+import CheckoutView from "@/views/CheckoutView.vue";
 
 const routes = [
   {
@@ -25,7 +23,7 @@ const routes = [
   {
     path: "/checkout",
     name: "checkout",
-    component: CheckoutPage,
+    component: CheckoutView,
   },
   {
     path: "/login",
@@ -53,10 +51,6 @@ const routes = [
         next();
       }
     },
-  },
-  {
-    path: "/view",
-    component: QuickViewPage,
   },
   {
     path: "/store",
