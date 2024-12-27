@@ -22,28 +22,6 @@
         </div>
         <!-- /Product main img -->
 
-        <!-- Product thumb imgs -->
-        <!-- <div class="col-md-2 col-md-pull-5">
-          <div id="product-imgs">
-            <div class="product-preview">
-              <img src="@/assets/img/product01.png" alt="" />
-            </div>
-
-            <div class="product-preview">
-              <img src="@/assets/img/product03.png" alt="" />
-            </div>
-
-            <div class="product-preview">
-              <img src="@/assets/img/product06.png" alt="" />
-            </div>
-
-            <div class="product-preview">
-              <img src="@/assets/img/product08.png" alt="" />
-            </div>
-          </div>
-        </div> -->
-        <!-- /Product thumb imgs -->
-
         <!-- Product details -->
         <div class="col-md-7">
           <div class="product-details">
@@ -539,6 +517,8 @@ export default {
   text-align: center; /* Center align the icons */
   margin-right: 5px; /* Add some space between the icon and the text */
 }
+
+
 
 p {
   white-space: pre-line; /* Preserve new lines */
