@@ -490,8 +490,8 @@ export default {
       try {
         const responseData = await this.globalState.addOrUpdate(this.product.id, this.quantity);
         if(responseData){
-          this.quantity = 1;
           alert("Added " + this.quantity + " item(s) to your cart");
+          this.quantity = 1;
         }
       } catch (error) {
         console.error(error);

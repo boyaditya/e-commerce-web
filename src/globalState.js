@@ -134,6 +134,16 @@ export const useGlobalState = () => {
       return await addToCart(product_id, quantity);
     }
   }
+
+  const addOrUpdateCart = async (product_id, quantity) => {
+    const index = findProductInCart(product_id);
+
+    if (index !== -1) {
+      return await updateCartItem(state.cartProducts[index].id, quantity, index);
+    } else {
+      return await addToCart(product_id, quantity);
+    }
+  }
   
   const removeFromCart = async (cart_id) => {
     try {
@@ -213,6 +223,7 @@ export const useGlobalState = () => {
     fetchCarts,
     findProductInCart,
     addOrUpdate,
+    addOrUpdateCart,
     removeFromCart,
     fetchWishlist,
     addToWishlist,

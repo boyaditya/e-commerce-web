@@ -132,7 +132,7 @@ export default {
     CartItem,
   },
   setup() {
-    const { state, findProductInCart, addOrUpdate, fetchCarts, removeFromCart } = useGlobalState();
+    const { state, findProductInCart, addOrUpdate, addOrUpdateCart, fetchCarts, removeFromCart } = useGlobalState();
     const selectedItems = ref([]);
 
     onMounted(async () => {
@@ -168,7 +168,7 @@ export default {
 
     const updateQuantity = async (item, newQuantity) => {
       // console.log(item.product_id);
-      const responseData = await addOrUpdate(item.product_id, newQuantity);
+      const responseData = await addOrUpdateCart(item.product_id, newQuantity);
       // const item = state.cartProducts.find((item) => item.id === id);
       // if (item) {
       //   item.quantity = newQuantity;
