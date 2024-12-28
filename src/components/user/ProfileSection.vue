@@ -19,6 +19,9 @@
             </div>
             <div class="col-md-8">
               <div class="profile-info">
+                <div class="section-title">
+                  <h3 class="title">User Information</h3>
+                </div>
                 <div class="profile-info-item">
                   <span class="profile-label">Username</span>
                   <span class="profile-value">{{ userInfo.username }}</span>
@@ -30,6 +33,22 @@
                 <div class="profile-info-item">
                   <span class="profile-label">Member since</span>
                   <span class="profile-value">{{ userInfo.created_at }}</span>
+                </div>
+              </div>
+              <hr />
+              <div class="address-card">
+                <div class="section-title">
+                  <h3 class="title">Shipping Address</h3>
+                </div>
+                <div class="address-details">
+                  <p>
+                    <strong>Street Address:</strong>
+                    {{ userAddress.street_address }}
+                  </p>
+                  <p><strong>City:</strong> {{ userAddress.city }}</p>
+                  <p><strong>State:</strong> {{ userAddress.state }}</p>
+                  <p><strong>Country:</strong> {{ userAddress.country }}</p>
+                  <p><strong>ZIP Code:</strong> {{ userAddress.postal_code }}</p>
                 </div>
               </div>
             </div>
@@ -48,13 +67,19 @@ export default {
       type: Object,
       required: true,
     },
+    userAddress: {
+      type: Object,
+      required: true,
+    },
   },
 };
 </script>
 
 <style scoped>
 .profile-section {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .profile-card {

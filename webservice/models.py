@@ -1,3 +1,4 @@
+import datetime
 from database import BaseDB
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Float, Text, Enum, Time, DateTime
 from sqlalchemy.orm import relationship
@@ -66,6 +67,21 @@ class Users(BaseDB):
     # foto_user = Column(String(512), nullable=False)
     # janji_temu = relationship("JanjiTemu", back_populates="user")
     # pengingat_minum_obat = relationship("PengingatMinumObat", back_populates="user")
+
+
+class Address(BaseDB):
+    __tablename__ = "addresses"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    street_address = Column(String(255), nullable=False)
+    city = Column(String(100), nullable=False)
+    state = Column(String(100), nullable=True)
+    postal_code = Column(String(20), nullable=False)
+    country = Column(String(100), nullable=False)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())    
+    updated_at = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
+
 
 class Carts(BaseDB):
     __tablename__ = "carts"
@@ -220,10 +236,10 @@ class Wishlists(BaseDB):
 #     foto_user = Column(String(512), nullable=False)
 #     janji_temu = relationship("JanjiTemu", back_populates="user")
 #     pengingat_minum_obat = relationship("PengingatMinumObat", back_populates="user")
-    
+
 # class RekamMedis(BaseDB):
 #     __tablename__ = 'rekam_medis'
-    
+
 #     id_rekam_medis = Column(Integer, primary_key=True, index=True)
 #     id_janji_temu = Column(Integer, ForeignKey('janji_temu.id_janji_temu'), nullable=False)
 #     id_obat = Column(Integer, ForeignKey('obat.id_obat'), nullable=False)
@@ -231,6 +247,6 @@ class Wishlists(BaseDB):
 #     pengobatan = Column(Text, nullable=False)
 #     dosis_obat = Column(Text, nullable=False)
 #     catatan = Column(Text, nullable=False)
-    
+
 #     janji_temu = relationship("JanjiTemu", back_populates="rekam_medis")
 #     obat = relationship("Obat", back_populates="rekam_medis")

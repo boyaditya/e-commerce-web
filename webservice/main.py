@@ -97,6 +97,28 @@ def read_user(
     return user
 
 
+@app.get("/addresses/{user_id}", response_model=list[schemas.Address])
+def get_addresses(
+    user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+    addresses = crud.get_addresses_by_user_id(db, user_id)
+    if addresses is None:
+        raise HTTPException(status_code=404, detail="Addresses not found")
+    return addresses
+
+
+@app.post("/addresses/", response_model=schemas.Address)
+def create_address(
+    address: schemas.AddressCreate,
+    db: Session = Depends(get_db),
+):
+    return crud.create_address(db=db, address=address)
+
+
 # @app.post("/login_no_telp") #,response_model=schemas.Token
 # async def login_no_telp(user: schemas.UserLoginPhone, db: Session = Depends(get_db)):
 #     if not authenticate_by_no_telp(db,user):

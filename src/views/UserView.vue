@@ -26,16 +26,16 @@
                   &nbsp; My Profile
                 </router-link>
               </li>
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <router-link
-                  to="/user/edit"
+                  to="/user/address"
                   class="nav-link"
-                  :class="{ active: $route.path === '/user/edit' }"
+                  :class="{ active: $route.path === '/user/address' }"
                 >
                   <i class="fa fa-fw fa-pencil-square"></i>
-                  &nbsp; Edit Profile
+                  &nbsp; Edit Address
                 </router-link>
-              </li> -->
+              </li>
               <!-- <li class="nav-item">
                 <router-link
                   to="/user/bookings"

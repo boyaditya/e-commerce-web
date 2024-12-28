@@ -19,6 +19,30 @@ class ResponseMSG(BaseModel):
 #     class Config:
 #         orm_mode = True
 
+# Address Base Schema
+class AddressBase(BaseModel):
+    street_address: str
+    city: str
+    state: Optional[str] = None
+    postal_code: str
+    country: str
+
+# Address Create Schema
+class AddressCreate(AddressBase):
+    user_id: int
+
+# Address Schema
+class Address(AddressBase):
+    id: int
+    user_id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+
 # Categories
 class CategoriesBase(BaseModel):
     name: str

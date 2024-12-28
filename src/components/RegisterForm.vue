@@ -4,54 +4,111 @@
       <h1 class="auth-title">Register</h1>
       <form @submit.prevent="handleRegister" class="auth-form">
         <div class="form-group">
-          <input 
-            type="text" 
-            v-model="username" 
-            class="form-input" 
-            placeholder="Choose a username"
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            v-model="username"
+            class="form-input"
+            placeholder="Enter your username"
             autocomplete="username"
             required
-          >
+          />
         </div>
 
-        <!-- <div class="form-group">
-          <input 
-            type="text" 
-            v-model="name" 
-            class="form-input" 
-            placeholder="Enter your full name"
-            autocomplete="name"
-            required
-          >
-        </div> -->
-        
         <div class="form-group">
-          <input 
-            type="email" 
-            v-model="email" 
-            class="form-input" 
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            v-model="email"
+            class="form-input"
             placeholder="Enter your email"
             autocomplete="email"
             required
-          >
+          />
         </div>
-        
+
         <div class="form-group">
-          <input 
-            type="password" 
-            v-model="password" 
-            class="form-input" 
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            class="form-input"
             placeholder="Choose a password"
             autocomplete="new-password"
             required
-          >
+          />
+        </div>
+        <hr />
+        <div class="form-group">
+          <label for="street_address">Street Address</label>
+          <input
+            type="text"
+            id="street_address"
+            v-model="address.street_address"
+            class="form-input"
+            placeholder="Street Address"
+            required
+          />
         </div>
 
-        <p v-if="errorMessage" class="error-message" role="alert">{{ errorMessage }}</p>
-        
+        <div class="form-group">
+          <label for="city">City</label>
+          <input
+            type="text"
+            id="city"
+            v-model="address.city"
+            class="form-input"
+            placeholder="City"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="state">State</label>
+          <input
+            type="text"
+            id="state"
+            v-model="address.state"
+            class="form-input"
+            placeholder="State"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="postal_code">Postal Code</label>
+          <input
+            type="text"
+            id="postal_code"
+            v-model="address.postal_code"
+            class="form-input"
+            placeholder="Postal Code"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input
+            type="text"
+            id="country"
+            v-model="address.country"
+            class="form-input"
+            placeholder="Country"
+            required
+          />
+        </div>
+
+        <p v-if="errorMessage" class="error-message" role="alert">
+          {{ errorMessage }}
+        </p>
+
         <button type="submit" class="auth-button">Register</button>
       </form>
-      
+
       <router-link to="/login" class="auth-link">
         Already have an account? Login here
       </router-link>
@@ -63,24 +120,31 @@
 import { useGlobalState } from "@/globalState";
 
 export default {
-  name: 'RegisterForm',
+  name: "RegisterForm",
   data() {
     return {
-      username: '',
-      name: '',
-      email: '',
-      password: '',
-      errorMessage: ''
-    }
+      username: "",
+      name: "",
+      email: "",
+      password: "",
+      address: {
+        street_address: "",
+        city: "",
+        state: "",
+        postal_code: "",
+        country: "",
+      },
+      errorMessage: "",
+    };
   },
-  setup(){
+  setup() {
     const { register } = useGlobalState();
     return { register };
   },
   methods: {
     async handleRegister() {
-      if (!this.username || !this.email || !this.password) {
-        this.errorMessage = 'Please fill in all fields';
+      if (!this.username || !this.email || !this.password || !this.address) {
+        this.errorMessage = "Please fill in all fields";
         return;
       }
 
@@ -91,16 +155,16 @@ export default {
       // });
 
       try {
-        await this.register(this.username, this.email, this.password);
+        await this.register(this.username, this.email, this.password, this.address);
         this.$router.push("/login");
       } catch (error) {
         console.error(error);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-@import '../assets/css/auth.css';
+@import "../assets/css/auth.css";
 </style>

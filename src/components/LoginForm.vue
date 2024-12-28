@@ -68,7 +68,7 @@ export default {
           this.$router.back();
         }
         else{
-          this.$router.push("/home");
+          this.$router.push("/");
         }
       } catch (error) {
         console.error(error);

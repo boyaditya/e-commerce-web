@@ -13,6 +13,7 @@ import UserView from "@/views/UserView.vue";
 import ProfileSection from "@/components/user/ProfileSection.vue";
 import ChangePassword from "@/components/user/ChangePassword.vue";
 import CheckoutView from "@/views/CheckoutView.vue";
+import AddressSection from "@/components/user/AddressSection.vue";
 
 const routes = [
   {
@@ -78,6 +79,7 @@ const routes = [
         component: ProfileSection,
         props: () => ({
           userInfo: JSON.parse(localStorage.getItem("userInfo")),
+          userAddress: JSON.parse(localStorage.getItem("userAddress")),
         }),
       },
       {
@@ -87,7 +89,16 @@ const routes = [
         props: () => ({
           userInfo: JSON.parse(localStorage.getItem("userInfo")),
         }),
+      },
+      {
+        name: "address",
+        path: "address",
+        component: () => AddressSection,
+        props: () => ({
+          userInfo: JSON.parse(localStorage.getItem("userAddress")),
+        }),
       }
+
     ],
     beforeEnter: (to, from, next) => {
       const { state } = useGlobalState();

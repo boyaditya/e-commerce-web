@@ -45,9 +45,14 @@
             </div>
           </div>
 
-          <router-link to="/checkout" class="primary-btn order-submit" @click.prevent="proceedToCheckout">
+          <button
+            class="primary-btn order-submit"
+            :class="{ disabled: !hasSelectedItems }"
+            @click="proceedToCheckout"
+            :disabled="!hasSelectedItems"
+          >
             Checkout
-          </router-link>
+          </button>
         </div>
       </div>
     </div>
@@ -56,84 +61,16 @@
 
 <script>
 import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useGlobalState } from "@/globalState.js";
 import CartItem from "./shop_item/CartItem.vue";
-export default {
-  //   components: {
-  //     CartItem,
-  //   },
-  //   data() {
-  //     return {
-  //       cartItems: [
-  //         {
-  //           id: 1,
-  //           name: "Product 1",
-  //           price: 100,
-  //           quantity: 1,
-  //           image: "shop03.png",
-  //         },
-  //         {
-  //           id: 2,
-  //           name: "Product 2",
-  //           price: 200,
-  //           quantity: 2,
-  //           image: "shop03.png",
-  //         },
-  //       ],
-  //       selectedItems: [],
-  //     };
-  //   },
-  //   async mounted() {
-  //     try {
-  //       const data = await fetchCarts();
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.error("Failed to fetch cart items:", error);
-  //     }
-  //   },
-  //   computed: {
-  //     totalPrice() {
-  //       return this.cartItems.reduce((total, item) => {
-  //         if (this.selectedItems.includes(item.id)) {
-  //           return total + item.price * item.quantity;
-  //         }
-  //         return total;
-  //       }, 0);
-  //     },
-  //     formattedTotalPrice() {
-  //       return new Intl.NumberFormat("id-ID", {
-  //         style: "currency",
-  //         currency: "IDR",
-  //       }).format(this.totalPrice);
-  //     },
-  //   },
-  //   methods: {
-  //     updateQuantity(id, newQuantity) {
-  //       const item = this.cartItems.find((item) => item.id === id);
-  //       if (item) {
-  //         item.quantity = newQuantity;
-  //       }
-  //     },
-  //     removeItem(id) {
-  //       this.cartItems = this.cartItems.filter((item) => item.id !== id);
-  //       this.selectedItems = this.selectedItems.filter((itemId) => itemId !== id);
-  //     },
-  //     toggleSelection(id, isSelected) {
-  //       if (isSelected) {
-  //         this.selectedItems.push(id);
-  //       } else {
-  //         this.selectedItems = this.selectedItems.filter(
-  //           (itemId) => itemId !== id
-  //         );
-  //       }
-  //     },
-  //   },
-  // };
 
+export default {
   components: {
     CartItem,
   },
   setup() {
+    const router = useRouter();
     const {
       state,
       addOrUpdateCart,
@@ -174,13 +111,12 @@ export default {
         .replace(/\s/g, "");
     });
 
+    const hasSelectedItems = computed(() => {
+      return selectedItems.value.length > 0;
+    });
+
     const updateQuantity = async (item, newQuantity) => {
-      // console.log(item.product_id);
-      const responseData = await addOrUpdateCart(item.product_id, newQuantity);
-      // const item = state.cartProducts.find((item) => item.id === id);
-      // if (item) {
-      //   item.quantity = newQuantity;
-      // }
+      await addOrUpdateCart(item.product_id, newQuantity);
     };
 
     const removeItem = (id) => {
@@ -198,7 +134,10 @@ export default {
     };
 
     const proceedToCheckout = () => {
-      setSelectedItems(selectedItems.value);
+      if (hasSelectedItems.value) {
+        setSelectedItems(selectedItems.value);
+        router.push("/checkout");
+      }
     };
 
     return {
@@ -209,10 +148,47 @@ export default {
       toggleSelection,
       selectedItems,
       proceedToCheckout,
+      hasSelectedItems,
     };
   },
 };
 </script>
 
-<style>
+<style scoped>
+.cart-items {
+  margin-bottom: 30px;
+}
+
+.order-details .order-summary {
+  margin-bottom: 30px;
+}
+
+.order-details .order-summary .order-col {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.primary-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #d10024;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.primary-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.primary-btn:hover:not(.disabled) {
+  background-color: #a0001b;
+}
 </style>

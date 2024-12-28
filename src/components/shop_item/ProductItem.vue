@@ -83,10 +83,6 @@ export default {
       type: String,
       required: true,
     },
-    productLink: {
-      type: Number,
-      required: true,
-    },
     productPrice: {
       type: Number,
       required: true,

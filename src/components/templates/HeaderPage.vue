@@ -258,10 +258,9 @@ export default {
   //   },
 
   setup() {
-    const { state, login, logout, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
+    const { state, logout, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
 
     onMounted(async () => {
-      // await login("aryaxdm9604@gmail.com", "inipassword");
       if (state.userInfo) {
         await fetchWishlist(state.userInfo.user_id, state.userInfo.access_token);
         await fetchCarts(state.userInfo.user_id, state.userInfo.access_token);

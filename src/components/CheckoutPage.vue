@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useGlobalState } from "@/globalState.js";
 import CheckoutItem from "./shop_item/CheckoutItem.vue";
 

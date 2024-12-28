@@ -11,6 +11,26 @@ def get_user(db: Session, id_user: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.Users).filter(models.Users.email == email).first()
 
+
+def get_addresses_by_user_id(db: Session, user_id: int):
+    return db.query(models.Address).filter(models.Address.user_id == user_id).all()
+
+
+def create_address(db: Session, address: schemas.AddressCreate):
+    db_address = models.Address(
+        user_id=address.user_id,
+        street_address=address.street_address,
+        city=address.city,
+        state=address.state,
+        postal_code=address.postal_code,
+        country=address.country,
+    )
+    db.add(db_address)
+    db.commit()
+    db.refresh(db_address)
+    return db_address
+
+
 # def get_user_by_no_telp(db: Session, no_telp: str):
 #     return db.query(models.Users).filter(models.Users.no_telp_user == no_telp).first()
 
@@ -48,7 +68,6 @@ def get_products_by_category(
         .limit(limit)
         .all()
     )
-
 
 
 # def get_item(db: Session, id_user: int):

@@ -10,10 +10,13 @@ import {
   fetchWishlist as apiFetchWishlist,
   addWishlistItem as apiAddWishlistItem,
   deleteWishlistItem as apiDeleteWishlistItem,
+  getAddress as apiGetAddress,
+  createAddress as apiCreateAddress,
 } from "@/api/api";
 
 const state = reactive({
   userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
+  userAddress: JSON.parse(localStorage.getItem("userAddress")) || null,
   cartProducts: JSON.parse(localStorage.getItem("cartProducts")) || [],
   wishlistProducts: JSON.parse(localStorage.getItem("wishlistProducts")) || [],
   isAuthenticated: !!localStorage.getItem("userInfo"),
@@ -33,15 +36,19 @@ export const useGlobalState = () => {
       state.userInfo.user_id = loginResponse.user_id;
       delete userInfo.id;
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+      const userAddress = await apiGetAddress(loginResponse.user_id, loginResponse.access_token);
+      state.userAddress = userAddress;
+      localStorage.setItem("userAddress", JSON.stringify(userAddress[0]));
       state.isAuthenticated = true;
     } catch (error) {
       console.error(error);
     }
   };
 
-  const register = async (username, email, password) => {
+  const register = async (username, email, password, address) => {
     try {
-      const registerResponse = await apiRegister(username, email, password);
+      await apiRegister(username, email, password, address);
     } catch (error) {
       console.error(error);
     }
@@ -62,6 +69,26 @@ export const useGlobalState = () => {
       state.isAuthenticated = false;
     } catch (error) {
       console.error("Error during logout:", error);
+    }
+  };
+
+  const fetchUserAddress = async (userId) => {
+    try {
+      const address = await apiGetAddress(userId);
+      state.userAddress = address;
+      localStorage.setItem("userAddress", JSON.stringify(address));
+    } catch (error) {
+      console.error("Failed to fetch user address:", error);
+    }
+  };
+
+  const setUserAddress = async (userId, address) => {
+    try {
+      const newAddress = await apiCreateAddress(userId, address);
+      state.userAddress = newAddress;
+      localStorage.setItem("userAddress", JSON.stringify(newAddress));
+    } catch (error) {
+      console.error("Failed to set user address:", error);
     }
   };
 
@@ -255,5 +282,7 @@ export const useGlobalState = () => {
     addToWishlist,
     removeFromWishlist,
     setSelectedItems,
+    fetchUserAddress,
+    setUserAddress,
   };
 };

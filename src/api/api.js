@@ -2,19 +2,63 @@ import axios from "axios";
 
 
 
-export async function register(username, email, password) {
+export async function register(username, email, password, address) {
   try {
     const response = await axios.post("http://127.0.0.1:8000/register_email", {
       username,
       email,
-      password
+      password,
     });
+
+    const userId = response.data.id;
+
+    // Post the address data
+    await createAddress(userId, address);
+
     return response.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
+
+export async function createAddress(userId, address) {
+  try {
+    const response = await axios.post("http://127.0.0.1:8000/addresses/", {
+      user_id: userId,
+      street_address: address.street_address,
+      city: address.city,
+      state: address.state,
+      postal_code: address.postal_code,
+      country: address.country,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getAddress(userId, accessToken) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/addresses/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 
 export async function login(email, password) {
   try {
