@@ -55,23 +55,34 @@
 </template>
 
 <script>
+import { computed, onMounted } from "vue";
+import { useGlobalState } from "@/globalState.js";
+
 export default {
-  data() {
-    return {
-      address: {
-        street_address: "",
-        city: "",
-        state: "",
-        postal_code: "",
-        country: "",
-      },
+  setup() {
+    const { state, setUserAddress } = useGlobalState();
+
+    const address = computed(() => state.userAddress);
+
+    const saveAddress = async () => {
+      try {
+        await setUserAddress(state.userInfo.user_id, address.value);
+        console.log("Address saved:", address.value);
+      } catch (error) {
+        console.error("Failed to save address:", error);
+      }
     };
-  },
-  methods: {
-    saveAddress() {
-      // Logic to save the address
-      console.log("Address saved:", this.address);
-    },
+
+    onMounted(() => {
+      if (address.value) {
+        address.value = { ...state.userAddress };
+      }
+    });
+
+    return {
+      address,
+      saveAddress,
+    };
   },
 };
 </script>
