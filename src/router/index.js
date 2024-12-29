@@ -14,6 +14,9 @@ import ProfileSection from "@/components/user/ProfileSection.vue";
 import ChangePassword from "@/components/user/ChangePassword.vue";
 import CheckoutView from "@/views/CheckoutView.vue";
 import AddressSection from "@/components/user/AddressSection.vue";
+import OrderHistoryView from "@/views/OrderHistoryView.vue";
+import OrderDetailView from "@/views/OrderDetailView.vue";
+
 
 const routes = [
   {
@@ -25,6 +28,25 @@ const routes = [
     path: "/checkout",
     name: "checkout",
     component: CheckoutView,
+  },
+  {
+    path: "/user/order-history",
+    name: "orderhistory",
+    component: OrderHistoryView,
+    beforeEnter: (to, from, next) => {
+      const { state } = useGlobalState();
+      if (!state.isAuthenticated) {
+        next({ name: "login" });
+      } else {
+        next();
+      }
+    },
+  },
+  {
+    path: '/order-detail/:id',
+    name: 'OrderDetail',
+    component: OrderDetailView,
+    props: true, // agar parameter id dapat diterima sebagai props
   },
   {
     path: "/login",

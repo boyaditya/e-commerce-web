@@ -53,50 +53,52 @@
           </div>
           <div class="col-md-4 clearfix">
             <div class="header-ctn button-container">
-              <!-- <div>
-                <a href="#">
-                  <i class="fa fa-heart-o"></i>
-                  <span>Your Wishlist</span>
-                  <div class="qty">{{ wishlistCount }}</div>
-                </a>
-              </div> -->
-              <div class="dropdown">
-                <a
-                  class="dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-expanded="true"
-                >
-                  <i class="fa fa-heart-o"></i>
-                  <span>Your Wishlist</span>
-                  <div class="qty">{{ wishlistCount }}</div>
-                </a>
-                <div class="cart-dropdown">
-                  <div class="cart-items">
-                    <div
-                      v-for="product in state.wishlistProducts"
-                      :key="product.product.id"
-                      class="product-widget"
-                    >
-                      <div class="product-img">
-                        <img
-                          :src="require('@/assets/img/' + product.product.image_url)"
-                          :alt="product.product.name"
-                        />
-                      </div>
-                      <div class="product-body">
-                        <h3 class="product-name">
-                          <router-link :to="{ path: `/product/${product.product.id}` }">
-                            {{ product.product.name }}
-                          </router-link>
-                        </h3>
-                        <h4 class="product-price">
-                          {{ product.product.price }}
-                        </h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  <!-- Wishlist Dropdown -->
+  <div class="dropdown">
+    <a
+      class="dropdown-toggle"
+      data-toggle="dropdown"
+      aria-expanded="true"
+    >
+      <i class="fa fa-heart-o"></i>
+      <span>Your Wishlist</span>
+      <div class="qty">{{ wishlistCount }}</div>
+    </a>
+    <div class="cart-dropdown">
+      <div class="cart-items">
+        <div
+          v-for="product in state.wishlistProducts"
+          :key="product.product.id"
+          class="product-widget"
+        >
+          <div class="product-img">
+            <img
+              :src="require('@/assets/img/' + product.product.image_url)"
+              :alt="product.product.name"
+            />
+          </div>
+          <div class="product-body">
+            <h3 class="product-name">
+              <router-link :to="{ path: `/product/${product.product.id}` }">
+                {{ product.product.name }}
+              </router-link>
+            </h3>
+            <h4 class="product-price">
+              {{ product.product.price }}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order History -->
+  <div class="dropdown">
+    <router-link to="/user/order-history" class="nav-link">
+      <i class="fa fa-history"></i>
+      <span>Order History</span>
+    </router-link>
+  </div>
               <div class="dropdown">
                 <a
                   class="dropdown-toggle"
