@@ -27,6 +27,8 @@ export async function createAddress(userId, address) {
     const response = await axios.post("http://127.0.0.1:8000/addresses/", {
       user_id: userId,
       street_address: address.street_address,
+      recipients_name: address.recipients_name,
+      phone_number: address.phone_number,
       city: address.city,
       state: address.state,
       postal_code: address.postal_code,

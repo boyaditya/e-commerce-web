@@ -18,14 +18,21 @@
               <h3 class="title">Shipping Address</h3>
             </div>
             <div class="address-details">
-              <p><strong>Full Name:</strong> John Doe</p>
-              <p><strong>Email:</strong> johndoe@example.com</p>
-              <p><strong>Address:</strong> 1234 Main St, Apt 101</p>
-              <p><strong>City:</strong> Jakarta</p>
-              <p><strong>Country:</strong> Indonesia</p>
-              <p><strong>ZIP Code:</strong> 12345</p>
-              <p><strong>Phone:</strong> +62 812-3456-7890</p>
+              <p>
+                <strong>Recipient's Name:</strong> {{ address.recipients_name }}
+              </p>
+              <p><strong>Phone Number:</strong> {{ address.phone_number }}</p>
+              <p>
+                <strong>Street Address:</strong> {{ address.street_address }}
+              </p>
+              <p><strong>City:</strong> {{ address.city }}</p>
+              <p><strong>State:</strong> {{ address.state }}</p>
+              <p><strong>Country:</strong> {{ address.country }}</p>
+              <p><strong>ZIP Code:</strong> {{ address.postal_code }}</p>
             </div>
+            <router-link to="/user/address" class="btn btn-primary"
+              >Edit Address</router-link
+            >
           </div>
           <div class="caption">
             <div class="cart-items">
@@ -53,32 +60,51 @@
               <div class="product-quantity"><strong>Quantity</strong></div>
               <div class="product-total"><strong>Total</strong></div>
             </div>
-            <div v-for="item in selectedCartItems" :key="item.id" class="order-products">
+            <div
+              v-for="item in selectedCartItems"
+              :key="item.id"
+              class="order-products"
+            >
               <div class="order-col">
                 <div class="product-name">{{ item.product.name }}</div>
-                <div class="product-price">{{ formatPrice(item.product.price) }}</div>
+                <div class="product-price">
+                  {{ formatPrice(item.product.price) }}
+                </div>
                 <div class="product-quantity">{{ item.quantity }}</div>
-                <div class="product-total">{{ formatPrice(item.product.price * item.quantity) }}</div>
+                <div class="product-total">
+                  {{ formatPrice(item.product.price * item.quantity) }}
+                </div>
               </div>
             </div>
             <hr />
             <div class="order-col">
               <div><strong>Subtotal</strong></div>
               <div></div>
-              <div><strong>{{ formatPrice(totalPriceProduct) }}</strong></div>
+              <div>
+                <strong>{{ formatPrice(totalPriceProduct) }}</strong>
+              </div>
             </div>
             <div class="order-col">
               <div><strong>Shipping Cost</strong></div>
               <div></div>
-              <div><strong>{{ formatPrice(shippingCost) }}</strong></div>
+              <div>
+                <strong>{{ formatPrice(shippingCost) }}</strong>
+              </div>
             </div>
             <div class="order-col">
               <div><strong>Total Payment</strong></div>
               <div></div>
-              <div><strong>{{ formatPrice(totalPayment) }}</strong></div>
+              <div>
+                <strong>{{ formatPrice(totalPayment) }}</strong>
+              </div>
             </div>
           </div>
-          <a href="#" class="primary-btn order-submit" @click.prevent="submitOrder">Place Order</a>
+          <a
+            href="#"
+            class="primary-btn order-submit"
+            @click.prevent="submitOrder"
+            >Place Order</a
+          >
         </div>
       </div>
     </div>
@@ -131,6 +157,8 @@ export default {
       });
     };
 
+    const address = computed(() => state.userAddress);
+
     return {
       selectedCartItems,
       totalPriceProduct,
@@ -138,6 +166,7 @@ export default {
       formatPrice,
       submitOrder,
       shippingCost,
+      address,
     };
   },
 };
@@ -219,5 +248,23 @@ export default {
 
 .primary-btn:hover {
   background-color: #a0001b;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
 }
 </style>

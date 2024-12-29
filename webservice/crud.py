@@ -19,6 +19,8 @@ def get_addresses_by_user_id(db: Session, user_id: int):
 def create_address(db: Session, address: schemas.AddressCreate):
     db_address = models.Address(
         user_id=address.user_id,
+        recipients_name=address.recipients_name,
+        phone_number=address.phone_number,
         street_address=address.street_address,
         city=address.city,
         state=address.state,

@@ -42,13 +42,21 @@
                 </div>
                 <div class="address-details">
                   <p>
+                    <strong>Recipient's Name:</strong>
+                    {{ userAddress.recipients_name }}
+                  </p>
+                  <p><strong>Phone Number:</strong> {{ userAddress.phone_number }}</p>
+
+                  <p>
                     <strong>Street Address:</strong>
                     {{ userAddress.street_address }}
                   </p>
                   <p><strong>City:</strong> {{ userAddress.city }}</p>
                   <p><strong>State:</strong> {{ userAddress.state }}</p>
                   <p><strong>Country:</strong> {{ userAddress.country }}</p>
-                  <p><strong>ZIP Code:</strong> {{ userAddress.postal_code }}</p>
+                  <p>
+                    <strong>ZIP Code:</strong> {{ userAddress.postal_code }}
+                  </p>
                 </div>
               </div>
             </div>

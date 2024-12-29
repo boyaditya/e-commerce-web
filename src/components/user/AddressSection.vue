@@ -4,6 +4,24 @@
       <h3>Edit Address</h3>
       <form @submit.prevent="saveAddress">
         <div class="form-group">
+          <label for="recipients_name">Recipient's Name</label>
+          <input
+            type="text"
+            id="recipients_name"
+            v-model="address.recipients_name"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            v-model="address.phone_number"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
           <label for="street_address">Street Address</label>
           <input
             type="text"

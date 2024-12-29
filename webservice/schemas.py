@@ -21,6 +21,8 @@ class ResponseMSG(BaseModel):
 
 # Address Base Schema
 class AddressBase(BaseModel):
+    recipients_name: str
+    phone_number: str
     street_address: str
     city: str
     state: Optional[str] = None

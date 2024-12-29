@@ -42,6 +42,30 @@
           />
         </div>
         <hr />
+
+                <div class="form-group">
+          <label for="recipients_name">Recipient's Name</label>
+          <input 
+            type="text" 
+            id="recipients_name"
+            v-model="address.recipients_name" 
+            class="form-input" 
+            placeholder="Recipient's Name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input 
+            type="text" 
+            id="phone"
+            v-model="address.phone_number" 
+            class="form-input" 
+            placeholder="Phone Number"
+            required
+          >
+        </div>
         <div class="form-group">
           <label for="street_address">Street Address</label>
           <input
@@ -128,6 +152,8 @@ export default {
       email: "",
       password: "",
       address: {
+        receipents_name: "",
+        phone_number: "",
         street_address: "",
         city: "",
         state: "",
