@@ -206,6 +206,97 @@ export async function deleteWishlistItem(wishlist_id, accessToken) {
   }
 }
 
+export async function addTransaction(transaction, details, cart_items, userInfo) {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/add_transaction",
+      {
+        transaction,
+        details,
+        cart_items
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchTransactions(user_id, userInfo) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/get_transactions/${user_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchTransactionByInvoice(invoice, userInfo) {
+  // invoice = encodeURIComponent(invoice);
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/get_transaction_by_invoice?invoice=${invoice}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchTransactionDetails(transaction_id, userInfo) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/get_transaction_details/${transaction_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function fetchAllTransactionDetails(user_id, userInfo) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/get_all_transaction_details/${user_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userInfo.access_token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function fetchAllProducts() {
   try {
     const response = await axios.get("http://127.0.0.1:8000/get_products");

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 import bcrypt
 from sqlalchemy import desc
+from typing import List
 
 SALT = b'$2b$12$0nFckzktMD0Fb16a8JsNA.'
 
@@ -207,6 +208,49 @@ def delete_wishlist_item(db: Session, wishlist_id: int):
     deleted = db.query(models.Wishlists).filter(models.Wishlists.id == wishlist_id).delete()
     db.commit()
     return deleted
+
+## transaction
+def add_transaction(db: Session, transaction: schemas.TransactionCreate, details: list[schemas.TransactionDetailCreate]):
+    db_transaction = models.Transaction(
+        user_id=transaction.user_id,
+        address_id=transaction.address_id,
+        total=transaction.total,
+        status=transaction.status,
+        invoice=transaction.invoice,
+        number=transaction.number,
+    )
+    db.add(db_transaction)
+    db.commit()
+    db.refresh(db_transaction)
+
+    # Add transaction details
+    for detail in details:
+        db_detail = models.TransactionDetail(
+            transaction_id=db_transaction.id,
+            product_id=detail.product_id,
+            product_name=detail.product_name,
+            product_price=detail.product_price,
+            product_image_url=detail.product_image_url,
+            product_category_id=detail.product_category_id,
+            quantity=detail.quantity,
+            total_price=detail.total_price,
+        )
+        db.add(db_detail)
+
+    db.commit()
+    return db_transaction
+
+def get_transaction_by_invoice(db: Session, invoice: int):
+    return db.query(models.Transaction).filter(models.Transaction.invoice == invoice).first()
+
+def get_transactions(db: Session, user_id: int):
+    return db.query(models.Transaction).filter(models.Transaction.user_id == user_id).order_by(models.Transaction.created_at.desc()).all()
+
+def get_transaction_details(db: Session, transaction_id: int):
+    return db.query(models.TransactionDetail).filter(models.TransactionDetail.transaction_id == transaction_id).all()
+
+def get_all_transaction_details(db: Session, user_id: int):
+    return db.query(models.TransactionDetail).join(models.Transaction).filter(models.Transaction.user_id == user_id).all()
 
 # ## dokter
 # def create_dokter(db: Session, dokter: schemas.DokterCreate):
