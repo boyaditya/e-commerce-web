@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="row" v-else>
-        <SectionTitle title="Category" />
+        <SectionTitle title="Kategori" />
         <CategoryItem
           v-for="(category, index) in categories"
           :key="index"
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="row" v-else>
-        <SectionTitle title="New Products" />
+        <SectionTitle title="Produk Terbaru" />
         <div class="col-md-12">
           <div class="row">
             <div class="products-tabs">
@@ -47,7 +47,7 @@
                     :category="product.category.name"
                     :productName="product.name"
                     :productPrice="product.price"
-                    :newLabel="'NEW'"
+                    :newLabel="'BARU'"
                   />
                 </div>
                 <div v-else class="no-products">
@@ -68,8 +68,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="featured-header text-center">
-            <h2>Featured Gaming Gear</h2>
-            <p>Discover Our Premium Selection</p>
+            <h2>Perlengkapan Gaming Pilihan</h2>
+            <p>Temukan Pilihan Premium Kami</p>
           </div>
         </div>
       </div>

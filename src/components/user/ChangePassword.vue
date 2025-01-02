@@ -1,21 +1,21 @@
 <template>
   <div class="col-md-8">
     <div class="profile-section">
-      <h3 class="mb-4">Change Password</h3>
+      <h3 class="mb-4">Ubah Password</h3>
       <div class="card shadow-sm profile-card">
         <div class="card-body">
           <form @submit.prevent="changePassword">
             <div class="col">
               <div class="col">
                   <div class="mb-3">
-                    <label for="password" class="form-label">New Password</label>
+                    <label for="password" class="form-label">Ubah Password</label>
                     <input
                       type="password"
                       class="form-control"
                       id="password"
                       v-model="userInfo.password"
                     />
-                  <button type="submit" class="btn-login">Save Changes</button>
+                  <button type="submit" class="btn-login">Simpan Perubahan</button>
                 </div>
               </div>
             </div>

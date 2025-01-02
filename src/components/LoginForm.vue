@@ -1,14 +1,14 @@
 <template>
   <div class="auth-page">
     <div class="auth-container">
-      <h1 class="auth-title">Login</h1>
+      <h1 class="auth-title">Log in</h1>
       <form @submit.prevent="handleLogin" class="auth-form">
         <div class="form-group">
           <input 
             type="email" 
             v-model="email" 
             class="form-input" 
-            placeholder="Enter your email"
+            placeholder="Masukkan Email"
             autocomplete="email"
             required
           >
@@ -19,7 +19,7 @@
             type="password" 
             v-model="password" 
             class="form-input" 
-            placeholder="Enter your password"
+            placeholder="Masukkan Password"
             autocomplete="current-password"
             required
           >
@@ -27,11 +27,11 @@
 
         <p v-if="errorMessage" class="error-message" role="alert">{{ errorMessage }}</p>
         
-        <button type="submit" class="auth-button">Login</button>
+        <button type="submit" class="auth-button">Log in</button>
       </form>
       
       <router-link to="/register" class="auth-link">
-        Don't have an account? Register here
+        Baru di ardhicom? Daftar disini
       </router-link>
     </div>
   </div>

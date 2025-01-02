@@ -45,9 +45,9 @@
                 <input
                   v-model="searchQuery"
                   class="input"
-                  placeholder="Search here"
+                  placeholder="Cari Disini"
                 />
-                <button class="search-btn">Search</button>
+                <button class="search-btn">Cari</button>
               </form>
             </div>
           </div>
@@ -61,7 +61,7 @@
       aria-expanded="true"
     >
       <i class="fa fa-heart-o"></i>
-      <span>Your Wishlist</span>
+      <span>Wishlist</span>
       <div class="qty">{{ wishlistCount }}</div>
     </a>
     <div class="cart-dropdown">
@@ -96,7 +96,7 @@
   <div class="dropdown">
     <router-link to="/user/order-history" class="nav-link">
       <i class="fa fa-history"></i>
-      <span>Order History</span>
+      <span>Riwayat Pesanan</span>
     </router-link>
   </div>
               <div class="dropdown">
@@ -106,7 +106,7 @@
                   aria-expanded="true"
                 >
                   <i class="fa fa-shopping-cart"></i>
-                  <span>Your Cart</span>
+                  <span>Keranjang</span>
                   <div class="qty">{{ quantityTotal }}</div>
                 </a>
                 <div class="cart-dropdown">
@@ -146,7 +146,7 @@
                     <h5>SUBTOTAL: {{ cartTotal }}</h5>
                   </div> -->
                   <div class="cart-btns">
-                    <router-link to="/cart">View Cart</router-link>
+                    <router-link to="/cart">Lihat Keranjang</router-link>
                     <!-- <router-link to="/checkout">Checkout <i class="fa fa-arrow-circle-right"></i></router-link> -->
                   </div>
                 </div>
@@ -154,7 +154,7 @@
                 <div v-if="state.isAuthenticated">
                     <router-link to="/user/profile" class="nav-link">
                       <i class="fa fa-user-o"></i>
-                      <span>My Account</span>
+                      <span>Akun</span>
                     </router-link>
                   <!-- <button @click="handleLogout" class="btn btn-danger btn-login"> 
                     Logout
