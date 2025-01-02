@@ -82,31 +82,18 @@ export default {
     const { state, fetchTransactions, fetchAllTransactionDetails } = useGlobalState();
     const orders = ref([]);
 
-    const formattedDate = (rawDate) => {
-      const date = new Date(rawDate);  // Convert string to Date object
-
-      const months = [
-        "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", 
-        "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
-      ];
-
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = months[date.getMonth()];
-      const year = date.getFullYear();
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${hours}:${minutes} ${day} ${month} ${year}`;
+    const formatDate = (dateString) => {
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      return new Date(dateString).toLocaleDateString('id-ID', options);
     };
 
-    const formattedPrice = (rawPrice) => {
-      return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
+    const formatPrice = (price) => {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-      })
-        .format(rawPrice)
-        .replace(/\s/g, "");
+      }).format(price);
     };
 
     onMounted(async () => {
@@ -117,8 +104,8 @@ export default {
           
           orders.value.forEach(item => {
             // item.items = [];
-            item.formattedDate = formattedDate(item.created_at);
-            item.formattedTotal = formattedPrice(item.total);
+            item.formattedDate = formatDate(item.created_at);
+            item.formattedTotal = formatPrice(item.total);
             // transactionDetails.forEach(barang => {
             //   if(item.id == barang.transaction_id){
             //     item.items.push(barang);

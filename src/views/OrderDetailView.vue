@@ -80,7 +80,7 @@
             </div>
             <div class="summary-row">
               <span>Biaya Pengiriman</span>
-              <span>{{ formatPrice(12000.00) }}</span>
+              <span>{{ formatPrice(shippingCost) }}</span>
             </div>
             <div class="summary-row total">
               <span>Total Pembayaran</span>
@@ -117,6 +117,7 @@ export default {
     const order = ref(null);
     const isLoading = ref(true);
     const error = ref(null);
+    const shippingCost = ref(12000);
 
     const mockOrders = [
       {
@@ -181,7 +182,7 @@ export default {
     };
 
     const calculateTotal = () => {
-      return calculateSubtotal() + 12000;
+      return calculateSubtotal() + shippingCost.value;
     };
 
     const getStatusClass = (status) => {
@@ -212,6 +213,7 @@ export default {
       order,
       isLoading,
       error,
+      shippingCost,
       formatDate,
       formatPrice,
       calculateSubtotal,
