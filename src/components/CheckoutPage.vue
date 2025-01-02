@@ -175,7 +175,7 @@ export default {
           product_image_url: item.product.image_url,  // Product Image URL
           product_category_id: item.product.category_id,  // Product Category ID
           quantity: item.quantity,  // Quantity in cart
-          total_price: totalPriceProduct.value,  // Total price for this item
+          total_price: item.product.price * item.quantity,  // Total price for this item
         };
       });
 

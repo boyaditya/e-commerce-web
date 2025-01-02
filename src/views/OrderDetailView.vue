@@ -176,7 +176,7 @@ export default {
 
     const calculateSubtotal = () => {
       return order.value.details.reduce((total, item) => {
-        return total + item.product_price * item.quantity;
+        return total + item.total_price;
       }, 0);
     };
 
