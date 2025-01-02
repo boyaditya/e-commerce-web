@@ -62,7 +62,7 @@
     >
       <i class="fa fa-heart-o"></i>
       <span>Wishlist</span>
-      <div class="qty">{{ wishlistCount }}</div>
+      <div v-if="state.isAuthenticated" class="qty">{{ wishlistCount }}</div>
     </a>
     <div class="cart-dropdown">
       <div class="cart-items">
@@ -107,7 +107,7 @@
                 >
                   <i class="fa fa-shopping-cart"></i>
                   <span>Keranjang</span>
-                  <div class="qty">{{ quantityTotal }}</div>
+                  <div v-if="state.isAuthenticated" class="qty">{{ quantityTotal }}</div>
                 </a>
                 <div class="cart-dropdown">
                   <div class="cart-items">
