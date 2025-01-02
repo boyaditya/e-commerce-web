@@ -84,7 +84,7 @@
               </router-link>
             </h3>
             <h4 class="product-price">
-              {{ product.product.price }}
+              {{ formatPrice(product.product.price) }}
             </h4>
           </div>
         </div>
@@ -130,7 +130,7 @@
                         </h3>
                         <h4 class="product-price">
                           <span class="qty">{{ product.quantity }}x</span>
-                          {{ product.product.price }}
+                            {{ formatPrice(product.product.price) }}
                         </h4>
                       </div>
                       <!-- <button
@@ -261,7 +261,7 @@ export default {
 
   setup() {
     const { state, logout, fetchCarts, removeFromCart, fetchWishlist } = useGlobalState();
-
+    
     onMounted(async () => {
       if (state.userInfo) {
         await fetchWishlist(state.userInfo.user_id, state.userInfo.access_token);
@@ -293,6 +293,18 @@ export default {
         return total + 1;
       }, 0);
     });
+
+  const formatPrice = (price) => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+        .format(price)
+        .replace(/\s/g, "");
+    };
+
     
     return {
       state,
@@ -301,6 +313,7 @@ export default {
       formattedCartTotal,
       removeFromCart,
       wishlistCount,
+      formatPrice,
     };
   },
 
