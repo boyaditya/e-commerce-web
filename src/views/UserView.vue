@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <h3 class="breadcrumb-header">Account</h3>
+            <h3 class="breadcrumb-header">Akun</h3>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
                   :class="{ active: $route.path === '/user/profile' }"
                 >
                   <i class="fa fa-fw fa-user"></i>
-                  &nbsp; My Profile
+                  &nbsp; Profil Saya
                 </router-link>
               </li>
               <li class="nav-item">
@@ -33,7 +33,7 @@
                   :class="{ active: $route.path === '/user/address' }"
                 >
                   <i class="fa fa-fw fa-pencil-square"></i>
-                  &nbsp; Edit Address
+                  &nbsp; Ubah Alamat
                 </router-link>
               </li>
               <!-- <li class="nav-item">
@@ -58,7 +58,7 @@
                   :class="{ active: $route.path === '/user/changepassword' }"
                 >
                   <i class="fa fa-fw fa-key"></i>
-                  &nbsp; Change Password
+                  &nbsp; Ubah Password
                 </router-link>
               </li>
               <li class="nav-item">
@@ -69,7 +69,7 @@
                   @click.prevent="handleLogout"
                 >
                   <i class="fa fa-fw fa-warning"></i>
-                  &nbsp; Logout
+                  &nbsp; Keluar
                 </a>
               </li>
             </ul>

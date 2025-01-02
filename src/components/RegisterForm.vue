@@ -1,7 +1,7 @@
 <template>
   <div class="auth-page">
     <div class="auth-container">
-      <h1 class="auth-title">Register</h1>
+      <h1 class="auth-title">Daftar</h1>
       <form @submit.prevent="handleRegister" class="auth-form">
         <div class="form-group">
           <label for="username">Username</label>
@@ -44,84 +44,84 @@
         <hr />
 
                 <div class="form-group">
-          <label for="recipients_name">Recipient's Name</label>
+          <label for="recipients_name">Nama Penerima</label>
           <input 
             type="text" 
             id="recipients_name"
             v-model="address.recipients_name" 
             class="form-input" 
-            placeholder="Recipient's Name"
+            placeholder="Nama Penerima"
             required
           >
         </div>
 
         <div class="form-group">
-          <label for="phone">Phone Number</label>
+          <label for="phone">Nomor Telepon</label>
           <input 
             type="text" 
             id="phone"
             v-model="address.phone_number" 
             class="form-input" 
-            placeholder="Phone Number"
+            placeholder="Nomor Telepon"
             required
           >
         </div>
         <div class="form-group">
-          <label for="street_address">Street Address</label>
+          <label for="street_address">Alamat</label>
           <input
             type="text"
             id="street_address"
             v-model="address.street_address"
             class="form-input"
-            placeholder="Street Address"
+            placeholder="Alamat"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="city">City</label>
+          <label for="city">Kota</label>
           <input
             type="text"
             id="city"
             v-model="address.city"
             class="form-input"
-            placeholder="City"
+            placeholder="Kota"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="state">State</label>
+          <label for="state">Provinsi</label>
           <input
             type="text"
             id="state"
             v-model="address.state"
             class="form-input"
-            placeholder="State"
+            placeholder="Provinsi"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="postal_code">Postal Code</label>
+          <label for="postal_code">Kode Pos</label>
           <input
             type="text"
             id="postal_code"
             v-model="address.postal_code"
             class="form-input"
-            placeholder="Postal Code"
+            placeholder="Kode Pos"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="country">Country</label>
+          <label for="country">Negara</label>
           <input
             type="text"
             id="country"
             v-model="address.country"
             class="form-input"
-            placeholder="Country"
+            placeholder="Negara"
             required
           />
         </div>
@@ -130,11 +130,11 @@
           {{ errorMessage }}
         </p>
 
-        <button type="submit" class="auth-button">Register</button>
+        <button type="submit" class="auth-button">Daftar</button>
       </form>
 
       <router-link to="/login" class="auth-link">
-        Already have an account? Login here
+        Sudah punya akun? Log in
       </router-link>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-8">
     <div class="profile-section">
-      <h3 class="mb-4">My Profile</h3>
+      <h3 class="mb-4">Profil Saya</h3>
       <div class="row">
         <div class="col-lg-6">
           <!-- Flash message placeholder -->
@@ -20,7 +20,7 @@
             <div class="col-md-8">
               <div class="profile-info">
                 <div class="section-title">
-                  <h3 class="title">User Information</h3>
+                  <h3 class="title">Informasi Pengguna</h3>
                 </div>
                 <div class="profile-info-item">
                   <span class="profile-label">Username</span>
@@ -31,31 +31,31 @@
                   <span class="profile-value">{{ userInfo.email }}</span>
                 </div>
                 <div class="profile-info-item">
-                  <span class="profile-label">Member since</span>
+                  <span class="profile-label">Pengguna sejak</span>
                   <span class="profile-value">{{ userInfo.created_at }}</span>
                 </div>
               </div>
               <hr />
               <div class="address-card">
                 <div class="section-title">
-                  <h3 class="title">Shipping Address</h3>
+                  <h3 class="title">Alamat Pengiriman</h3>
                 </div>
                 <div class="address-details">
                   <p>
-                    <strong>Recipient's Name:</strong>
+                    <strong>Nama Penerima:</strong>
                     {{ userAddress.recipients_name }}
                   </p>
-                  <p><strong>Phone Number:</strong> {{ userAddress.phone_number }}</p>
+                  <p><strong>Nomor Telepon:</strong> {{ userAddress.phone_number }}</p>
 
                   <p>
-                    <strong>Street Address:</strong>
+                    <strong>Alamat:</strong>
                     {{ userAddress.street_address }}
                   </p>
-                  <p><strong>City:</strong> {{ userAddress.city }}</p>
-                  <p><strong>State:</strong> {{ userAddress.state }}</p>
-                  <p><strong>Country:</strong> {{ userAddress.country }}</p>
+                  <p><strong>Kota:</strong> {{ userAddress.city }}</p>
+                  <p><strong>Provinsi:</strong> {{ userAddress.state }}</p>
+                  <p><strong>Negara:</strong> {{ userAddress.country }}</p>
                   <p>
-                    <strong>ZIP Code:</strong> {{ userAddress.postal_code }}
+                    <strong>Kode Pos:</strong> {{ userAddress.postal_code }}
                   </p>
                 </div>
               </div>
