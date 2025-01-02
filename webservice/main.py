@@ -18,6 +18,7 @@ from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordBearer
 from pydantic import BaseModel
 
 from sqlalchemy.orm import Session
+from sqlalchemy import cast, Date
 
 import crud, models, schemas
 from database import SessionLocal, engine
@@ -25,6 +26,7 @@ models.BaseDB.metadata.create_all(bind=engine)
 
 import jwt
 import datetime
+import httpx
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
@@ -239,11 +241,85 @@ def delete_wishlist_item(wishlist_id:int,db: Session = Depends(get_db),token: st
     usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
     return crud.delete_wishlist_item(db,wishlist_id)
 
+@app.post("/add_transaction", response_model=schemas.Transaction)
+def add_transaction(transaction: schemas.TransactionCreate, details: list[schemas.TransactionDetailCreate], cart_items: list[schemas.Carts], db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(user_id)
+    now = datetime.datetime.now()
+    date_part = now.strftime("%Y%m%d")
+    date_only = now.date()
+    
+    # Format the invoice number with leading zeros
+    last_data = db.query(models.Transaction).filter(cast(models.Transaction.created_at, Date) == date_only).order_by(models.Transaction.number.desc()).first()
+    new_number = 1
+    if last_data is not None:
+        new_number = last_data.number+1
+
+    invoice_number = f"INV/{date_part}/{new_number:06}"
+
+    transaction.invoice = invoice_number
+    transaction.number = new_number
+
+    result = crud.add_transaction(db, transaction, details)
+    if result is not None:
+        try:
+            # Call delete_cart_item/{cart_id} for each cart item
+            with httpx.Client(headers={"Authorization": f"Bearer {token}"}) as client:
+                for item in cart_items:  # Assuming `items` is a list of cart item IDs
+                    response = client.delete(f"http://127.0.0.1:8000/delete_cart_item/{item.id}")
+                    if response.status_code != 200:
+                        raise HTTPException(
+                            status_code=response.status_code,
+                            detail=f"Failed to delete cart item with ID {item.id}.",
+                        )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error while deleting cart items: {str(e)}")
+        
+    return result
+
+@app.get("/get_transactions/{user_id}", response_model=list[schemas.Transaction])
+def read_transactions(user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(user_id)
+    transactions = crud.get_transactions(db, user_id)
+    return transactions
+
+@app.get("/get_transaction_by_invoice", response_model=schemas.Transaction)
+def read_transaction_by_invoice(invoice: str, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    print(invoice)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(invoice)
+    transaction_by_invoice = crud.get_transaction_by_invoice(db, invoice)
+    return transaction_by_invoice
+
+@app.get("/get_transaction_details/{transaction_id}", response_model=list[schemas.TransactionDetail])
+def read_transaction_details(transaction_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(transaction_id)
+    transaction_details = crud.get_transaction_details(db, transaction_id)
+    return transaction_details
+
+@app.get("/get_all_transaction_details/{user_id}", response_model=list[schemas.TransactionDetail])
+def read_all_transaction_details(user_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    usr =  verify_token(token) #bisa digunakan untuk mengecek apakah user cocok (tdk boleh akses data user lain)
+    # print(usr)
+    # print(crud.hashPassword(passwd = "inipassword"))
+    # print(user_id)
+    all_transaction_details = crud.get_all_transaction_details(db, user_id)
+    return all_transaction_details
+
 @app.get("/get_products/", response_model=list[schemas.Products])
 def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     products = crud.get_products(db, skip, limit)
     return products
-
 
 @app.get("/product/{product_id}", response_model=schemas.Products)
 async def read_products(

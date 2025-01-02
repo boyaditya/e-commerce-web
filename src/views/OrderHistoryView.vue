@@ -15,23 +15,23 @@
               <div class="order-info">
                 <div class="order-date">
                   <i class="fas fa-calendar-alt"></i>
-                  {{ order.date }}
+                  {{ order.formattedDate }}
                 </div>
                 <div class="order-number">
-                  No. Pesanan: {{ order.id }}
+                  No. Pesanan: {{ order.invoice }}
                 </div>
               </div>
-              <div class="order-status success">Selesai</div>
+              <div class="order-status success">{{ order.status }}</div>
             </div>
 
             <!-- Order Items -->
             <div class="order-items">
-              <div v-for="item in order.items" :key="item.id" class="order-item">
+              <div v-for="item in order.details" :key="item.id" class="order-item">
                 <div class="item-image">
-                  <img :src="item.image" :alt="item.name">
+                  <img :src="require('@/assets/img/' + item.product_image_url)" :alt="item.product_name">
                 </div>
                 <div class="item-details">
-                  <h4 class="item-name">{{ item.name }}</h4>
+                  <h4 class="item-name">{{ item.product_name }}</h4>
                   <p class="item-quantity">{{ item.quantity }} barang</p>
                 </div>
               </div>
@@ -41,12 +41,12 @@
             <div class="order-card-footer">
               <div class="total-section">
                 <span>Total Belanja</span>
-                <span class="total-amount">{{ order.total }}</span>
+                <span class="total-amount">{{ order.formattedTotal }}</span>
               </div>
               <div class="action-buttons">
                 <button 
                   class="btn-detail" 
-                  @click="$router.push({ name: 'OrderDetail', params: { id: order.id } })">
+                  @click="$router.push({ name: 'OrderDetail', params: { invoice: order.invoice } })">
                   Lihat Detail
                 </button>
                 <button class="btn-buy-again">Beli Lagi</button>
@@ -79,31 +79,76 @@ export default {
     HeaderPage,
   },
   setup() {
-    const { state } = useGlobalState();
+    const { state, fetchTransactions, fetchAllTransactionDetails } = useGlobalState();
     const orders = ref([]);
 
-    onMounted(() => {
+    const formattedDate = (rawDate) => {
+      const date = new Date(rawDate);  // Convert string to Date object
+
+      const months = [
+        "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", 
+        "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+      ];
+
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = months[date.getMonth()];
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      return `${hours}:${minutes} ${day} ${month} ${year}`;
+    };
+
+    const formattedPrice = (rawPrice) => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+        .format(rawPrice)
+        .replace(/\s/g, "");
+    };
+
+    onMounted(async () => {
       if (state.isAuthenticated) {
-        orders.value = [
-          {
-            id: "INV/20240128/001",
-            date: "28 Jan 2024",
-            total: "Rp1.500.000",
-            items: [
-              { id: 1, name: "Logitech G Pro X Superlight", quantity: 2, image: "https://via.placeholder.com/80" },
-              { id: 2, name: "HyperX Cloud Alpha", quantity: 1, image: "https://via.placeholder.com/80" },
-            ],
-          },
-          {
-            id: "INV/20240127/002",
-            date: "27 Jan 2024",
-            total: "Rp2.300.000",
-            items: [
-              { id: 3, name: "Razer Blackwidow V3", quantity: 1, image: "https://via.placeholder.com/80" },
-              { id: 4, name: "Steelseries Arctis 7", quantity: 3, image: "https://via.placeholder.com/80" },
-            ],
-          },
-        ];
+        try {
+          orders.value = await fetchTransactions(state.userInfo.user_id);
+          const transactionDetails = await fetchAllTransactionDetails(state.userInfo.user_id);
+          
+          orders.value.forEach(item => {
+            // item.items = [];
+            item.formattedDate = formattedDate(item.created_at);
+            item.formattedTotal = formattedPrice(item.total);
+            // transactionDetails.forEach(barang => {
+            //   if(item.id == barang.transaction_id){
+            //     item.items.push(barang);
+            //   }
+            // });
+          });
+
+        } catch (error) {
+          console.error(error);
+        }
+        // orders.value = [
+        //   {
+        //     id: "INV/20240128/001",
+        //     date: "28 Jan 2024",
+        //     total: "Rp1.500.000",
+        //     items: [
+        //       { id: 1, name: "Logitech G Pro X Superlight", quantity: 2, image: "https://via.placeholder.com/80" },
+        //       { id: 2, name: "HyperX Cloud Alpha", quantity: 1, image: "https://via.placeholder.com/80" },
+        //     ],
+        //   },
+        //   {
+        //     id: "INV/20240127/002",
+        //     date: "27 Jan 2024",
+        //     total: "Rp2.300.000",
+        //     items: [
+        //       { id: 3, name: "Razer Blackwidow V3", quantity: 1, image: "https://via.placeholder.com/80" },
+        //       { id: 4, name: "Steelseries Arctis 7", quantity: 3, image: "https://via.placeholder.com/80" },
+        //     ],
+        //   },
+        // ];
       }
     });
 

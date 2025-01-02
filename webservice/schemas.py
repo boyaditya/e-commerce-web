@@ -229,6 +229,64 @@ class Wishlists(WishlistsBase):
     class Config:
         orm_mode = True
 
+class TransactionStatusEnum(str, Enum):
+    pending = "pending"
+    paid = "paid"
+    shipped = "shipped"
+    completed = "completed"
+    cancelled = "cancelled"
+
+
+class TransactionDetailBase(BaseModel):
+    transaction_id: Optional[int]
+    product_id: Optional[int]
+    product_name: Optional[str]
+    product_price: Optional[float]
+    product_image_url: Optional[str]
+    product_category_id: Optional[int]
+    quantity: int
+    total_price: Optional[float]
+
+
+class TransactionDetailCreate(TransactionDetailBase):
+    pass
+
+
+class TransactionDetail(TransactionDetailBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class TransactionBase(BaseModel):
+    user_id: Optional[int]
+    address_id: Optional[int]
+    total: float
+    status: str
+    invoice: str
+    number: int
+    # status: Optional[TransactionStatusEnum] = TransactionStatusEnum.pending
+
+    class Config:
+        use_enum_values = True
+
+
+class TransactionCreate(TransactionBase):
+    pass
+
+
+class Transaction(TransactionBase):
+    id: int
+    transaction_date: datetime
+    created_at: datetime
+    approved_at: Optional[datetime]
+    details: List[TransactionDetail] = []
+    address: Optional[Address]
+
+    class Config:
+        orm_mode = True
+
 class Password(BaseModel):
     old_password: str
     new_password: str

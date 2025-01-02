@@ -1,6 +1,6 @@
 import datetime
 from database import BaseDB
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Float, Text, Enum, Time, DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Float, Text, Enum, Time, DateTime, DECIMAL
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from enum import Enum as PyEnum
@@ -84,6 +84,8 @@ class Address(BaseDB):
     created_at = Column(DateTime, nullable=False, server_default=func.now())    
     updated_at = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
 
+    transaction = relationship("Transaction", back_populates="address")
+
 
 class Carts(BaseDB):
     __tablename__ = "carts"
@@ -105,6 +107,49 @@ class Wishlists(BaseDB):
     product = relationship("Products", back_populates="wishlist")
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime, nullable=False)
+
+class TransactionStatus(PyEnum):
+    pending = "pending"
+    paid = "paid"
+    shipped = "shipped"
+    completed = "completed"
+    cancelled = "cancelled"
+
+
+class Transaction(BaseDB):
+    __tablename__ = "transactions"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id = Column(Integer, nullable=True)
+    address_id = Column(Integer, ForeignKey('addresses.id'), nullable=True)
+    total = Column(DECIMAL(10, 2), nullable=False)
+    transaction_date = Column(DateTime, server_default=func.now(), nullable=False)
+    status = Column(String(255), default="pending")
+    invoice = Column(String(255), nullable=False)
+    number = Column(Integer, nullable=False)
+    payment_id = Column(Integer, nullable=True)
+    approved_by = Column(Integer, nullable=True)
+    approved_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+
+    details = relationship("TransactionDetail", back_populates="transaction")
+    address = relationship("Address", back_populates="transaction")
+
+
+class TransactionDetail(BaseDB):
+    __tablename__ = "transaction_details"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    transaction_id = Column(Integer, ForeignKey("transactions.id"), nullable=True)
+    product_id = Column(Integer, nullable=True)
+    product_name = Column(String(255), nullable=True)
+    product_price = Column(DECIMAL(10, 2), nullable=True)
+    product_image_url = Column(String(255), nullable=True)
+    product_category_id = Column(Integer, nullable=True)
+    quantity = Column(Integer, nullable=False)
+    total_price = Column(DECIMAL(10, 2), nullable=True)
+
+    transaction = relationship("Transaction", back_populates="details")
 
 # class JadwalDokter(BaseDB):
 #     __tablename__ = 'jadwal_dokter'

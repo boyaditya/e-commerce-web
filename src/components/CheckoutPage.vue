@@ -100,7 +100,7 @@
             </div>
           </div>
           <a
-            href="#"
+            href=""
             class="primary-btn order-submit"
             @click.prevent="submitOrder"
             >Place Order</a
@@ -121,7 +121,7 @@ export default {
     CheckoutItem,
   },
   setup() {
-    const { state } = useGlobalState();
+    const { state, addTransaction } = useGlobalState();
     const shippingCost = ref(12000);
 
     const selectedCartItems = computed(() => {
@@ -151,10 +151,37 @@ export default {
         .replace(/\s/g, "");
     };
 
-    const submitOrder = () => {
-      console.log("Order submitted", {
-        selectedCartItems: selectedCartItems.value,
+    const submitOrder = async () => {
+      // console.log("Order submitted", {
+      //   selectedCartItems: selectedCartItems.value,
+      // });
+      // console.log(state.userAddress.id);
+      const transaction = {
+        user_id: state.userInfo.user_id,
+        address_id: state.userAddress.id,
+        total: totalPriceProduct.value,
+        status: "Menunggu Pembayaran",
+        invoice: "",
+        number: 0
+      };
+
+      const selected = JSON.parse(JSON.stringify(selectedCartItems.value));
+      const details = selectedCartItems.value.map(item => {
+        return {
+          transaction_id: 0,
+          product_id: item.product.id,  // Product ID
+          product_name: item.product.name,  // Product Name
+          product_price: item.product.price,  // Product Price
+          product_image_url: item.product.image_url,  // Product Image URL
+          product_category_id: item.product.category_id,  // Product Category ID
+          quantity: item.quantity,  // Quantity in cart
+          total_price: totalPayment.value,  // Total price for this item
+        };
       });
+
+      // console.log(details);  // Log the details array for verification
+      // console.log(JSON.parse(JSON.stringify(selectedCartItems.value)));
+      const responseData = await addTransaction(transaction, details, selected);
     };
 
     const address = computed(() => state.userAddress);

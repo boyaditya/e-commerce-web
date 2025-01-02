@@ -43,7 +43,7 @@ const routes = [
     },
   },
   {
-    path: '/order-detail/:id',
+    path: '/order-detail/:invoice',
     name: 'OrderDetail',
     component: OrderDetailView,
     props: true, // agar parameter id dapat diterima sebagai props
