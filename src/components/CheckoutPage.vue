@@ -113,6 +113,7 @@
 
 <script>
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useGlobalState } from "@/globalState.js";
 import CheckoutItem from "./shop_item/CheckoutItem.vue";
 
@@ -121,6 +122,7 @@ export default {
     CheckoutItem,
   },
   setup() {
+    const router = useRouter();
     const { state, addTransaction } = useGlobalState();
     const shippingCost = ref(12000);
 
@@ -179,9 +181,10 @@ export default {
         };
       });
 
-      // console.log(details);  // Log the details array for verification
-      // console.log(JSON.parse(JSON.stringify(selectedCartItems.value)));
       const responseData = await addTransaction(transaction, details, selected);
+      if(responseData){
+        router.push({ name: 'OrderDetail', params: { invoice: responseData.invoice } });
+      }
     };
 
     const address = computed(() => state.userAddress);
