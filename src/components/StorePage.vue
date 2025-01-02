@@ -14,7 +14,7 @@
         <div id="aside" class="col-md-3">
           <!-- aside Widget -->
           <div class="aside">
-            <h3 class="aside-title">Categories</h3>
+            <h3 class="aside-title">Kategori</h3>
             <div class="checkbox-filter">
               <div
                 v-for="category in categories"
@@ -65,15 +65,15 @@
           <div class="store-filter clearfix">
             <div class="store-sort">
               <label>
-                Sort By:
+                Urutkan berdasarkan:
                 <select
                   class="input-select"
                   v-model="selectedSort"
                   @change="sortProducts"
                 >
-                  <option value="newest">Newest</option>
-                  <option value="lowest">Lowest Price</option>
-                  <option value="highest">Highest Price</option>
+                  <option value="newest">Terbaru</option>
+                  <option value="lowest">Harga Terendah</option>
+                  <option value="highest">Harga Tertinggi</option>
                 </select>
               </label>
 
@@ -95,41 +95,37 @@
           <!-- /store top filter -->
 
           <!-- store products -->
-          <div class="row">
-            <!-- products -->
-            <ProductItem
-              v-for="product in filteredProducts"
-              :key="product.id"
-              :id="product.id"
-              :imgSrc="product.image_url || 'default-image.jpg'"
-              :imgAlt="product.name"
-              :saleLabel="'-30%'"
-              :newLabel="'NEW'"
-              :category="product.category.name"
-              :productName="product.name"
-              :productLink="product.id"
-              :productPrice="product.price"
-              :addCartItemHandler="addCartItemHandler"
-              :colClass="'col-md-3'"
-            />
-            <!-- /products -->
-          </div>
-          <!-- /store products -->
-
-          <!-- store bottom filter -->
-          <div class="store-filter clearfix">
-            <span class="store-qty">Showing 20-100 products</span>
-            <ul class="store-pagination">
-              <li class="active">1</li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li>
-                <a href="#"><i class="fa fa-angle-right"></i></a>
-              </li>
-            </ul>
-          </div>
-          <!-- /store bottom filter -->
+         <div class="row">
+    <div class="row">
+      <ProductItem
+        v-for="product in paginatedProducts"
+        :key="product.id"
+        :id="product.id"
+        :imgSrc="product.image_url || 'default-image.jpg'"
+        :imgAlt="product.name"
+        :category="product.category.name"
+        :productName="product.name"
+        :productLink="product.id"
+        :productPrice="product.price"
+        :addCartItemHandler="addCartItemHandler"
+        :colClass="'col-md-3'"
+      />
+    </div>
+    <div class="store-filter clearfix">
+      <span class="store-qty">
+        Tampilkan {{ startIndex + 1 }} - {{ endIndex }} Produk
+      </span>
+      <ul class="store-pagination">
+        <li
+          v-for="page in visiblePages"
+          :key="page"
+          :class="{ active: page === currentPage }"
+        >
+          <a href="#" @click.prevent="changePage(page)">{{ page }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
         </div>
         <!-- /STORE -->
       </div>
@@ -159,89 +155,125 @@ export default {
       allProducts: [],
       categories: [],
       selectedCategories: [],
+      selectedSort: "newest",
       filteredProducts: [],
-      selectedSort: "newest", // Add selectedSort property
-      isLoading: true, // Add isLoading property
+      totalProducts: 0, // Total produk setelah filter
+      itemsPerPage: 10, // Maksimum produk per halaman
+      currentPage: 1, // Halaman saat ini
+      isLoading: true, // Status loading
     };
+  },
+  computed: {
+    paginatedProducts() {
+      // Produk yang ditampilkan pada halaman tertentu
+      const start = this.startIndex;
+      const end = this.endIndex;
+      return this.filteredProducts.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.totalProducts / this.itemsPerPage);
+    },
+    visiblePages() {
+      return this.totalPages > 1
+        ? Array.from({ length: this.totalPages }, (_, i) => i + 1)
+        : [1];
+    },
+    startIndex() {
+      return (this.currentPage - 1) * this.itemsPerPage;
+    },
+    endIndex() {
+      return Math.min(this.startIndex + this.itemsPerPage, this.totalProducts);
+    },
   },
   methods: {
     async fetchAllProducts() {
       try {
         this.allProducts = await fetchAllProducts();
-        this.filteredProducts = this.allProducts;
-        this.sortProducts(); // Sort products after fetching
+        this.applyFilters();
       } catch (error) {
         console.error(error);
       }
     },
     async fetchCategories() {
-      try {
-        const categories = await fetchCategories();
-        // Fetch product count for each category
-        for (const category of categories) {
-          const products = await fetchProductsByCategory(category.id);
-          category.productCount = products.length;
-        }
-        this.categories = categories;
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    },
-    async fetchProductsByCategory() {
-      try {
-        if (this.selectedCategories.length === 0) {
-          this.filteredProducts = this.allProducts;
-        } else {
-          const promises = this.selectedCategories.map((categoryId) =>
-            fetchProductsByCategory(categoryId)
-          );
-          const results = await Promise.all(promises);
-          this.filteredProducts = results.flat();
-        }
-        this.sortProducts(); // Sort products after filtering
-      } catch (error) {
-        console.error("Failed to fetch products by category:", error);
-      }
-    },
-    filterProducts() {
-      const searchQuery = this.$route.query.search?.toLowerCase() || "";
-      this.filteredProducts = this.allProducts.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery)
-      );
-      this.sortProducts();
-    },
+  try {
+    const categories = await fetchCategories();
+    // Hitung jumlah produk untuk setiap kategori
+    categories.forEach((category) => {
+      category.productCount = this.allProducts.filter(
+        (product) => product.category.id === category.id
+      ).length;
+    });
+    this.categories = categories;
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+  }
+},
+    applyFilters() {
+  const searchQuery = this.$route.query.search?.toLowerCase() || "";
+
+  // Filter produk berdasarkan nama (search query)
+  let products = this.allProducts.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery)
+  );
+
+  // Jika ada kategori yang dipilih, filter berdasarkan kategori
+  if (this.selectedCategories.length > 0) {
+    products = products.filter((product) =>
+      this.selectedCategories.includes(product.category.id)
+    );
+  }
+
+  // Perbarui filteredProducts dan totalProducts
+  this.filteredProducts = products;
+  this.totalProducts = products.length;
+
+  // Terapkan pengurutan
+  this.sortProducts();
+
+  // Reset ke halaman pertama setiap kali filter berubah
+  this.currentPage = 1;
+},
     sortProducts() {
-      if (this.selectedSort === "newest") {
-        this.filteredProducts.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-      } else if (this.selectedSort === "lowest") {
-        this.filteredProducts.sort((a, b) => a.price - b.price);
-      } else if (this.selectedSort === "highest") {
-        this.filteredProducts.sort((a, b) => b.price - a.price);
-      }
+  if (this.filteredProducts.length === 0) return;
+
+  if (this.selectedSort === "newest") {
+    this.filteredProducts.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+  } else if (this.selectedSort === "lowest") {
+    this.filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (this.selectedSort === "highest") {
+    this.filteredProducts.sort((a, b) => b.price - a.price);
+  }
+},
+    changePage(page) {
+      this.currentPage = page;
     },
   },
   watch: {
-    "$route.query.search": "filterProducts",
+    "$route.query.search": "applyFilters",
     selectedCategories() {
-      this.fetchProductsByCategory();
-      this.filterProducts();
+      this.applyFilters();
     },
   },
   async created() {
-    await this.fetchAllProducts();
-    await this.fetchCategories();
-    const categoryId = this.$route.query.category;
-    if (categoryId) {
-      this.selectedCategories = [parseInt(categoryId)];
-      await this.fetchProductsByCategory();
-    }
-    this.filterProducts();
-    this.isLoading = false;
-  },
+  await this.fetchAllProducts();
+  await this.fetchCategories();
+
+  // Tangkap parameter kategori dari query dan terapkan
+  const categoryFromQuery = this.$route.query.category;
+  if (categoryFromQuery) {
+    this.selectedCategories = Array.isArray(categoryFromQuery)
+      ? categoryFromQuery.map(Number) // Jika query parameter berupa array
+      : [Number(categoryFromQuery)]; // Jika query parameter berupa string tunggal
+  }
+
+  this.applyFilters();
+  this.isLoading = false;
+}
 };
 </script>
+
 
 <style>
 /* Add your styles here */

@@ -23,7 +23,7 @@
           <div class="order-info">
             <h1 class="order-title">Detail Pesanan</h1>
             <div class="order-meta">
-              <span class="order-id">{{ order.id }}</span>
+              <span class="order-id">{{ order.invoice }}</span>
               <span class="separator">•</span>
               <span class="order-date">{{ formatDate(order.created_at) }}</span>
             </div>
@@ -38,12 +38,12 @@
           <h2 class="section-title">Informasi Pengiriman</h2>
           <div class="info-content">
             <div class="address-info">
-              <p class="recipient">{{ order.shipping_address.name }}</p>
-              <p class="phone">{{ order.shipping_address.phone }}</p>
-              <p class="address">{{ order.shipping_address.address }}</p>
+              <p class="recipient">{{ order.address.recipients_name }}</p>
+              <p class="phone">{{ order.address.phone_number }}</p>
+              <p class="address">{{ order.address.street_address }}</p>
               <p class="city-info">
-                {{ order.shipping_address.city }}, {{ order.shipping_address.province }}
-                {{ order.shipping_address.postal_code }}
+                {{ order.address.city }}, {{ order.address.state }}
+                {{ order.address.postal_code }}
               </p>
             </div>
             <div v-if="order.tracking_number" class="tracking-info">
@@ -57,14 +57,14 @@
         <div class="product-list">
           <h2 class="section-title">Produk yang Dibeli</h2>
           <div class="products">
-            <div v-for="item in order.items" :key="item.id" class="product-item">
+            <div v-for="item in order.details" :key="item.id" class="product-item">
               <div class="product-image">
-                <img :src="item.product.image_url" :alt="item.product.name" />
+                <img :src="require('@/assets/img/' + item.product_image_url)" :alt="item.product_name" />
               </div>
               <div class="product-details">
-                <h3 class="product-name">{{ item.product.name }}</h3>
+                <h3 class="product-name">{{ item.product_name }}</h3>
                 <p class="product-quantity">{{ item.quantity }} barang</p>
-                <p class="product-price">{{ formatPrice(item.product.price) }}</p>
+                <p class="product-price">{{ formatPrice(item.product_price) }}</p>
               </div>
             </div>
           </div>
@@ -80,7 +80,7 @@
             </div>
             <div class="summary-row">
               <span>Biaya Pengiriman</span>
-              <span>{{ formatPrice(order.shipping_cost) }}</span>
+              <span>{{ formatPrice(shippingCost) }}</span>
             </div>
             <div class="summary-row total">
               <span>Total Pembayaran</span>
@@ -103,6 +103,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useGlobalState } from "@/globalState";
 import HeaderPage from '@/components/templates/HeaderPage.vue';
 
 export default {
@@ -111,14 +112,17 @@ export default {
     HeaderPage,
   },
   setup(props) {
+    const { state, fetchTransactionByInvoice, fetchTransactionDetails } = useGlobalState();
     const route = useRoute();
     const order = ref(null);
     const isLoading = ref(true);
     const error = ref(null);
+    const shippingCost = ref(12000);
 
     const mockOrders = [
       {
-        id: 'INV/20240128/001',
+        id: 28,
+        invoice: 'INV/20240128/001',
         created_at: '2024-01-28',
         status: 'completed',
         shipping_address: {
@@ -146,12 +150,14 @@ export default {
       },
     ];
 
-    const fetchOrderDetail = () => {
-      const orderId = route.params.id;
-      order.value = mockOrders.find((o) => o.id === orderId);
+    const fetchOrderDetail = async () => {
+      const orderInvoice = route.params.invoice;
+      // order.value = mockOrders.find((o) => o.id === orderId);
+      order.value = await fetchTransactionByInvoice(orderInvoice);
       if (!order.value) {
         error.value = 'Pesanan tidak ditemukan';
       }
+      console.log(order.value);
       isLoading.value = false;
     };
 
@@ -170,13 +176,13 @@ export default {
     };
 
     const calculateSubtotal = () => {
-      return order.value.items.reduce((total, item) => {
-        return total + item.product.price * item.quantity;
+      return order.value.details.reduce((total, item) => {
+        return total + item.total_price;
       }, 0);
     };
 
     const calculateTotal = () => {
-      return calculateSubtotal() + order.value.shipping_cost;
+      return calculateSubtotal() + shippingCost.value;
     };
 
     const getStatusClass = (status) => {
@@ -199,14 +205,15 @@ export default {
       return statusTexts[status] || status;
     };
 
-    onMounted(() => {
-      fetchOrderDetail();
+    onMounted(async () => {
+      await fetchOrderDetail();
     });
 
     return {
       order,
       isLoading,
       error,
+      shippingCost,
       formatDate,
       formatPrice,
       calculateSubtotal,

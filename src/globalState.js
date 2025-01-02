@@ -10,6 +10,11 @@ import {
   fetchWishlist as apiFetchWishlist,
   addWishlistItem as apiAddWishlistItem,
   deleteWishlistItem as apiDeleteWishlistItem,
+  addTransaction as apiAddTransaction,
+  fetchTransactions as apiFetchTransactions,
+  fetchTransactionByInvoice as apiFetchTransactionByInvoice,
+  fetchTransactionDetails as apiFetchTransactionDetails,
+  fetchAllTransactionDetails as apiFetchAllTransactionDetails,
   getAddress as apiGetAddress,
   createAddress as apiCreateAddress,
 } from "@/api/api";
@@ -19,6 +24,8 @@ const state = reactive({
   userAddress: JSON.parse(localStorage.getItem("userAddress")) || null,
   cartProducts: JSON.parse(localStorage.getItem("cartProducts")) || [],
   wishlistProducts: JSON.parse(localStorage.getItem("wishlistProducts")) || [],
+  transactions: JSON.parse(localStorage.getItem("transactions")) || [],
+  transactionsDetails: JSON.parse(localStorage.getItem("transactionsDetails")) || [],
   isAuthenticated: !!localStorage.getItem("userInfo"),
   selectedItems: [],
 });
@@ -140,7 +147,6 @@ export const useGlobalState = () => {
       product_id: state.cartProducts[index].product_id,
       quantity: quantity,
     };
-    console.log(cart);
 
     try {
       if (state.userInfo) {
@@ -152,6 +158,95 @@ export const useGlobalState = () => {
           JSON.stringify(state.cartProducts)
         );
         return cartData;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addTransaction = async (transaction, details, cartItems) => {
+    console.log(transaction);
+    console.log(cartItems);
+    try {
+      if (state.userInfo) {
+        const transactionData = await apiAddTransaction(transaction, details, cartItems, state.userInfo);
+
+        state.transactions.push(transactionData);
+        localStorage.setItem(
+          "transactions",
+          JSON.stringify(state.transactions)
+        );
+
+        await fetchCarts();
+        // await fetchTransactionDetails(transactionData.id);
+
+        return transactionData;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchTransactions = async (user_id) => {
+    try {
+      if (state.userInfo) {
+        const transactionsData = await apiFetchTransactions(
+          user_id,
+          state.userInfo
+        );
+        state.transactions = transactionsData;
+        localStorage.setItem("transactions", JSON.stringify(transactionsData));
+
+        return transactionsData;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchTransactionByInvoice = async (invoice) => {
+    try {
+      if (state.userInfo) {
+        const transactionData = await apiFetchTransactionByInvoice(
+          invoice,
+          state.userInfo
+        );
+
+        return transactionData;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchTransactionDetails = async (transaction_id) => {
+    try {
+      if (state.userInfo) {
+        const transactionDetailsData = await apiFetchTransactionDetails(
+          transaction_id,
+          state.userInfo
+        );
+        // state.transactionsDetails = transactionDetailsData;
+        // localStorage.setItem("transactionsDetails", JSON.stringify(transactionDetailsData));
+
+        return transactionDetailsData;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchAllTransactionDetails = async (user_id) => {
+    try {
+      if (state.userInfo) {
+        const transactionDetailsData = await apiFetchAllTransactionDetails(
+          user_id,
+          state.userInfo
+        );
+        // state.transactionsDetails = transactionDetailsData;
+        // localStorage.setItem("transactionsDetails", JSON.stringify(transactionDetailsData));
+
+        return transactionDetailsData;
       }
     } catch (error) {
       console.error(error);
@@ -281,6 +376,11 @@ export const useGlobalState = () => {
     fetchWishlist,
     addToWishlist,
     removeFromWishlist,
+    addTransaction,
+    fetchTransactions,
+    fetchTransactionByInvoice,
+    fetchTransactionDetails,
+    fetchAllTransactionDetails,
     setSelectedItems,
     fetchUserAddress,
     setUserAddress,

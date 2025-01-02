@@ -1,10 +1,10 @@
 <template>
   <div class="col-md-8">
     <div class="address-section">
-      <h3>Edit Address</h3>
+      <h3>Ubah Alamat</h3>
       <form @submit.prevent="saveAddress">
         <div class="form-group">
-          <label for="recipients_name">Recipient's Name</label>
+          <label for="recipients_name">Nama Penerima</label>
           <input
             type="text"
             id="recipients_name"
@@ -13,7 +13,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="phone">Phone Number</label>
+          <label for="phone">Nomor Telepon</label>
           <input
             type="text"
             id="phone"
@@ -22,7 +22,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="street_address">Street Address</label>
+          <label for="street_address">Alamat</label>
           <input
             type="text"
             id="street_address"
@@ -31,7 +31,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="city">City</label>
+          <label for="city">Kota</label>
           <input
             type="text"
             id="city"
@@ -40,7 +40,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="state">State</label>
+          <label for="state">Provinsi</label>
           <input
             type="text"
             id="state"
@@ -49,7 +49,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="postal_code">Postal Code</label>
+          <label for="postal_code">Kode Pos</label>
           <input
             type="text"
             id="postal_code"
@@ -58,7 +58,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="country">Country</label>
+          <label for="country">Negara</label>
           <input
             type="text"
             id="country"
@@ -66,7 +66,7 @@
             class="form-control"
           />
         </div>
-        <button type="submit" class="btn btn-primary">Save Address</button>
+        <button type="submit" class="btn btn-primary">Simpan Alamat</button>
       </form>
     </div>
   </div>
