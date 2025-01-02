@@ -159,7 +159,7 @@ export default {
       const transaction = {
         user_id: state.userInfo.user_id,
         address_id: state.userAddress.id,
-        total: totalPriceProduct.value,
+        total: totalPayment.value,
         status: "Menunggu Pembayaran",
         invoice: "",
         number: 0
@@ -175,7 +175,7 @@ export default {
           product_image_url: item.product.image_url,  // Product Image URL
           product_category_id: item.product.category_id,  // Product Category ID
           quantity: item.quantity,  // Quantity in cart
-          total_price: totalPayment.value,  // Total price for this item
+          total_price: totalPriceProduct.value,  // Total price for this item
         };
       });
 
