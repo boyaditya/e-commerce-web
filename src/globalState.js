@@ -38,7 +38,7 @@ export const useGlobalState = () => {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
       const userAddress = await apiGetAddress(loginResponse.user_id, loginResponse.access_token);
-      state.userAddress = userAddress;
+      state.userAddress = userAddress[0];
       localStorage.setItem("userAddress", JSON.stringify(userAddress[0]));
       state.isAuthenticated = true;
     } catch (error) {
