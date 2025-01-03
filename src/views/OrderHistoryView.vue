@@ -49,7 +49,7 @@
                   @click="$router.push({ name: 'OrderDetail', params: { invoice: order.invoice } })">
                   Lihat Detail
                 </button>
-                <button class="btn-buy-again">Beli Lagi</button>
+                <button @click="handleBuyAgain(order)" class="btn-buy-again">Beli Lagi</button>
               </div>
             </div>
           </div>
@@ -79,7 +79,7 @@ export default {
     HeaderPage,
   },
   setup() {
-    const { state, fetchTransactions, fetchAllTransactionDetails } = useGlobalState();
+    const { state, fetchTransactions, addOrUpdate } = useGlobalState();
     const orders = ref([]);
 
     const formatDate = (dateString) => {
@@ -109,8 +109,17 @@ export default {
     return {
       orders,
       formatDate,
-      formatPrice
+      formatPrice,
+      addOrUpdate
     };
+  },
+  methods: {
+    async handleBuyAgain(order){
+      for(const item of order.details){
+        const result = await this.addOrUpdate(item.product_id, item.quantity);
+      };
+      this.$router.push("/cart");
+    }
   },
 };
 </script>
