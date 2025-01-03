@@ -50,7 +50,6 @@ export default {
   },
   computed: {
     resolvedImgSrc() {
-      // Use require to dynamically resolve the image path
       return require(`@/assets/img/${this.imgSrc}`);
     }
   }
@@ -58,5 +57,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add your styles here */
 </style>

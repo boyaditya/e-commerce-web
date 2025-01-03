@@ -61,7 +61,6 @@ export default {
       }
       
       try {
-        // console.log('Login attempt:', { email: this.email, password: this.password });
         await this.login(this.email, this.password);
         if(this.state.userInfo){
           const prevRoute = this.$router.options.history.state.back;

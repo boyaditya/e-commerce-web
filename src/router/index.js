@@ -11,7 +11,6 @@ import StoreView from "@/views/StoreView.vue";
 import CartView from "@/views/CartView.vue";
 import UserView from "@/views/UserView.vue";
 import ProfileSection from "@/components/user/ProfileSection.vue";
-import ChangePassword from "@/components/user/ChangePassword.vue";
 import CheckoutView from "@/views/CheckoutView.vue";
 import AddressSection from "@/components/user/AddressSection.vue";
 import OrderHistoryView from "@/views/OrderHistoryView.vue";
@@ -117,14 +116,6 @@ const routes = [
         props: () => ({
           userInfo: JSON.parse(localStorage.getItem("userInfo")),
           userAddress: JSON.parse(localStorage.getItem("userAddress")),
-        }),
-      },
-      {
-        name: "changepassword",
-        path: "changepassword",
-        component: ChangePassword,
-        props: () => ({
-          userInfo: JSON.parse(localStorage.getItem("userInfo")),
         }),
       },
       {

@@ -36,31 +36,6 @@
                   &nbsp; Ubah Alamat
                 </router-link>
               </li>
-              <!-- <li class="nav-item">
-                <router-link
-                  to="/user/bookings"
-                  class="nav-link"
-                  :class="{
-                    active:
-                      $route.path === '/user/bookings' ||
-                      $route.path === '/user/booking-details' ||
-                      $route.path === '/user/testimonial',
-                  }"
-                >
-                  <i class="fa fa-fw fa-list-alt"></i>
-                  &nbsp; My Bookings
-                </router-link>
-              </li> -->
-              <!-- <li class="nav-item">
-                <router-link
-                  to="/user/changepassword"
-                  class="nav-link"
-                  :class="{ active: $route.path === '/user/changepassword' }"
-                >
-                  <i class="fa fa-fw fa-key"></i>
-                  &nbsp; Ubah Password
-                </router-link>
-              </li> -->
               <li class="nav-item">
                 <a
                   href="#"
