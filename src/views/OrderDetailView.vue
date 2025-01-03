@@ -124,7 +124,13 @@ export default {
     HeaderPage,
   },
   setup(props) {
-    const { state, fetchTransactionByInvoice, fetchTransactionDetails, addOrUpdate } = useGlobalState();
+    const {
+      state,
+      fetchTransactionByInvoice,
+      fetchTransactionDetails,
+      addOrUpdate,
+      updateTransaction,
+    } = useGlobalState();
     const route = useRoute();
     const order = ref(null);
     const isLoading = ref(true);
@@ -157,7 +163,10 @@ export default {
           status: "Terbayar",
         };
 
-        const response = await updateTransaction(transactionId, updatedTransaction);
+        const response = await updateTransaction(
+          transactionId,
+          updatedTransaction
+        );
         if (response) {
           order.value.status = "Terbayar";
           alert("Pembayaran berhasil diselesaikan");
@@ -229,13 +238,13 @@ export default {
     };
   },
   methods: {
-    async handleBuyAgain(){
+    async handleBuyAgain() {
       console.log(this.order);
-      for(const item of this.order.details){
+      for (const item of this.order.details) {
         const result = await this.addOrUpdate(item.product_id, item.quantity);
-      };
+      }
       this.$router.push("/cart");
-    }
+    },
   },
 };
 </script>
@@ -402,6 +411,8 @@ export default {
 .action-buttons {
   padding: 20px;
   text-align: right;
+  display: flex;
+  gap: 10px; /* Add space between buttons */
 }
 
 .btn-buy-again {
@@ -413,6 +424,14 @@ export default {
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
+}
+
+.btn-complete-payment {
+  background-color: #5cb85c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-buy-again:hover {
