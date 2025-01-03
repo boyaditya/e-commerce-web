@@ -124,44 +124,12 @@ export default {
     HeaderPage,
   },
   setup(props) {
-    const { state, fetchTransactionByInvoice, fetchTransactionDetails, updateTransaction } =
-      useGlobalState();
+    const { state, fetchTransactionByInvoice, fetchTransactionDetails, addOrUpdate } = useGlobalState();
     const route = useRoute();
     const order = ref(null);
     const isLoading = ref(true);
     const error = ref(null);
     const shippingCost = ref(12000);
-
-    const mockOrders = [
-      {
-        id: 28,
-        invoice: "INV/20240128/001",
-        created_at: "2024-01-28",
-        status: "completed",
-        shipping_address: {
-          name: "John Doe",
-          phone: "08123456789",
-          address: "Jl. Mawar No. 10",
-          city: "Jakarta",
-          province: "DKI Jakarta",
-          postal_code: "12345",
-        },
-        tracking_number: "123456789",
-        shipping_cost: 15000,
-        items: [
-          {
-            id: 1,
-            quantity: 2,
-            product: {
-              id: 101,
-              name: "Logitech G Pro X Superlight",
-              price: 750000,
-              image_url: "https://via.placeholder.com/80",
-            },
-          },
-        ],
-      },
-    ];
 
     const fetchOrderDetail = async () => {
       const orderInvoice = route.params.invoice;
@@ -259,6 +227,15 @@ export default {
       fetchOrderDetail,
       handleCompletePayment,
     };
+  },
+  methods: {
+    async handleBuyAgain(){
+      console.log(this.order);
+      for(const item of this.order.details){
+        const result = await this.addOrUpdate(item.product_id, item.quantity);
+      };
+      this.$router.push("/cart");
+    }
   },
 };
 </script>
