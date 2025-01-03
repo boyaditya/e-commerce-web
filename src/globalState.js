@@ -62,9 +62,9 @@ export const useGlobalState = () => {
 
   const register = async (username, email, password, address) => {
     try {
-      await apiRegister(username, email, password, address);
+      return await apiRegister(username, email, password, address);
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   };
 

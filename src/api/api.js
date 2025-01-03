@@ -15,7 +15,7 @@ export async function register(username, email, password, address) {
     // Post the address data
     await createAddress(userId, address);
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error(error);
     throw error;

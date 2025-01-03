@@ -29,6 +29,10 @@
           />
         </div>
 
+        <p v-if="errorEmail" class="error-message" role="alert">
+          {{ errorEmail }}
+        </p>
+
         <div class="form-group">
           <label for="password">Password</label>
           <input
@@ -161,6 +165,7 @@ export default {
         country: "",
       },
       errorMessage: "",
+      errorEmail: "",
     };
   },
   setup() {
@@ -174,17 +179,19 @@ export default {
         return;
       }
 
-      // console.log('Register attempt:', {
-      //   username: this.username,
-      //   email: this.email,
-      //   password: this.password
-      // });
-
       try {
-        await this.register(this.username, this.email, this.password, this.address);
-        this.$router.push("/login");
+        const response = await this.register(this.username, this.email, this.password, this.address);
+
+        if (response?.status === 200) { // Assuming 200 is the success status code
+          this.$router.push("/login");
+        }
       } catch (error) {
-        console.error(error);
+        console.error("Error during registration:", error);
+        if (error.response?.status === 400) {
+          this.errorEmail = error.response.data?.detail || "Invalid email provided.";
+        } else {
+          this.errorEmail = "An error occurred. Please try again later.";
+        }
       }
     },
   },

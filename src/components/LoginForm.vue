@@ -50,8 +50,8 @@ export default {
     }
   },
   setup(){
-    const { login } = useGlobalState();
-    return { login };
+    const { state, login } = useGlobalState();
+    return { state, login };
   },
   methods: {
     async handleLogin() {
@@ -63,12 +63,17 @@ export default {
       try {
         // console.log('Login attempt:', { email: this.email, password: this.password });
         await this.login(this.email, this.password);
-        const prevRoute = this.$router.options.history.state.back;
-        if(prevRoute != "/register"){
-          this.$router.back();
+        if(this.state.userInfo){
+          const prevRoute = this.$router.options.history.state.back;
+          if(prevRoute != "/register"){
+            this.$router.back();
+          }
+          else{
+            this.$router.push("/");
+          }
         }
         else{
-          this.$router.push("/");
+          this.errorMessage = "Email atau kata sandi salah!";
         }
       } catch (error) {
         console.error(error);

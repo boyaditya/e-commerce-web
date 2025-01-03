@@ -63,7 +63,7 @@ async def root():
 def register_email(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user_email = crud.get_user_by_email(db, email=user.email)
     if db_user_email:
-        raise HTTPException(status_code=400, detail="Error: Email sudah digunakan")
+        raise HTTPException(status_code=400, detail="Email sudah digunakan")
 
     return crud.register_email(db=db, user=user)
 
