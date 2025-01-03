@@ -282,7 +282,7 @@ export default {
           amount: hargaTotal,
           payment_date: new Date().toISOString(),
           payment_method: selectedPaymentMethod.value,
-          status: "pending",
+          status: "Menunggu Pembayaran",
           verified_by: null,
         };
 
