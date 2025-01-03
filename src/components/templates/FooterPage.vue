@@ -34,13 +34,18 @@
 
             <div class="col-md-3 col-xs-6">
               <div class="footer">
-                <h3 class="footer-title">Categories</h3>
+                <h3 class="footer-title">Kategori</h3>
                 <ul class="footer-links">
-                  <li><a href="#">Hot deals</a></li>
-                  <li><a href="#">Laptops</a></li>
-                  <li><a href="#">Smartphones</a></li>
-                  <li><a href="#">Cameras</a></li>
-                  <li><a href="#">Accessories</a></li>
+                  <!-- Render categories dynamically based on the fetched data -->
+                  <li
+                    v-for="(category, index) in categories"
+                    :key="category.id"
+                    @click="navigateToStore(category.id)"
+                  >
+                    <a :href="category.link">
+                      {{ category.title }}
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -51,24 +56,22 @@
               <div class="footer">
                 <h3 class="footer-title">Information</h3>
                 <ul class="footer-links">
-                  <li><a href="#">About Us</a></li>
-                  <li><a href="#">Contact Us</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Orders and Returns</a></li>
-                  <li><a href="#">Terms & Conditions</a></li>
+                  <li><a href="#">Tentang Kami</a></li>
+                  <li><a href="#">Kebijakan Privasi</a></li>
+                  <li><a href="#">Syarat & Ketentuan</a></li>
                 </ul>
               </div>
             </div>
 
             <div class="col-md-3 col-xs-6">
               <div class="footer">
-                <h3 class="footer-title">Service</h3>
+                <h3 class="footer-title">Layanan</h3>
                 <ul class="footer-links">
-                  <li><a href="#">My Account</a></li>
-                  <li><a href="#">View Cart</a></li>
-                  <li><a href="#">Wishlist</a></li>
-                  <li><a href="#">Track My Order</a></li>
-                  <li><a href="#">Help</a></li>
+                  <!-- Using router-link for Layanan -->
+                  <li><router-link to="/user/profile">Akun</router-link></li>
+                  <li><router-link to="/cart">Keranjang</router-link></li>
+                  <li><router-link to="/wishlist">Wishlist</router-link></li>
+                  <li><router-link to="/user/order-history">Riwayat Pesanan</router-link></li>
                 </ul>
               </div>
             </div>
@@ -85,31 +88,9 @@
           <!-- row -->
           <div class="row">
             <div class="col-md-12 text-center">
-              <!-- <ul class="footer-payments">
-                <li>
-                  <a href="#"><i class="fa fa-cc-visa"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-credit-card"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-cc-paypal"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-cc-mastercard"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-cc-discover"></i></a>
-                </li>
-                <li>
-                  <a href="#"><i class="fa fa-cc-amex"></i></a>
-                </li>
-              </ul> -->
               <span class="copyright">
-                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 Copyright &copy; 2024 All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by 
                 <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
               </span>
             </div>
           </div>
@@ -122,13 +103,48 @@
     <!-- /FOOTER -->
   </div>
 </template>
-		
+
 <script>
+import { fetchCategories } from "@/api/api"; // Import the fetchCategories API method
+
 export default {
   name: "FooterPage",
+  data() {
+    return {
+      categories: [], // To hold the fetched categories
+      isLoading: true, // To show loading state while fetching data
+    };
+  },
+  methods: {
+    async fetchCategories() {
+      try {
+        // Fetch categories from API
+        const categoriesData = await fetchCategories();
+        // Format categories as required for the footer
+        this.categories = categoriesData.map(category => ({
+          id: category.id,
+          title: category.name, // Assuming the API provides a 'name' field
+          imgSrc: category.image || "default-category.jpg", // Use category image or default
+          imgAlt: `${category.name} Image`, // Alt text for image
+          link: `/store?category=${category.id}`, // Use query parameter for category
+        }));
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    navigateToStore(categoryId) {
+      // Navigate to the category store using query params
+      this.$router.push({ path: "/store", query: { category: categoryId } });
+    },
+  },
+  async created() {
+    await this.fetchCategories(); // Fetch categories when the component is created
+  },
 };
 </script>
 
 <style scoped>
-/* Include relevant styles */
+/* Add any scoped CSS here */
 </style>

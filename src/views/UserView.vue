@@ -51,7 +51,7 @@
                   &nbsp; My Bookings
                 </router-link>
               </li> -->
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <router-link
                   to="/user/changepassword"
                   class="nav-link"
@@ -60,7 +60,7 @@
                   <i class="fa fa-fw fa-key"></i>
                   &nbsp; Ubah Password
                 </router-link>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a
                   href="#"
