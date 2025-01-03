@@ -235,6 +235,7 @@ export default {
       getStatusText,
       fetchOrderDetail,
       handleCompletePayment,
+      addOrUpdate
     };
   },
   methods: {
