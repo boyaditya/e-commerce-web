@@ -242,6 +242,7 @@ export default {
         alert("Silakan pilih metode pembayaran terlebih dahulu");
         return;
       }
+      const hargaTotal = totalPayment.value;
 
       const transaction = {
         user_id: state.userInfo.user_id,
@@ -278,7 +279,7 @@ export default {
       if (transactionResponse) {
         const paymentDetails = {
           transaction_id: transactionResponse.id,
-          amount: totalPayment.value,
+          amount: hargaTotal,
           payment_date: new Date().toISOString(),
           payment_method: selectedPaymentMethod.value,
           status: "pending",

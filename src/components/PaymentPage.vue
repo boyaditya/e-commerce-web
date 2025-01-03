@@ -79,9 +79,9 @@ export default {
     const paymentMethodName = ref("");
     const bankLogo = ref("/path/to/bank-logo.png");
     const virtualAccountNumber = ref("8870182389");
-    const totalAmount = ref(327150);
+    const totalAmount = ref(0);
     let timer;
-    const { state, updateTransaction } = useGlobalState();
+    const { state, updateTransaction, getPayment } = useGlobalState();
 
     const setPaymentMethodName = () => {
       const paymentMethodMap = {
@@ -101,6 +101,14 @@ export default {
         paymentMethodMap[paymentMethodKey] || "Unknown Payment Method";
     };
 
+    const fetchPaymentDetails = async () => {
+      const paymentId = route.params.payment_id;
+      const payment = await getPayment(paymentId);
+      if (payment) {
+        totalAmount.value = payment.amount;
+      }
+    };
+
     const checkPaymentStatus = async () => {
       try {
         const transactionId = route.params.transaction_id; // Assuming transactionId is passed as a route parameter
@@ -109,10 +117,13 @@ export default {
           status: "Terbayar",
         };
 
-        const response = await updateTransaction(transactionId ,updatedTransaction);
+        const response = await updateTransaction(
+          transactionId,
+          updatedTransaction
+        );
         if (response) {
           alert("Pembayaran berhasil diverifikasi");
-           router.push("/user/order-history"); 
+          router.push("/user/order-history");
         } else {
           alert("Gagal memverifikasi pembayaran");
         }
@@ -120,7 +131,6 @@ export default {
         console.error("Error verifying payment:", error);
         alert("Terjadi kesalahan saat memverifikasi pembayaran");
       }
-
     };
 
     const formatTime = computed(() => {
@@ -175,6 +185,7 @@ export default {
 
     onMounted(() => {
       setPaymentMethodName();
+      fetchPaymentDetails();
       startCountdown();
     });
 
@@ -193,7 +204,6 @@ export default {
       copyToClipboard,
       checkPaymentStatus,
       continueShopping,
-      checkPaymentStatus,
     };
   },
 };
