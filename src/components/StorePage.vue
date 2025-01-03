@@ -158,7 +158,7 @@ export default {
       selectedSort: "newest",
       filteredProducts: [],
       totalProducts: 0, // Total produk setelah filter
-      itemsPerPage: 10, // Maksimum produk per halaman
+      itemsPerPage: 12, // Maksimum produk per halaman
       currentPage: 1, // Halaman saat ini
       isLoading: true, // Status loading
     };

@@ -15,7 +15,7 @@
               <div class="order-info">
                 <div class="order-date">
                   <i class="fas fa-calendar-alt"></i>
-                  {{ order.formattedDate }}
+                  {{ formatDate(order.created_at) }}
                 </div>
                 <div class="order-number">
                   No. Pesanan: {{ order.invoice }}
@@ -41,7 +41,7 @@
             <div class="order-card-footer">
               <div class="total-section">
                 <span>Total Belanja</span>
-                <span class="total-amount">{{ order.formattedTotal }}</span>
+                <span class="total-amount">{{ formatPrice(order.total) }}</span>
               </div>
               <div class="action-buttons">
                 <button 
@@ -82,78 +82,34 @@ export default {
     const { state, fetchTransactions, fetchAllTransactionDetails } = useGlobalState();
     const orders = ref([]);
 
-    const formattedDate = (rawDate) => {
-      const date = new Date(rawDate);  // Convert string to Date object
-
-      const months = [
-        "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", 
-        "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
-      ];
-
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = months[date.getMonth()];
-      const year = date.getFullYear();
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${hours}:${minutes} ${day} ${month} ${year}`;
+    const formatDate = (dateString) => {
+      const options = { day: 'numeric', month: 'short', year: 'numeric' };
+      return new Date(dateString).toLocaleDateString('id-ID', options);
     };
 
-    const formattedPrice = (rawPrice) => {
-      return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
+    const formatPrice = (price) => {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-      })
-        .format(rawPrice)
-        .replace(/\s/g, "");
+      }).format(price);
     };
 
     onMounted(async () => {
       if (state.isAuthenticated) {
         try {
           orders.value = await fetchTransactions(state.userInfo.user_id);
-          const transactionDetails = await fetchAllTransactionDetails(state.userInfo.user_id);
-          
-          orders.value.forEach(item => {
-            // item.items = [];
-            item.formattedDate = formattedDate(item.created_at);
-            item.formattedTotal = formattedPrice(item.total);
-            // transactionDetails.forEach(barang => {
-            //   if(item.id == barang.transaction_id){
-            //     item.items.push(barang);
-            //   }
-            // });
-          });
-
         } catch (error) {
           console.error(error);
         }
-        // orders.value = [
-        //   {
-        //     id: "INV/20240128/001",
-        //     date: "28 Jan 2024",
-        //     total: "Rp1.500.000",
-        //     items: [
-        //       { id: 1, name: "Logitech G Pro X Superlight", quantity: 2, image: "https://via.placeholder.com/80" },
-        //       { id: 2, name: "HyperX Cloud Alpha", quantity: 1, image: "https://via.placeholder.com/80" },
-        //     ],
-        //   },
-        //   {
-        //     id: "INV/20240127/002",
-        //     date: "27 Jan 2024",
-        //     total: "Rp2.300.000",
-        //     items: [
-        //       { id: 3, name: "Razer Blackwidow V3", quantity: 1, image: "https://via.placeholder.com/80" },
-        //       { id: 4, name: "Steelseries Arctis 7", quantity: 3, image: "https://via.placeholder.com/80" },
-        //     ],
-        //   },
-        // ];
       }
     });
 
     return {
       orders,
+      formatDate,
+      formatPrice
     };
   },
 };

@@ -15,23 +15,23 @@
         <div class="col-md-6">
           <div class="address-card">
             <div class="section-title">
-              <h3 class="title">Shipping Address</h3>
+              <h3 class="title">Alamat Pengiriman</h3>
             </div>
             <div class="address-details">
               <p>
-                <strong>Recipient's Name:</strong> {{ address.recipients_name }}
+                <strong>Nama Penerima:</strong> {{ address.recipients_name }}
               </p>
-              <p><strong>Phone Number:</strong> {{ address.phone_number }}</p>
+              <p><strong>Nomor Telepon:</strong> {{ address.phone_number }}</p>
               <p>
-                <strong>Street Address:</strong> {{ address.street_address }}
+                <strong>Alamat:</strong> {{ address.street_address }}
               </p>
-              <p><strong>City:</strong> {{ address.city }}</p>
-              <p><strong>State:</strong> {{ address.state }}</p>
-              <p><strong>Country:</strong> {{ address.country }}</p>
-              <p><strong>ZIP Code:</strong> {{ address.postal_code }}</p>
+              <p><strong>Kota:</strong> {{ address.city }}</p>
+              <p><strong>Provinsi:</strong> {{ address.state }}</p>
+              <p><strong>Negara:</strong> {{ address.country }}</p>
+              <p><strong>Kode Pos:</strong> {{ address.postal_code }}</p>
             </div>
             <router-link to="/user/address" class="btn btn-primary"
-              >Edit Address</router-link
+              >Ubah Alamat</router-link
             >
           </div>
           <div class="caption">
@@ -51,13 +51,13 @@
 
         <div class="col-md-6 order-details">
           <div class="section-title text-center">
-            <h4 class="title">Order Summary</h4>
+            <h4 class="title">Ringkasan Transaksi</h4>
           </div>
           <div class="order-summary">
             <div class="order-col header">
-              <div class="product-name"><strong>Product</strong></div>
-              <div class="product-price"><strong>Price</strong></div>
-              <div class="product-quantity"><strong>Quantity</strong></div>
+              <div class="product-name"><strong>Produk</strong></div>
+              <div class="product-price"><strong>Harga</strong></div>
+              <div class="product-quantity"><strong>Jumlah</strong></div>
               <div class="product-total"><strong>Total</strong></div>
             </div>
             <div
@@ -85,14 +85,14 @@
               </div>
             </div>
             <div class="order-col">
-              <div><strong>Shipping Cost</strong></div>
+              <div><strong>Ongkos Pengiriman</strong></div>
               <div></div>
               <div>
                 <strong>{{ formatPrice(shippingCost) }}</strong>
               </div>
             </div>
             <div class="order-col">
-              <div><strong>Total Payment</strong></div>
+              <div><strong>Total Pembayaran</strong></div>
               <div></div>
               <div>
                 <strong>{{ formatPrice(totalPayment) }}</strong>
@@ -103,7 +103,7 @@
             href=""
             class="primary-btn order-submit"
             @click.prevent="submitOrder"
-            >Place Order</a
+            >Pesan</a
           >
         </div>
       </div>
@@ -113,6 +113,7 @@
 
 <script>
 import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useGlobalState } from "@/globalState.js";
 import CheckoutItem from "./shop_item/CheckoutItem.vue";
 
@@ -121,6 +122,7 @@ export default {
     CheckoutItem,
   },
   setup() {
+    const router = useRouter();
     const { state, addTransaction } = useGlobalState();
     const shippingCost = ref(12000);
 
@@ -179,9 +181,10 @@ export default {
         };
       });
 
-      // console.log(details);  // Log the details array for verification
-      // console.log(JSON.parse(JSON.stringify(selectedCartItems.value)));
       const responseData = await addTransaction(transaction, details, selected);
+      if(responseData){
+        router.push({ name: 'OrderDetail', params: { invoice: responseData.invoice } });
+      }
     };
 
     const address = computed(() => state.userAddress);
@@ -217,17 +220,17 @@ export default {
 }
 
 .order-details .order-summary {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .order-details .order-summary .order-col {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  
 }
 
 .order-details .order-summary .order-products .order-col {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .order-details .order-summary .order-col div {
