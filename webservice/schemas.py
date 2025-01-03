@@ -210,14 +210,6 @@ class Carts(CartsBase):
     class Config:
         orm_mode = True
 
-
-# class CartId(BaseModel):
-#     id: int
-
-#     class Config:
-#         orm_mode = True
-
-
 # Wishlist
 class WishlistsBase(BaseModel):
     user_id: int
@@ -332,101 +324,7 @@ class Payments(PaymentsBase):
     class Config:
         orm_mode = True
 
-
-# # Janji Temu as Orang Lain
-# class JanjiTemuAsOrangLainBase(BaseModel):
-#     nama_lengkap_orang_lain: str
-#     no_bpjs_orang_lain: str
-#     tgl_lahir_orang_lain: date
-#     gender_orang_lain: str
-#     no_telp_orang_lain: str
-#     alamat_orang_lain: str
-
-# class JanjiTemuAsOrangLainCreate(JanjiTemuAsOrangLainBase):
-#     pass
-
-# class JanjiTemuAsOrangLain(JanjiTemuAsOrangLainBase):
-#     id_janji_temu_as_orang_lain: int
-
-#     class Config:
-#         orm_mode = True
-
-# class StatusEnum(str, Enum):
-#     MENUNGGU_AMBIL_ANTRIAN = 'Menunggu Ambil Antrian'
-#     MENUNGGU_ANTRIAN = 'Menunggu Antrian'
-#     DALAM_SESI = 'Dalam Sesi'
-#     MENUNGGU_PEMBAYARAN = 'Menunggu Pembayaran'
-#     SELESAI = 'Selesai'
-
-# # Janji Temu
-# class JanjiTemuBase(BaseModel):
-#     kode_janji_temu: str
-#     tgl_janji_temu: date
-#     id_dokter: int
-#     id_user: int
-#     is_relasi: int
-#     id_relasi: int
-#     biaya_janji_temu: int
-#     id_janji_temu_as_orang_lain: int
-#     status: StatusEnum
-#     dokter: Optional[Dokter] = []
-#     user: Optional[User] = []
-#     relasi: Optional[Relasi] = []
-#     janji_temu_as_orang_lain: Optional[JanjiTemuAsOrangLain] = []
-
-# class JanjiTemuCreate(JanjiTemuBase):
-#     pass
-
-# class JanjiTemu(JanjiTemuBase):
-#     id_janji_temu: int
-
-#     class Config:
-#         orm_mode = True
-
-
 # Token
 class Token(BaseModel):
     access_token: str
     token_type: str
-
-# # Pengingat Minum Obat
-# class PengingatMinumObatBase(BaseModel):
-#     id_obat: int
-#     id_user: int
-#     dosis: int
-#     sendok: str
-#     jadwal: str
-#     aturan: str
-#     obat: Optional[Obat] = []
-#     user: Optional[User] = []
-#     # nama_obat: Optional[Obat] = []
-#     # foto_obat: Optional[Obat] = []
-#     # detail_obat: Optional[Obat] = []
-
-# class PengingatMinumObatCreate(PengingatMinumObatBase):
-#     pass
-
-# class PengingatMinumObat(PengingatMinumObatBase):
-#     id_pengingat: int
-#     # obat: Optional[Obat] = []
-
-#     class Config:
-#         orm_mode = True
-
-
-# # rekam medis
-# class RekamMedisBase(BaseModel):
-#     id_janji_temu: int
-#     id_obat: int
-#     hasil_diagnosis: str
-#     pengobatan: str
-#     dosis_obat: str
-#     catatan: str
-#     janji_temu: Optional[JanjiTemu] = []
-#     obat: Optional[Obat] = []
-
-# class RekamMedis(RekamMedisBase):
-#     id_rekam_medis: int
-
-#     class Config:
-#         orm_mode = True
