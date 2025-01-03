@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderPage title="Pembayaran" />
-    
+
     <div class="payment-container">
       <div class="payment-card">
         <div class="timer-section">
@@ -14,26 +14,31 @@
         <div class="payment-details">
           <div class="bank-info">
             <div class="bank-header">
-              <h3>{{ bankName }}</h3>
-              <img :src="bankLogo" :alt="bankName" class="bank-logo"/>
+              <h3>{{ paymentMethodName }}</h3>
             </div>
-            
+
             <div class="account-info">
               <div class="info-row">
                 <span class="label">Nomor Virtual Account</span>
                 <div class="value-container">
                   <span class="value">{{ virtualAccountNumber }}</span>
-                  <button @click="copyToClipboard(virtualAccountNumber)" class="copy-button">
+                  <button
+                    @click="copyToClipboard(virtualAccountNumber)"
+                    class="copy-button"
+                  >
                     <span>Salin</span>
                   </button>
                 </div>
               </div>
-              
+
               <div class="info-row">
                 <span class="label">Total Tagihan</span>
                 <div class="value-container">
                   <span class="value">Rp{{ formatPrice(totalAmount) }}</span>
-                  <button @click="copyToClipboard(totalAmount)" class="copy-button">
+                  <button
+                    @click="copyToClipboard(totalAmount)"
+                    class="copy-button"
+                  >
                     <span>Salin</span>
                   </button>
                 </div>
@@ -56,41 +61,88 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
-import HeaderPage from '@/components/templates/HeaderPage.vue';
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+import HeaderPage from "@/components/templates/HeaderPage.vue";
+import { useGlobalState } from "@/globalState";
 
 export default {
-  name: 'PaymentPage',
+  name: "PaymentPage",
   components: {
-    HeaderPage
+    HeaderPage,
   },
   setup() {
     const router = useRouter();
+    const route = useRoute();
     const countdown = ref(23 * 60 * 60 + 47 * 60 + 50); // 23:47:50
-    const bankName = ref('Bank Muamalat');
-    const bankLogo = ref('/path/to/bank-logo.png');
-    const virtualAccountNumber = ref('8870182389');
+    const paymentMethodName = ref("");
+    const bankLogo = ref("/path/to/bank-logo.png");
+    const virtualAccountNumber = ref("8870182389");
     const totalAmount = ref(327150);
     let timer;
+    const { state, updateTransaction } = useGlobalState();
+
+    const setPaymentMethodName = () => {
+      const paymentMethodMap = {
+        va_permata: "Bank Permata",
+        va_bca: "Bank BCA",
+        va_bni: "Bank BNI",
+        va_mandiri: "Bank Mandiri",
+        va_bri: "Bank BRI",
+        cod: "Cash on Delivery (COD)",
+        store_alfamart: "Alfamart",
+        store_indomaret: "Indomaret",
+      };
+
+      const pathParts = route.path.split("/");
+      const paymentMethodKey = pathParts.slice(2, 3).join("_");
+      paymentMethodName.value =
+        paymentMethodMap[paymentMethodKey] || "Unknown Payment Method";
+    };
+
+    const checkPaymentStatus = async () => {
+      try {
+        const transactionId = route.params.transaction_id; // Assuming transactionId is passed as a route parameter
+        const updatedTransaction = {
+          payment_id: route.params.payment_id,
+          status: "Terbayar",
+        };
+
+        const response = await updateTransaction(transactionId ,updatedTransaction);
+        if (response) {
+          alert("Pembayaran berhasil diverifikasi");
+           router.push("/user/order-history"); 
+        } else {
+          alert("Gagal memverifikasi pembayaran");
+        }
+      } catch (error) {
+        console.error("Error verifying payment:", error);
+        alert("Terjadi kesalahan saat memverifikasi pembayaran");
+      }
+
+    };
 
     const formatTime = computed(() => {
       const hours = Math.floor(countdown.value / 3600);
       const minutes = Math.floor((countdown.value % 3600) / 60);
       const seconds = countdown.value % 60;
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+        2,
+        "0"
+      )}:${String(seconds).padStart(2, "0")}`;
     });
 
     const paymentDeadline = computed(() => {
       const date = new Date();
       date.setHours(date.getHours() + 24);
-      return date.toLocaleString('id-ID', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+      return date.toLocaleString("id-ID", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
     });
 
@@ -105,27 +157,24 @@ export default {
     };
 
     const formatPrice = (price) => {
-      return price.toLocaleString('id-ID');
+      return price.toLocaleString("id-ID");
     };
 
     const copyToClipboard = async (text) => {
       try {
         await navigator.clipboard.writeText(text.toString());
-        alert('Berhasil disalin!');
+        alert("Berhasil disalin!");
       } catch (err) {
-        console.error('Failed to copy:', err);
+        console.error("Failed to copy:", err);
       }
     };
 
-    const checkPaymentStatus = () => {
-      // Implement payment status check
-    };
-
     const continueShopping = () => {
-      router.push('/');
+      router.push("/");
     };
 
     onMounted(() => {
+      setPaymentMethodName();
       startCountdown();
     });
 
@@ -136,16 +185,17 @@ export default {
     return {
       formatTime,
       paymentDeadline,
-      bankName,
+      paymentMethodName,
       bankLogo,
       virtualAccountNumber,
       totalAmount,
       formatPrice,
       copyToClipboard,
       checkPaymentStatus,
-      continueShopping
+      continueShopping,
+      checkPaymentStatus,
     };
-  }
+  },
 };
 </script>
 
@@ -177,7 +227,7 @@ export default {
 .countdown {
   font-size: 32px;
   font-weight: bold;
-  color: #FF6B6B;
+  color: #ff6b6b;
   margin-bottom: 8px;
 }
 
@@ -229,7 +279,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #F8F9FA;
+  background: #f8f9fa;
   padding: 12px;
   border-radius: 8px;
 }
@@ -243,7 +293,7 @@ export default {
 .copy-button {
   background: none;
   border: none;
-  color: #00A389;
+  color: #00a389;
   font-weight: 500;
   cursor: pointer;
   padding: 4px 8px;
@@ -262,9 +312,9 @@ export default {
 
 .btn-outline {
   padding: 12px 24px;
-  border: 1px solid #00A389;
+  border: 1px solid #00a389;
   background: white;
-  color: #00A389;
+  color: #00a389;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
@@ -272,13 +322,13 @@ export default {
 }
 
 .btn-outline:hover {
-  background: #F0F9F7;
+  background: #f0f9f7;
 }
 
 .btn-primary {
   padding: 12px 24px;
   border: none;
-  background: #00A389;
+  background: #00a389;
   color: white;
   border-radius: 8px;
   font-weight: 500;
@@ -287,6 +337,6 @@ export default {
 }
 
 .btn-primary:hover {
-  background: #008D76;
+  background: #008d76;
 }
 </style>

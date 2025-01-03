@@ -31,7 +31,7 @@ const routes = [
     component: CheckoutView,
   },
   {
-    path: "/payment/:method",
+    path: "/payment/:method/:transaction_id/:payment_id",
     name: "payment",
     component: PaymentPage,
     props: true,

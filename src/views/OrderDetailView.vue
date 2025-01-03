@@ -57,14 +57,23 @@
         <div class="product-list">
           <h2 class="section-title">Produk yang Dibeli</h2>
           <div class="products">
-            <div v-for="item in order.details" :key="item.id" class="product-item">
+            <div
+              v-for="item in order.details"
+              :key="item.id"
+              class="product-item"
+            >
               <div class="product-image">
-                <img :src="require('@/assets/img/' + item.product_image_url)" :alt="item.product_name" />
+                <img
+                  :src="require('@/assets/img/' + item.product_image_url)"
+                  :alt="item.product_name"
+                />
               </div>
               <div class="product-details">
                 <h3 class="product-name">{{ item.product_name }}</h3>
                 <p class="product-quantity">{{ item.quantity }} barang</p>
-                <p class="product-price">{{ formatPrice(item.product_price) }}</p>
+                <p class="product-price">
+                  {{ formatPrice(item.product_price) }}
+                </p>
               </div>
             </div>
           </div>
@@ -94,6 +103,9 @@
           <button @click="handleBuyAgain" class="btn-buy-again">
             Beli Lagi
           </button>
+          <button @click="handleCompletePayment" class="btn-complete-payment">
+            Selesaikan Pembayaran
+          </button>
         </div>
       </div>
     </div>
@@ -101,18 +113,19 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { useGlobalState } from "@/globalState";
-import HeaderPage from '@/components/templates/HeaderPage.vue';
+import HeaderPage from "@/components/templates/HeaderPage.vue";
 
 export default {
-  name: 'OrderDetailView',
+  name: "OrderDetailView",
   components: {
     HeaderPage,
   },
   setup(props) {
-    const { state, fetchTransactionByInvoice, fetchTransactionDetails } = useGlobalState();
+    const { state, fetchTransactionByInvoice, fetchTransactionDetails, updateTransaction } =
+      useGlobalState();
     const route = useRoute();
     const order = ref(null);
     const isLoading = ref(true);
@@ -122,18 +135,18 @@ export default {
     const mockOrders = [
       {
         id: 28,
-        invoice: 'INV/20240128/001',
-        created_at: '2024-01-28',
-        status: 'completed',
+        invoice: "INV/20240128/001",
+        created_at: "2024-01-28",
+        status: "completed",
         shipping_address: {
-          name: 'John Doe',
-          phone: '08123456789',
-          address: 'Jl. Mawar No. 10',
-          city: 'Jakarta',
-          province: 'DKI Jakarta',
-          postal_code: '12345',
+          name: "John Doe",
+          phone: "08123456789",
+          address: "Jl. Mawar No. 10",
+          city: "Jakarta",
+          province: "DKI Jakarta",
+          postal_code: "12345",
         },
-        tracking_number: '123456789',
+        tracking_number: "123456789",
         shipping_cost: 15000,
         items: [
           {
@@ -141,9 +154,9 @@ export default {
             quantity: 2,
             product: {
               id: 101,
-              name: 'Logitech G Pro X Superlight',
+              name: "Logitech G Pro X Superlight",
               price: 750000,
-              image_url: 'https://via.placeholder.com/80',
+              image_url: "https://via.placeholder.com/80",
             },
           },
         ],
@@ -155,21 +168,44 @@ export default {
       // order.value = mockOrders.find((o) => o.id === orderId);
       order.value = await fetchTransactionByInvoice(orderInvoice);
       if (!order.value) {
-        error.value = 'Pesanan tidak ditemukan';
+        error.value = "Pesanan tidak ditemukan";
       }
       console.log(order.value);
       isLoading.value = false;
     };
 
     const formatDate = (dateString) => {
-      const options = { day: 'numeric', month: 'short', year: 'numeric' };
-      return new Date(dateString).toLocaleDateString('id-ID', options);
+      const options = { day: "numeric", month: "short", year: "numeric" };
+      return new Date(dateString).toLocaleDateString("id-ID", options);
+    };
+
+    const handleCompletePayment = async () => {
+      if (!order.value) return;
+
+      try {
+        const transactionId = order.value.id;
+        const updatedTransaction = {
+          payment_id: order.value.payment_id,
+          status: "Terbayar",
+        };
+
+        const response = await updateTransaction(transactionId, updatedTransaction);
+        if (response) {
+          order.value.status = "Terbayar";
+          alert("Pembayaran berhasil diselesaikan");
+        } else {
+          alert("Gagal menyelesaikan pembayaran");
+        }
+      } catch (error) {
+        console.error("Error completing payment:", error);
+        alert("Terjadi kesalahan saat menyelesaikan pembayaran");
+      }
     };
 
     const formatPrice = (price) => {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       }).format(price);
@@ -187,20 +223,20 @@ export default {
 
     const getStatusClass = (status) => {
       const statusClasses = {
-        completed: 'status-completed',
-        processing: 'status-processing',
-        shipped: 'status-shipped',
-        cancelled: 'status-cancelled',
+        completed: "status-completed",
+        processing: "status-processing",
+        shipped: "status-shipped",
+        cancelled: "status-cancelled",
       };
-      return statusClasses[status] || 'status-processing';
+      return statusClasses[status] || "status-processing";
     };
 
     const getStatusText = (status) => {
       const statusTexts = {
-        completed: 'Selesai',
-        processing: 'Diproses',
-        shipped: 'Dikirim',
-        cancelled: 'Dibatalkan',
+        completed: "Selesai",
+        processing: "Diproses",
+        shipped: "Dikirim",
+        cancelled: "Dibatalkan",
       };
       return statusTexts[status] || status;
     };
@@ -221,6 +257,7 @@ export default {
       getStatusClass,
       getStatusText,
       fetchOrderDetail,
+      handleCompletePayment,
     };
   },
 };
@@ -250,7 +287,7 @@ export default {
 .order-title {
   font-size: 24px;
   font-weight: 600;
-  color: #2B2D42;
+  color: #2b2d42;
   margin: 0 0 8px 0;
 }
 
@@ -293,11 +330,13 @@ export default {
 .section-title {
   font-size: 18px;
   font-weight: 600;
-  color: #2B2D42;
+  color: #2b2d42;
   margin: 0 0 16px 0;
 }
 
-.shipping-info, .product-list, .payment-summary {
+.shipping-info,
+.product-list,
+.payment-summary {
   padding: 20px;
   border-bottom: 1px solid #e0e0e0;
 }
@@ -313,7 +352,9 @@ export default {
   margin: 0 0 4px 0;
 }
 
-.phone, .address, .city-info {
+.phone,
+.address,
+.city-info {
   margin: 0 0 4px 0;
   color: #757575;
 }
@@ -358,7 +399,7 @@ export default {
 
 .product-price {
   font-weight: 500;
-  color: #2B2D42;
+  color: #2b2d42;
 }
 
 .summary-details {
@@ -378,7 +419,7 @@ export default {
   margin-top: 8px;
   padding-top: 16px;
   font-weight: 600;
-  color: #2B2D42;
+  color: #2b2d42;
 }
 
 .action-buttons {
@@ -418,8 +459,12 @@ export default {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Error State */

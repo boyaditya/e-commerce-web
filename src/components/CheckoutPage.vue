@@ -22,9 +22,7 @@
                 <strong>Nama Penerima:</strong> {{ address.recipients_name }}
               </p>
               <p><strong>Nomor Telepon:</strong> {{ address.phone_number }}</p>
-              <p>
-                <strong>Alamat:</strong> {{ address.street_address }}
-              </p>
+              <p><strong>Alamat:</strong> {{ address.street_address }}</p>
               <p><strong>Kota:</strong> {{ address.city }}</p>
               <p><strong>Provinsi:</strong> {{ address.state }}</p>
               <p><strong>Negara:</strong> {{ address.country }}</p>
@@ -41,22 +39,30 @@
               <h3 class="title">Metode Pembayaran</h3>
             </div>
             <div class="payment-selector">
-              <select 
-                v-model="selectedPaymentMethod" 
+              <select
+                v-model="selectedPaymentMethod"
                 class="payment-dropdown"
-                :class="{ 'empty': !selectedPaymentMethod }"
+                :class="{ empty: !selectedPaymentMethod }"
               >
                 <option value="">Pilih metode pembayaran</option>
                 <optgroup label="Cash on Delivery">
                   <option value="cod">Cash on Delivery (COD)</option>
                 </optgroup>
                 <optgroup label="Virtual Account">
-                  <option v-for="bank in banks" :key="bank.id" :value="'va_' + bank.id">
+                  <option
+                    v-for="bank in banks"
+                    :key="bank.id"
+                    :value="'va_' + bank.id"
+                  >
                     {{ bank.name }} Virtual Account
                   </option>
                 </optgroup>
                 <optgroup label="Minimarket">
-                  <option v-for="store in stores" :key="store.id" :value="'store_' + store.id">
+                  <option
+                    v-for="store in stores"
+                    :key="store.id"
+                    :value="'store_' + store.id"
+                  >
                     {{ store.name }}
                   </option>
                 </optgroup>
@@ -75,8 +81,6 @@
               </div>
             </div>
           </div>
-
-          
         </div>
 
         <div class="col-md-6 order-details">
@@ -129,12 +133,13 @@
               </div>
             </div>
           </div>
-         <a
-          href=""
-          class="primary-btn order-submit"
-          :class="{ 'disabled': !selectedPaymentMethod }"
-          @click.prevent="submitOrder"
-        >Pesan</a>
+          <a
+            href=""
+            class="primary-btn order-submit"
+            :class="{ disabled: !selectedPaymentMethod }"
+            @click.prevent="submitOrder"
+            >Pesan</a
+          >
         </div>
       </div>
     </div>
@@ -153,21 +158,22 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const { state, addTransaction } = useGlobalState();
+    const { state, addTransaction, createPayment, updateTransaction } =
+      useGlobalState();
     const shippingCost = ref(12000);
-    const selectedPaymentMethod = ref('');
+    const selectedPaymentMethod = ref("");
 
     const banks = [
-      { id: 'bca', name: 'BCA' },
-      { id: 'bni', name: 'BNI' },
-      { id: 'mandiri', name: 'Mandiri' },
-      { id: 'bri', name: 'BRI' },
-      { id: 'permata', name: 'Permata' }
+      { id: "bca", name: "BCA" },
+      { id: "bni", name: "BNI" },
+      { id: "mandiri", name: "Mandiri" },
+      { id: "bri", name: "BRI" },
+      { id: "permata", name: "Permata" },
     ];
 
     const stores = [
-      { id: 'alfamart', name: 'Alfamart' },
-      { id: 'indomaret', name: 'Indomaret' }
+      { id: "alfamart", name: "Alfamart" },
+      { id: "indomaret", name: "Indomaret" },
     ];
 
     const selectedCartItems = computed(() => {
@@ -177,37 +183,37 @@ export default {
     });
 
     const getPaymentIcon = computed(() => {
-      if (!selectedPaymentMethod.value) return '';
-      
-      if (selectedPaymentMethod.value === 'cod') {
-        return 'fa fa-money';
+      if (!selectedPaymentMethod.value) return "";
+
+      if (selectedPaymentMethod.value === "cod") {
+        return "fa fa-money";
       }
-      if (selectedPaymentMethod.value.startsWith('va_')) {
-        return 'fa fa-bank';
+      if (selectedPaymentMethod.value.startsWith("va_")) {
+        return "fa fa-bank";
       }
-      if (selectedPaymentMethod.value.startsWith('store_')) {
-        return 'fa fa-store';
+      if (selectedPaymentMethod.value.startsWith("store_")) {
+        return "fa fa-store";
       }
-      return '';
+      return "";
     });
 
     const getPaymentLabel = computed(() => {
-      if (!selectedPaymentMethod.value) return '';
+      if (!selectedPaymentMethod.value) return "";
 
-      if (selectedPaymentMethod.value === 'cod') {
-        return 'Cash on Delivery (COD)';
+      if (selectedPaymentMethod.value === "cod") {
+        return "Cash on Delivery (COD)";
       }
-      if (selectedPaymentMethod.value.startsWith('va_')) {
-        const bankId = selectedPaymentMethod.value.replace('va_', '');
-        const bank = banks.find(b => b.id === bankId);
+      if (selectedPaymentMethod.value.startsWith("va_")) {
+        const bankId = selectedPaymentMethod.value.replace("va_", "");
+        const bank = banks.find((b) => b.id === bankId);
         return `${bank.name} Virtual Account`;
       }
-      if (selectedPaymentMethod.value.startsWith('store_')) {
-        const storeId = selectedPaymentMethod.value.replace('store_', '');
-        const store = stores.find(s => s.id === storeId);
+      if (selectedPaymentMethod.value.startsWith("store_")) {
+        const storeId = selectedPaymentMethod.value.replace("store_", "");
+        const store = stores.find((s) => s.id === storeId);
         return store.name;
       }
-      return '';
+      return "";
     });
 
     const totalPriceProduct = computed(() => {
@@ -231,9 +237,9 @@ export default {
         .replace(/\s/g, "");
     };
 
-   const submitOrder = async () => {
+    const submitOrder = async () => {
       if (!selectedPaymentMethod.value) {
-        alert('Silakan pilih metode pembayaran terlebih dahulu');
+        alert("Silakan pilih metode pembayaran terlebih dahulu");
         return;
       }
 
@@ -242,13 +248,13 @@ export default {
         address_id: state.userAddress.id,
         total: totalPayment.value,
         status: "Menunggu Pembayaran",
-        payment_method: selectedPaymentMethod.value,
         invoice: "",
-        number: 0
+        number: 0,
+        payment_id: null,
       };
 
-      const selected = JSON.parse(JSON.stringify(selectedCartItems.value));
-      const details = selectedCartItems.value.map(item => {
+      const selectedCart = JSON.parse(JSON.stringify(selectedCartItems.value));
+      const transactionData = selectedCartItems.value.map((item) => {
         return {
           transaction_id: 0,
           product_id: item.product.id,
@@ -261,15 +267,50 @@ export default {
         };
       });
 
-      const responseData = await addTransaction(transaction, details, selected);
-      if(responseData) {
+      const transactionResponse = await addTransaction(
+        transaction,
+        transactionData,
+        selectedCart
+      );
+
+      let paymentResponse = null;
+
+      if (transactionResponse) {
+        const paymentDetails = {
+          transaction_id: transactionResponse.id,
+          amount: totalPayment.value,
+          payment_date: new Date().toISOString(),
+          payment_method: selectedPaymentMethod.value,
+          status: "pending",
+          verified_by: null,
+        };
+
+        paymentResponse = await createPayment(paymentDetails);
+        if (paymentResponse) {
+          const updatedTransaction = {
+            payment_id: paymentResponse.id,
+            status: "Menunggu Pembayaran",
+          };
+
+          await updateTransaction(transactionResponse.id, updatedTransaction);
+
+          alert("Berhasil membuat pembayaran");
+        } else {
+          alert("Gagal membuat pembayaran");
+        }
+      } else {
+        alert("Gagal membuat transaksi");
+      }
+
+      if (transactionResponse) {
         // Redirect to payment page with the selected payment method
-        router.push({ 
-          name: 'payment', 
-          params: { 
+        router.push({
+          name: "payment",
+          params: {
             method: selectedPaymentMethod.value,
-            invoice: responseData.invoice 
-          }
+            transaction_id: paymentResponse.transaction_id,
+            payment_id: paymentResponse.id,
+          },
         });
       }
     };
@@ -288,7 +329,7 @@ export default {
       banks,
       stores,
       getPaymentIcon,
-      getPaymentLabel
+      getPaymentLabel,
     };
   },
 };

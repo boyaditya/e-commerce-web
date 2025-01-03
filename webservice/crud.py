@@ -218,6 +218,7 @@ def add_transaction(db: Session, transaction: schemas.TransactionCreate, details
         status=transaction.status,
         invoice=transaction.invoice,
         number=transaction.number,
+        payment_id=transaction.payment_id,
     )
     db.add(db_transaction)
     db.commit()
@@ -251,6 +252,70 @@ def get_transaction_details(db: Session, transaction_id: int):
 
 def get_all_transaction_details(db: Session, user_id: int):
     return db.query(models.TransactionDetail).join(models.Transaction).filter(models.Transaction.user_id == user_id).all()
+
+
+def get_transaction_by_id(db: Session, transaction_id: int):
+    return (
+        db.query(models.Transaction)
+        .filter(models.Transaction.id == transaction_id)
+        .first()
+    )
+
+
+def update_transaction(
+    db: Session,
+    db_transaction: models.Transaction,
+    transaction_update: schemas.TransactionUpdate,
+):
+    if transaction_update.payment_id is not None:
+        db_transaction.payment_id = transaction_update.payment_id
+    if transaction_update.status is not None:
+        db_transaction.status = transaction_update.status
+    db.commit()
+    db.refresh(db_transaction)
+    return db_transaction
+
+
+## payment
+
+
+def create_payment(db: Session, payment: schemas.PaymentsCreate):
+    db_payment = models.Payments(
+        transaction_id=payment.transaction_id,
+        amount=payment.amount,
+        payment_date=payment.payment_date,
+        payment_method=payment.payment_method,
+        status=payment.status,
+        verified_by=payment.verified_by,
+    )
+    db.add(db_payment)
+    db.commit()
+    db.refresh(db_payment)
+    return db_payment
+
+
+def get_payment_by_id(db: Session, payment_id: int):
+    return db.query(models.Payments).filter(models.Payments.id == payment_id).first()
+
+
+def get_payments_by_transaction_id(db: Session, transaction_id: int):
+    return (
+        db.query(models.Payments)
+        .filter(models.Payments.transaction_id == transaction_id)
+        .all()
+    )
+
+
+def update_payment_status(db: Session, payment_id: int, status: str):
+    db_payment = (
+        db.query(models.Payments).filter(models.Payments.id == payment_id).first()
+    )
+    if db_payment:
+        db_payment.status = status
+        db.commit()
+        db.refresh(db_payment)
+    return db_payment
+
 
 # ## dokter
 # def create_dokter(db: Session, dokter: schemas.DokterCreate):

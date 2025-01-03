@@ -120,6 +120,61 @@ def create_address(
 ):
     return crud.create_address(db=db, address=address)
 
+# payments
+
+
+@app.post("/payments/", response_model=schemas.Payments)
+def create_payment(payment: schemas.PaymentsCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+    return crud.create_payment(db=db, payment=payment)
+
+@app.get("/payments/{payment_id}", response_model=schemas.Payments)
+def get_payment(payment_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+    payment = crud.get_payment_by_id(db, payment_id)
+    if payment is None:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return payment
+
+@app.get("/payments/transaction/{transaction_id}", response_model=list[schemas.Payments])
+def get_payments_by_transaction(transaction_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+    payments = crud.get_payments_by_transaction_id(db, transaction_id)
+    if payments is None:
+        raise HTTPException(status_code=404, detail="Payments not found")
+    return payments
+
+@app.put("/payments/{payment_id}", response_model=schemas.Payments)
+def update_payment_status(payment_id: int, status: str, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+    payment = crud.update_payment_status(db, payment_id, status)
+    if payment is None:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return payment
+
+@app.delete("/payments/{payment_id}", response_model=schemas.Payments)
+def delete_payment(payment_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+    payment = crud.delete_payment(db, payment_id)
+    if payment is None:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return payment
+
 
 # @app.post("/login_no_telp") #,response_model=schemas.Token
 # async def login_no_telp(user: schemas.UserLoginPhone, db: Session = Depends(get_db)):
@@ -315,6 +370,28 @@ def read_all_transaction_details(user_id: int, db: Session = Depends(get_db), to
     # print(user_id)
     all_transaction_details = crud.get_all_transaction_details(db, user_id)
     return all_transaction_details
+
+
+@app.put("/transactions/{transaction_id}", response_model=schemas.Transaction)
+def update_transaction(
+    transaction_id: int,
+    transaction: schemas.TransactionUpdate,
+    db: Session = Depends(get_db),
+    token: str = Depends(oauth2_scheme),
+):
+    try:
+        usr = verify_token(token)
+    except HTTPException as e:
+        raise e
+
+    db_transaction = crud.get_transaction_by_id(db, transaction_id)
+    if db_transaction is None:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    updated_transaction = crud.update_transaction(db, db_transaction, transaction)
+    return updated_transaction
+
+
 
 @app.get("/get_products/", response_model=list[schemas.Products])
 def read_products(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):

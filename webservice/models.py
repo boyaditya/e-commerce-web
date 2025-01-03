@@ -134,6 +134,7 @@ class Transaction(BaseDB):
 
     details = relationship("TransactionDetail", back_populates="transaction")
     address = relationship("Address", back_populates="transaction")
+    payments = relationship("Payments", back_populates="transaction")
 
 
 class TransactionDetail(BaseDB):
@@ -151,6 +152,35 @@ class TransactionDetail(BaseDB):
 
     transaction = relationship("Transaction", back_populates="details")
 
+class PaymentMethod(PyEnum):
+    cod = "cod"
+    va_bca = "va_bca"
+    va_bni = "va_bni"
+    va_mandiri = "va_mandiri"
+    va_bri = "va_bri"
+    va_permata = "va_permata"
+    store_alfamart = "store_alfamart"
+    store_indomaret = "store_indomaret"
+class PaymentStatus(PyEnum):
+    pending = "pending"
+    verified = "verified"
+    rejected = "rejected"
+
+class Payments(BaseDB):
+    __tablename__ = "payments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    transaction_id = Column(Integer, ForeignKey("transactions.id"), nullable=True)
+    amount = Column(DECIMAL(10, 2), nullable=False)
+    payment_date = Column(DateTime, nullable=False, server_default=func.now())
+    payment_method = Column(Enum(PaymentMethod), nullable=False)
+    status = Column(Enum(PaymentStatus), nullable=True, default=PaymentStatus.pending)
+    verified_by = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
+    updated_at = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
+
+    transaction = relationship("Transaction", back_populates="payments")
+    # verified_by_user = relationship("User", foreign_keys=[verified_by], back_populates="payments_verified")
 # class JadwalDokter(BaseDB):
 #     __tablename__ = 'jadwal_dokter'
 

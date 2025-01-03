@@ -44,7 +44,6 @@ class Address(AddressBase):
         orm_mode = True
 
 
-
 # Categories
 class CategoriesBase(BaseModel):
     name: str
@@ -134,7 +133,6 @@ class Products(ProductsBase):
 #         orm_mode = True
 
 
-
 # # Relasi
 # class RelasiBase(BaseModel):
 #     id_user: int
@@ -212,6 +210,14 @@ class Carts(CartsBase):
     class Config:
         orm_mode = True
 
+
+# class CartId(BaseModel):
+#     id: int
+
+#     class Config:
+#         orm_mode = True
+
+
 # Wishlist
 class WishlistsBase(BaseModel):
     user_id: int
@@ -229,12 +235,13 @@ class Wishlists(WishlistsBase):
     class Config:
         orm_mode = True
 
+
 class TransactionStatusEnum(str, Enum):
-    pending = "pending"
-    paid = "paid"
-    shipped = "shipped"
-    completed = "completed"
-    cancelled = "cancelled"
+    menunggu_pembayaran = "Menunggu Pembayaran"
+    terbayar = "Terbayar"
+    dikirim = "Dikirim"
+    selesai = "Selesai"
+    dibatalkan = "Dibatalkan"
 
 
 class TransactionDetailBase(BaseModel):
@@ -267,6 +274,7 @@ class TransactionBase(BaseModel):
     invoice: str
     number: int
     # status: Optional[TransactionStatusEnum] = TransactionStatusEnum.pending
+    payment_id: Optional[int] = None
 
     class Config:
         use_enum_values = True
@@ -274,6 +282,14 @@ class TransactionBase(BaseModel):
 
 class TransactionCreate(TransactionBase):
     pass
+
+
+class TransactionUpdate(BaseModel):
+    payment_id: Optional[int] = None
+    status: Optional[TransactionStatusEnum] = None
+
+    class Config:
+        orm_mode = True
 
 
 class Transaction(TransactionBase):
@@ -290,6 +306,32 @@ class Transaction(TransactionBase):
 class Password(BaseModel):
     old_password: str
     new_password: str
+
+
+# Payments Base Schema
+class PaymentsBase(BaseModel):
+    transaction_id: Optional[int] = None
+    amount: float
+    payment_date: datetime
+    payment_method: str
+    status: Optional[str] = "pending"
+    verified_by: Optional[int] = None
+
+
+# Payments Create Schema
+class PaymentsCreate(PaymentsBase):
+    pass
+
+
+# Payments Schema
+class Payments(PaymentsBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+
 
 # # Janji Temu as Orang Lain
 # class JanjiTemuAsOrangLainBase(BaseModel):
@@ -356,7 +398,7 @@ class Token(BaseModel):
 #     jadwal: str
 #     aturan: str
 #     obat: Optional[Obat] = []
-#     user: Optional[User] = [] 
+#     user: Optional[User] = []
 #     # nama_obat: Optional[Obat] = []
 #     # foto_obat: Optional[Obat] = []
 #     # detail_obat: Optional[Obat] = []
@@ -370,8 +412,8 @@ class Token(BaseModel):
 
 #     class Config:
 #         orm_mode = True
-        
-        
+
+
 # # rekam medis
 # class RekamMedisBase(BaseModel):
 #     id_janji_temu: int
@@ -382,7 +424,7 @@ class Token(BaseModel):
 #     catatan: str
 #     janji_temu: Optional[JanjiTemu] = []
 #     obat: Optional[Obat] = []
-    
+
 # class RekamMedis(RekamMedisBase):
 #     id_rekam_medis: int
 

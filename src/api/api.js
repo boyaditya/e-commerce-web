@@ -370,3 +370,100 @@ export async function fetchProductsByCategory(categoryId) {
     }
   }
 }
+
+
+export async function createPayment(paymentDetails, token) {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/payments/",
+      paymentDetails,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Pass the token in the header
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
+export async function getPayment(paymentId, token) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/payments/${paymentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass the token in the header
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getPaymentsByTransaction(transactionId, token) {
+  try {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/payments/transaction/${transactionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass the token in the header
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function updatePaymentStatus(paymentId, status, token) {
+  try {
+    const response = await axios.put(
+      `http://127.0.0.1:8000/payments/${paymentId}`,
+      { status },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Pass the token in the header
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function updateTransaction(
+  transactionId,
+  transactionDetails,
+  token
+) {
+  try {
+    const response = await axios.put(
+      `http://127.0.0.1:8000/transactions/${transactionId}`,
+      transactionDetails,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Pass the token in the header
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

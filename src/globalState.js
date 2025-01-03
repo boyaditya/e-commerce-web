@@ -17,6 +17,11 @@ import {
   fetchAllTransactionDetails as apiFetchAllTransactionDetails,
   getAddress as apiGetAddress,
   createAddress as apiCreateAddress,
+  createPayment as apiCreatePayment,
+  getPayment as apiGetPayment,
+  getPaymentsByTransaction as apiGetPaymentsByTransaction,
+  updatePaymentStatus as apiUpdatePaymentStatus,
+  updateTransaction as apiUpdateTransaction,
 } from "@/api/api";
 
 const state = reactive({
@@ -25,7 +30,9 @@ const state = reactive({
   cartProducts: JSON.parse(localStorage.getItem("cartProducts")) || [],
   wishlistProducts: JSON.parse(localStorage.getItem("wishlistProducts")) || [],
   transactions: JSON.parse(localStorage.getItem("transactions")) || [],
-  transactionsDetails: JSON.parse(localStorage.getItem("transactionsDetails")) || [],
+  transactionsDetails:
+    JSON.parse(localStorage.getItem("transactionsDetails")) || [],
+  payments: JSON.parse(localStorage.getItem("payments")) || [],
   isAuthenticated: !!localStorage.getItem("userInfo"),
   selectedItems: [],
 });
@@ -165,8 +172,8 @@ export const useGlobalState = () => {
   };
 
   const addTransaction = async (transaction, details, cartItems) => {
-    console.log(transaction);
-    console.log(cartItems);
+    // console.log(transaction);
+    // console.log(cartItems);
     try {
       if (state.userInfo) {
         const transactionData = await apiAddTransaction(transaction, details, cartItems, state.userInfo);
@@ -250,6 +257,30 @@ export const useGlobalState = () => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const updateTransaction = async (transaction_id, transactionDetails) => {
+    try {
+      const updatedTransaction = await apiUpdateTransaction(
+        transaction_id,
+        transactionDetails,
+        state.userInfo.access_token
+      );
+      const index = state.transactions.findIndex(
+        (transaction) => transaction.id === transaction_id,
+      );
+      if (index !== -1) {
+        state.transactions[index] = updatedTransaction;
+        localStorage.setItem(
+          "transactions",
+          JSON.stringify(state.transactions)
+        );
+      }
+      return updatedTransaction;
+    } catch (error) {
+      console.error("Failed to update transaction:", error);
+      throw error;
     }
   };
 
@@ -363,6 +394,66 @@ export const useGlobalState = () => {
     }
   };
 
+    const createPayment = async (paymentDetails) => {
+      try {
+        const payment = await apiCreatePayment(
+          paymentDetails,
+          state.userInfo.access_token
+        );
+        state.payments.push(payment);
+        localStorage.setItem("payments", JSON.stringify(state.payments));
+        return payment;
+      } catch (error) {
+        console.error("Failed to create payment:", error);
+      }
+    };
+
+    const getPayment = async (paymentId) => {
+      try {
+        const payment = await apiGetPayment(
+          paymentId,
+          state.userInfo.access_token
+        );
+        return payment;
+      } catch (error) {
+        console.error("Failed to get payment:", error);
+      }
+    };
+
+    const getPaymentsByTransaction = async (transactionId) => {
+      try {
+        const payments = await apiGetPaymentsByTransaction(
+          transactionId,
+          state.userInfo.access_token
+        );
+        state.payments = payments;
+        localStorage.setItem("payments", JSON.stringify(payments));
+        return payments;
+      } catch (error) {
+        console.error("Failed to get payments by transaction:", error);
+      }
+    };
+
+    const updatePaymentStatus = async (paymentId, status) => {
+      try {
+        const updatedPayment = await apiUpdatePaymentStatus(
+          paymentId,
+          status,
+          state.userInfo.access_token
+        );
+        const index = state.payments.findIndex(
+          (payment) => payment.id === paymentId
+        );
+        if (index !== -1) {
+          state.payments[index] = updatedPayment;
+          localStorage.setItem("payments", JSON.stringify(state.payments));
+        }
+        return updatedPayment;
+      } catch (error) {
+        console.error("Failed to update payment status:", error);
+      }
+    };
+
   return {
     state,
     login,
@@ -384,5 +475,10 @@ export const useGlobalState = () => {
     setSelectedItems,
     fetchUserAddress,
     setUserAddress,
+    createPayment,
+    getPayment,
+    getPaymentsByTransaction,
+    updatePaymentStatus,
+    updateTransaction,
   };
 };
