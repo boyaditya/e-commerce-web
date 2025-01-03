@@ -34,19 +34,49 @@
               >Ubah Alamat</router-link
             >
           </div>
-          <div class="caption">
-            <div class="cart-items">
-              <CheckoutItem
-                v-for="item in selectedCartItems"
-                :key="item.id"
-                :id="item.id"
-                :name="item.product.name"
-                :price="item.product.price"
-                :quantity="item.quantity"
-                :imgSrc="item.product.image_url"
-              />
+
+          <!-- Payment Method Section -->
+          <div class="payment-method-card">
+            <div class="section-title">
+              <h3 class="title">Metode Pembayaran</h3>
+            </div>
+            <div class="payment-selector">
+              <select 
+                v-model="selectedPaymentMethod" 
+                class="payment-dropdown"
+                :class="{ 'empty': !selectedPaymentMethod }"
+              >
+                <option value="">Pilih metode pembayaran</option>
+                <optgroup label="Cash on Delivery">
+                  <option value="cod">Cash on Delivery (COD)</option>
+                </optgroup>
+                <optgroup label="Virtual Account">
+                  <option v-for="bank in banks" :key="bank.id" :value="'va_' + bank.id">
+                    {{ bank.name }} Virtual Account
+                  </option>
+                </optgroup>
+                <optgroup label="Minimarket">
+                  <option v-for="store in stores" :key="store.id" :value="'store_' + store.id">
+                    {{ store.name }}
+                  </option>
+                </optgroup>
+              </select>
+              <div class="payment-icon">
+                <i class="fa fa-chevron-down"></i>
+              </div>
+            </div>
+            <div v-if="selectedPaymentMethod" class="selected-payment-info">
+              <div class="payment-icon">
+                <i :class="getPaymentIcon"></i>
+              </div>
+              <div class="payment-details">
+                <span class="payment-label">Metode Pembayaran Terpilih:</span>
+                <span class="payment-value">{{ getPaymentLabel }}</span>
+              </div>
             </div>
           </div>
+
+          
         </div>
 
         <div class="col-md-6 order-details">
@@ -99,12 +129,12 @@
               </div>
             </div>
           </div>
-          <a
-            href=""
-            class="primary-btn order-submit"
-            @click.prevent="submitOrder"
-            >Pesan</a
-          >
+         <a
+          href=""
+          class="primary-btn order-submit"
+          :class="{ 'disabled': !selectedPaymentMethod }"
+          @click.prevent="submitOrder"
+        >Pesan</a>
         </div>
       </div>
     </div>
@@ -125,11 +155,59 @@ export default {
     const router = useRouter();
     const { state, addTransaction } = useGlobalState();
     const shippingCost = ref(12000);
+    const selectedPaymentMethod = ref('');
+
+    const banks = [
+      { id: 'bca', name: 'BCA' },
+      { id: 'bni', name: 'BNI' },
+      { id: 'mandiri', name: 'Mandiri' },
+      { id: 'bri', name: 'BRI' },
+      { id: 'permata', name: 'Permata' }
+    ];
+
+    const stores = [
+      { id: 'alfamart', name: 'Alfamart' },
+      { id: 'indomaret', name: 'Indomaret' }
+    ];
 
     const selectedCartItems = computed(() => {
       return state.cartProducts.filter((item) =>
         state.selectedItems.includes(item.id)
       );
+    });
+
+    const getPaymentIcon = computed(() => {
+      if (!selectedPaymentMethod.value) return '';
+      
+      if (selectedPaymentMethod.value === 'cod') {
+        return 'fa fa-money';
+      }
+      if (selectedPaymentMethod.value.startsWith('va_')) {
+        return 'fa fa-bank';
+      }
+      if (selectedPaymentMethod.value.startsWith('store_')) {
+        return 'fa fa-store';
+      }
+      return '';
+    });
+
+    const getPaymentLabel = computed(() => {
+      if (!selectedPaymentMethod.value) return '';
+
+      if (selectedPaymentMethod.value === 'cod') {
+        return 'Cash on Delivery (COD)';
+      }
+      if (selectedPaymentMethod.value.startsWith('va_')) {
+        const bankId = selectedPaymentMethod.value.replace('va_', '');
+        const bank = banks.find(b => b.id === bankId);
+        return `${bank.name} Virtual Account`;
+      }
+      if (selectedPaymentMethod.value.startsWith('store_')) {
+        const storeId = selectedPaymentMethod.value.replace('store_', '');
+        const store = stores.find(s => s.id === storeId);
+        return store.name;
+      }
+      return '';
     });
 
     const totalPriceProduct = computed(() => {
@@ -153,16 +231,18 @@ export default {
         .replace(/\s/g, "");
     };
 
-    const submitOrder = async () => {
-      // console.log("Order submitted", {
-      //   selectedCartItems: selectedCartItems.value,
-      // });
-      // console.log(state.userAddress.id);
+   const submitOrder = async () => {
+      if (!selectedPaymentMethod.value) {
+        alert('Silakan pilih metode pembayaran terlebih dahulu');
+        return;
+      }
+
       const transaction = {
         user_id: state.userInfo.user_id,
         address_id: state.userAddress.id,
         total: totalPayment.value,
         status: "Menunggu Pembayaran",
+        payment_method: selectedPaymentMethod.value,
         invoice: "",
         number: 0
       };
@@ -171,19 +251,26 @@ export default {
       const details = selectedCartItems.value.map(item => {
         return {
           transaction_id: 0,
-          product_id: item.product.id,  // Product ID
-          product_name: item.product.name,  // Product Name
-          product_price: item.product.price,  // Product Price
-          product_image_url: item.product.image_url,  // Product Image URL
-          product_category_id: item.product.category_id,  // Product Category ID
-          quantity: item.quantity,  // Quantity in cart
-          total_price: item.product.price * item.quantity,  // Total price for this item
+          product_id: item.product.id,
+          product_name: item.product.name,
+          product_price: item.product.price,
+          product_image_url: item.product.image_url,
+          product_category_id: item.product.category_id,
+          quantity: item.quantity,
+          total_price: item.product.price * item.quantity,
         };
       });
 
       const responseData = await addTransaction(transaction, details, selected);
-      if(responseData){
-        router.push({ name: 'OrderDetail', params: { invoice: responseData.invoice } });
+      if(responseData) {
+        // Redirect to payment page with the selected payment method
+        router.push({ 
+          name: 'payment', 
+          params: { 
+            method: selectedPaymentMethod.value,
+            invoice: responseData.invoice 
+          }
+        });
       }
     };
 
@@ -197,6 +284,11 @@ export default {
       submitOrder,
       shippingCost,
       address,
+      selectedPaymentMethod,
+      banks,
+      stores,
+      getPaymentIcon,
+      getPaymentLabel
     };
   },
 };
@@ -207,7 +299,8 @@ export default {
   margin-bottom: 30px;
 }
 
-.address-card {
+.address-card,
+.payment-method-card {
   background: #f9f9f9;
   padding: 20px;
   border: 1px solid #e4e7ed;
@@ -219,6 +312,104 @@ export default {
   margin: 0 0 10px;
 }
 
+.payment-selector {
+  position: relative;
+  margin-top: 15px;
+}
+
+.payment-dropdown {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  font-size: 16px;
+  border: 2px solid #e4e7ed;
+  border-radius: 8px;
+  background-color: white;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-dropdown:focus {
+  outline: none;
+  border-color: #d10024;
+  box-shadow: 0 0 0 3px rgba(209, 0, 36, 0.1);
+}
+
+.payment-dropdown.empty {
+  color: #757575;
+}
+
+.payment-dropdown option,
+.payment-dropdown optgroup {
+  color: #333;
+  padding: 12px;
+}
+
+.payment-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #d10024;
+  pointer-events: none;
+}
+
+.selected-payment-info {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.selected-payment-info .payment-icon {
+  position: static;
+  transform: none;
+  width: 40px;
+  height: 40px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-payment-info .payment-icon i {
+  font-size: 20px;
+}
+
+.payment-details {
+  flex: 1;
+}
+
+.payment-label {
+  display: block;
+  font-size: 12px;
+  color: #757575;
+  margin-bottom: 4px;
+}
+
+.payment-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.payment-dropdown optgroup {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
+
+.payment-dropdown option {
+  padding: 10px;
+  font-weight: normal;
+  background-color: white;
+}
+
 .order-details .order-summary {
   margin-bottom: 20px;
 }
@@ -226,7 +417,6 @@ export default {
 .order-details .order-summary .order-col {
   display: flex;
   justify-content: space-between;
-  
 }
 
 .order-details .order-summary .order-products .order-col {
@@ -278,6 +468,11 @@ export default {
 
 .primary-btn:hover {
   background-color: #a0001b;
+}
+
+.primary-btn.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .btn {

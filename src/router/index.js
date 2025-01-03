@@ -16,6 +16,7 @@ import CheckoutView from "@/views/CheckoutView.vue";
 import AddressSection from "@/components/user/AddressSection.vue";
 import OrderHistoryView from "@/views/OrderHistoryView.vue";
 import OrderDetailView from "@/views/OrderDetailView.vue";
+import PaymentPage from "@/components/PaymentPage.vue";
 
 
 const routes = [
@@ -28,6 +29,20 @@ const routes = [
     path: "/checkout",
     name: "checkout",
     component: CheckoutView,
+  },
+  {
+    path: "/payment/:method",
+    name: "payment",
+    component: PaymentPage,
+    props: true,
+    beforeEnter: (to, from, next) => {
+      const { state } = useGlobalState();
+      if (!state.isAuthenticated) {
+        next({ name: "login" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/user/order-history",
