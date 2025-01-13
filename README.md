@@ -74,15 +74,7 @@ cd ecommerce-website
    ```bash
    uvicorn main:app --reload
    ```
-   
-
-## 🎯 Usage
-
-1. Open the frontend in your browser at `http://localhost:8080` (default Vue.js port).
-2. Access the backend API at `http://127.0.0.1:8000` (default FastAPI port).
-3. Register a new account, browse products, add to your wishlist or cart, and complete a purchase.
-
-
+ 
 ### Frontend Setup
 1. Install dependencies:
    ```bash
@@ -92,6 +84,13 @@ cd ecommerce-website
    ```bash
    npm run serve
    ```
+
+## 🎯 Usage
+
+1. Open the frontend in your browser at `http://localhost:8080` (default Vue.js port).
+2. Access the backend API at `http://127.0.0.1:8000` (default FastAPI port).
+3. Register a new account, browse products, add to your wishlist or cart, and complete a purchase.
+
 
 ## 📸 Screenshot
 ### Home Page
@@ -118,11 +117,15 @@ cd ecommerce-website
 ### Edit Shipping Address
 ![screencapture-localhost-8081-user-address-2025-01-13-14_57_24](https://github.com/user-attachments/assets/da440305-5e77-4cbe-814e-de2335e4d25f)
 
+## 🤓 Author(s)
+- @boyaditya
+- @aryaayy
+- @RaffiArdhiN
+- @rafiealhabsyi
+
+## ✋ Acknowledgement
+- Website Template: [colorlib](https://themewagon.com/themes/free-bootstrap-ecommerce-template-electro/)
+
 
 ## 📜 License
 This project is licensed under the **MIT License**. See the `LICENSE` file for details.
-
-
-Enjoy exploring our e-commerce platform! 🎮✨
-
-
