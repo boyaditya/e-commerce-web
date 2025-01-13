@@ -1,6 +1,6 @@
-# 🌟 E-commerce Website for Gaming Peripherals
+# 🌟 Ardhicom (Gaming Peripheral E-Commerce Website)
 
-Welcome to the repository for our **E-commerce Website**, specializing in selling top-quality gaming peripherals. Built with a robust tech stack, this project offers a seamless shopping experience for gaming enthusiasts.
+This is an e-commerce website for selling gaming peripherals. The project was created as a final assignment for the **E-Business** course at our university. It is built using **Vue.js**, **FastAPI**, and **MySQL**.
 
 ## 🚀 Features
 
