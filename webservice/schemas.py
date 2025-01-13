@@ -6,19 +6,6 @@ from enum import Enum
 class ResponseMSG(BaseModel):
     msg: str
 
-# Poli
-# class PoliBase(BaseModel):
-#     nama_poli: str
-
-# class PoliCreate(PoliBase):
-#     pass
-
-# class Poli(PoliBase):
-#     id_poli: int
-
-#     class Config:
-#         orm_mode = True
-
 # Address Base Schema
 class AddressBase(BaseModel):
     recipients_name: str
@@ -79,97 +66,6 @@ class Products(ProductsBase):
 
     class Config:
         orm_mode = True
-
-# Jadwal Dokter
-# class JadwalDokterBase(BaseModel):
-#     id_dokter: int
-#     tanggal_jadwal_dokter: date
-#     is_full: int
-#     start_time: time
-#     end_time: time
-
-# class JadwalDokterCreate(JadwalDokterBase):
-#     pass
-
-# class JadwalDokter(JadwalDokterBase):
-#     id_jadwal_dokter: int
-
-#     class Config:
-#         orm_mode = True
-
-# # Jenis Obat
-# class JenisObatBase(BaseModel):
-#     jenis_obat: str
-
-# class JenisObatCreate(JenisObatBase):
-#     pass
-
-# class JenisObat(JenisObatBase):
-#     id_jenis_obat: int
-
-#     class Config:
-#         orm_mode = True
-
-
-# # Obat
-# class ObatBase(BaseModel):
-#     nama_obat: str
-#     deskripsi_obat: str
-#     komposisi_obat: str
-#     dosis_obat: str
-#     peringatan_obat: str
-#     efek_samping_obat: str
-#     foto_obat: str
-#     id_jenis_obat: int
-#     jenis_obat: Optional[JenisObat] = []
-
-# class ObatCreate(ObatBase):
-#     pass
-
-# class Obat(ObatBase):
-#     id_obat: int
-
-#     class Config:
-#         orm_mode = True
-
-
-# # Relasi
-# class RelasiBase(BaseModel):
-#     id_user: int
-#     nama_lengkap_relasi: str
-#     no_bpjs_relasi: str
-#     tgl_lahir_relasi: date
-#     gender_relasi: str
-#     no_telp_relasi: str
-#     alamat_relasi: str
-#     foto_relasi: str
-#     tipe_relasi: str
-
-# class RelasiCreate(RelasiBase):
-#     pass
-
-# class Relasi(RelasiBase):
-#     id_relasi: int
-
-#     class Config:
-#         orm_mode = True
-
-
-# # Review
-# class ReviewBase(BaseModel):
-#     id_user: int
-#     id_dokter: int
-#     rating: int
-#     review_content: Optional[str]
-
-# class ReviewCreate(ReviewBase):
-#     pass
-
-# class Review(ReviewBase):
-#     id_review: int
-
-#     class Config:
-#         orm_mode = True
 
 # User
 class UserBase(BaseModel):

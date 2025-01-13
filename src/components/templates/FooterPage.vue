@@ -7,41 +7,33 @@
         <div class="container">
           <!-- row -->
           <div class="row">
-            <div class="col-md-3 col-xs-6">
+            <div class="col-md-4 col-xs-6">
               <div class="footer">
                 <h3 class="footer-title">About Us</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut.
+                  Kami adalah toko yang menyediakan berbagai peripheral gaming berkualitas tinggi,
+                  mulai dari keyboard, mouse, hingga headset untuk meningkatkan pengalaman bermain Anda.
                 </p>
                 <ul class="footer-links">
                   <li>
-                    <a href="#"
-                      ><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a
-                    >
+                    <a href="#"><i class="fa fa-map-marker"></i>Jl. Ardhicom No. 123, Bandung</a>
                   </li>
                   <li>
-                    <a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a>
+                    <a href="#"><i class="fa fa-phone"></i>+62-21-1234-5678</a>
                   </li>
                   <li>
-                    <a href="#"
-                      ><i class="fa fa-envelope-o"></i>email@email.com</a
-                    >
+                    <a href="#"><i class="fa fa-envelope-o"></i>ardhicom@toko-gaming.com</a>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div class="col-md-3 col-xs-6">
+            <div class="col-md-4 col-xs-6">
               <div class="footer">
                 <h3 class="footer-title">Kategori</h3>
                 <ul class="footer-links">
                   <!-- Render categories dynamically based on the fetched data -->
-                  <li
-                    v-for="(category, index) in categories"
-                    :key="category.id"
-                    @click="navigateToStore(category.id)"
-                  >
+                  <li v-for="(category) in categories" :key="category.id" @click="navigateToStore(category.id)">
                     <a :href="category.link">
                       {{ category.title }}
                     </a>
@@ -52,18 +44,7 @@
 
             <div class="clearfix visible-xs"></div>
 
-            <div class="col-md-3 col-xs-6">
-              <div class="footer">
-                <h3 class="footer-title">Information</h3>
-                <ul class="footer-links">
-                  <li><a href="#">Tentang Kami</a></li>
-                  <li><a href="#">Kebijakan Privasi</a></li>
-                  <li><a href="#">Syarat & Ketentuan</a></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-md-3 col-xs-6">
+            <div class="col-md-4 col-xs-6">
               <div class="footer">
                 <h3 class="footer-title">Layanan</h3>
                 <ul class="footer-links">
@@ -89,7 +70,8 @@
           <div class="row">
             <div class="col-md-12 text-center">
               <span class="copyright">
-                Copyright &copy; 2024 All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by 
+                Copyright &copy; 2024 All rights reserved | This template is made with <i class="fa fa-heart-o"
+                  aria-hidden="true"></i> by
                 <a href="https://colorlib.com" target="_blank">Colorlib</a>
               </span>
             </div>

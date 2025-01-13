@@ -11,11 +11,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-4">
-              <img
-                src="@/assets/img/default-profile.png"
-                class="img-fluid img-thumbnail"
-                alt="Profile"
-              />
+              <img src="@/assets/img/default-profile.png" class="img-fluid img-thumbnail" alt="Profile" />
             </div>
             <div class="col-md-8">
               <div class="profile-info">
@@ -30,9 +26,9 @@
                   <span class="profile-label">Email</span>
                   <span class="profile-value">{{ userInfo.email }}</span>
                 </div>
-                <div class="profile-info-item">
+                <div class="profile-info-item" v-if="userInfo">
                   <span class="profile-label">Pengguna sejak</span>
-                  <span class="profile-value">{{ userInfo.created_at }}</span>
+                  <span class="profile-value">{{ formatDate(userInfo.created_at) }}</span>
                 </div>
               </div>
               <hr />
@@ -80,6 +76,12 @@ export default {
       required: true,
     },
   },
+  methods: {
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('id-ID', options);
+    }
+  }
 };
 </script>
 

@@ -150,12 +150,8 @@
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useGlobalState } from "@/globalState.js";
-import CheckoutItem from "./shop_item/CheckoutItem.vue";
 
 export default {
-  components: {
-    CheckoutItem,
-  },
   setup() {
     const router = useRouter();
     const { state, addTransaction, createPayment, updateTransaction } =

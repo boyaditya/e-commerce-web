@@ -51,7 +51,10 @@ export const useGlobalState = () => {
       delete userInfo.id;
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
-      const userAddress = await apiGetAddress(loginResponse.user_id, loginResponse.access_token);
+      const userAddress = await apiGetAddress(
+        loginResponse.user_id,
+        loginResponse.access_token
+      );
       state.userAddress = userAddress[0];
       localStorage.setItem("userAddress", JSON.stringify(userAddress[0]));
       state.isAuthenticated = true;
@@ -61,11 +64,7 @@ export const useGlobalState = () => {
   };
 
   const register = async (username, email, password, address) => {
-    try {
-      return await apiRegister(username, email, password, address);
-    } catch (error) {
-      throw error;
-    }
+    return await apiRegister(username, email, password, address);
   };
 
   const logout = () => {
@@ -176,7 +175,12 @@ export const useGlobalState = () => {
     // console.log(cartItems);
     try {
       if (state.userInfo) {
-        const transactionData = await apiAddTransaction(transaction, details, cartItems, state.userInfo);
+        const transactionData = await apiAddTransaction(
+          transaction,
+          details,
+          cartItems,
+          state.userInfo
+        );
 
         state.transactions.push(transactionData);
         localStorage.setItem(
@@ -268,7 +272,7 @@ export const useGlobalState = () => {
         state.userInfo.access_token
       );
       const index = state.transactions.findIndex(
-        (transaction) => transaction.id === transaction_id,
+        (transaction) => transaction.id === transaction_id
       );
       if (index !== -1) {
         state.transactions[index] = updatedTransaction;
@@ -321,10 +325,7 @@ export const useGlobalState = () => {
   const removeFromCart = async (cart_id) => {
     try {
       if (state.userInfo) {
-        const cartData = await apiDeleteCartItem(
-          cart_id,
-          state.userInfo.access_token
-        );
+        await apiDeleteCartItem(cart_id, state.userInfo.access_token);
         state.cartProducts = state.cartProducts.filter(
           (cart) => cart.id !== cart_id
         );
@@ -377,7 +378,7 @@ export const useGlobalState = () => {
   const removeFromWishlist = async (wishlist_id) => {
     try {
       if (state.userInfo) {
-        const wishlistData = await apiDeleteWishlistItem(
+        await apiDeleteWishlistItem(
           wishlist_id,
           state.userInfo.access_token
         );
@@ -394,65 +395,65 @@ export const useGlobalState = () => {
     }
   };
 
-    const createPayment = async (paymentDetails) => {
-      try {
-        const payment = await apiCreatePayment(
-          paymentDetails,
-          state.userInfo.access_token
-        );
-        state.payments.push(payment);
+  const createPayment = async (paymentDetails) => {
+    try {
+      const payment = await apiCreatePayment(
+        paymentDetails,
+        state.userInfo.access_token
+      );
+      state.payments.push(payment);
+      localStorage.setItem("payments", JSON.stringify(state.payments));
+      return payment;
+    } catch (error) {
+      console.error("Failed to create payment:", error);
+    }
+  };
+
+  const getPayment = async (paymentId) => {
+    try {
+      const payment = await apiGetPayment(
+        paymentId,
+        state.userInfo.access_token
+      );
+      return payment;
+    } catch (error) {
+      console.error("Failed to get payment:", error);
+    }
+  };
+
+  const getPaymentsByTransaction = async (transactionId) => {
+    try {
+      const payments = await apiGetPaymentsByTransaction(
+        transactionId,
+        state.userInfo.access_token
+      );
+      state.payments = payments;
+      localStorage.setItem("payments", JSON.stringify(payments));
+      return payments;
+    } catch (error) {
+      console.error("Failed to get payments by transaction:", error);
+    }
+  };
+
+  const updatePaymentStatus = async (paymentId, status) => {
+    try {
+      const updatedPayment = await apiUpdatePaymentStatus(
+        paymentId,
+        status,
+        state.userInfo.access_token
+      );
+      const index = state.payments.findIndex(
+        (payment) => payment.id === paymentId
+      );
+      if (index !== -1) {
+        state.payments[index] = updatedPayment;
         localStorage.setItem("payments", JSON.stringify(state.payments));
-        return payment;
-      } catch (error) {
-        console.error("Failed to create payment:", error);
       }
-    };
-
-    const getPayment = async (paymentId) => {
-      try {
-        const payment = await apiGetPayment(
-          paymentId,
-          state.userInfo.access_token
-        );
-        return payment;
-      } catch (error) {
-        console.error("Failed to get payment:", error);
-      }
-    };
-
-    const getPaymentsByTransaction = async (transactionId) => {
-      try {
-        const payments = await apiGetPaymentsByTransaction(
-          transactionId,
-          state.userInfo.access_token
-        );
-        state.payments = payments;
-        localStorage.setItem("payments", JSON.stringify(payments));
-        return payments;
-      } catch (error) {
-        console.error("Failed to get payments by transaction:", error);
-      }
-    };
-
-    const updatePaymentStatus = async (paymentId, status) => {
-      try {
-        const updatedPayment = await apiUpdatePaymentStatus(
-          paymentId,
-          status,
-          state.userInfo.access_token
-        );
-        const index = state.payments.findIndex(
-          (payment) => payment.id === paymentId
-        );
-        if (index !== -1) {
-          state.payments[index] = updatedPayment;
-          localStorage.setItem("payments", JSON.stringify(state.payments));
-        }
-        return updatedPayment;
-      } catch (error) {
-        console.error("Failed to update payment status:", error);
-      }
-    };
+      return updatedPayment;
+    } catch (error) {
+      console.error("Failed to update payment status:", error);
+    }
+  };
 
   return {
     state,

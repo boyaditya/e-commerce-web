@@ -106,7 +106,6 @@ import ProductItem from "@/components/shop_item/ProductItem.vue";
 import {
   fetchAllProducts,
   fetchCategories,
-  fetchProductsByCategory,
 } from "@/api/api";
 import "@/assets/css/loading.css"; // Import CSS file
 

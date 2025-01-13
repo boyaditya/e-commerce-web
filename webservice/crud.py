@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 import models, schemas
 import bcrypt
 from sqlalchemy import desc
-from typing import List
 
 SALT = b'$2b$12$0nFckzktMD0Fb16a8JsNA.'
 

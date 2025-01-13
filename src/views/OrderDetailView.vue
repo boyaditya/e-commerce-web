@@ -123,11 +123,9 @@ export default {
   components: {
     HeaderPage,
   },
-  setup(props) {
+  setup() {
     const {
-      state,
       fetchTransactionByInvoice,
-      fetchTransactionDetails,
       addOrUpdate,
       updateTransaction,
     } = useGlobalState();
@@ -242,7 +240,7 @@ export default {
     async handleBuyAgain() {
       console.log(this.order);
       for (const item of this.order.details) {
-        const result = await this.addOrUpdate(item.product_id, item.quantity);
+        await this.addOrUpdate(item.product_id, item.quantity);
       }
       this.$router.push("/cart");
     },

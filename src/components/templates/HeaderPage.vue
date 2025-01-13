@@ -5,13 +5,13 @@
       <div class="container">
         <ul class="header-links pull-left">
           <li>
-            <a href="#"><i class="fa fa-phone"></i> +62 123 456 78</a>
+            <a href="#"><i class="fa fa-phone"></i>+62-21-1234-5678</a>
           </li>
           <li>
-            <a href="#"><i class="fa fa-envelope-o"></i> ardhicom@email.com</a>
+            <a href="#"><i class="fa fa-envelope-o"></i>ardhicom@toko-gaming.com</a>
           </li>
           <li>
-            <a href="#"><i class="fa fa-map-marker"></i> 123 jalan jalan </a>
+            <a href="#"><i class="fa fa-map-marker"></i>Jl. Ardhicom No. 123, Bandung</a>
           </li>
         </ul>
       </div>
@@ -29,11 +29,7 @@
           <div class="col-md-5">
             <div class="header-search">
               <form @submit.prevent="onSearch">
-                <input
-                  v-model="searchQuery"
-                  class="input"
-                  placeholder="Cari Disini"
-                />
+                <input v-model="searchQuery" class="input" placeholder="Cari Disini" />
                 <button class="search-btn">Cari</button>
               </form>
             </div>
@@ -42,11 +38,7 @@
             <div class="header-ctn button-container">
               <!-- Wishlist Dropdown -->
               <div class="dropdown">
-                <a
-                  class="dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-expanded="true"
-                >
+                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                   <i class="fa fa-heart-o"></i>
                   <span>Wishlist</span>
                   <div v-if="state.isAuthenticated" class="qty">
@@ -55,24 +47,15 @@
                 </a>
                 <div class="cart-dropdown">
                   <div class="cart-items">
-                    <div
-                      v-for="product in state.wishlistProducts"
-                      :key="product.product.id"
-                      class="product-widget"
-                    >
+                    <div v-for="product in state.wishlistProducts" :key="product.product.id" class="product-widget">
                       <div class="product-img">
-                        <img
-                          :src="
+                        <img :src="
                             require('@/assets/img/' + product.product.image_url)
-                          "
-                          :alt="product.product.name"
-                        />
+                          " :alt="product.product.name" />
                       </div>
                       <div class="product-body">
                         <h3 class="product-name">
-                          <router-link
-                            :to="{ path: `/product/${product.product.id}` }"
-                          >
+                          <router-link :to="{ path: `/product/${product.product.id}` }">
                             {{ product.product.name }}
                           </router-link>
                         </h3>
@@ -93,11 +76,7 @@
                 </router-link>
               </div>
               <div class="dropdown">
-                <a
-                  class="dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-expanded="true"
-                >
+                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                   <i class="fa fa-shopping-cart"></i>
                   <span>Keranjang</span>
                   <div v-if="state.isAuthenticated" class="qty">
@@ -106,24 +85,15 @@
                 </a>
                 <div class="cart-dropdown">
                   <div class="cart-items">
-                    <div
-                      v-for="product in state.cartProducts"
-                      :key="product.product.id"
-                      class="product-widget"
-                    >
+                    <div v-for="product in state.cartProducts" :key="product.product.id" class="product-widget">
                       <div class="product-img">
-                        <img
-                          :src="
+                        <img :src="
                             require('@/assets/img/' + product.product.image_url)
-                          "
-                          :alt="product.product.name"
-                        />
+                          " :alt="product.product.name" />
                       </div>
                       <div class="product-body">
                         <h3 class="product-name">
-                          <router-link
-                            :to="{ path: `/product/${product.product.id}` }"
-                          >
+                          <router-link :to="{ path: `/product/${product.product.id}` }">
                             {{ product.product.name }}
                           </router-link>
                         </h3>
@@ -216,7 +186,7 @@ export default {
     });
 
     const wishlistCount = computed(() => {
-      return state.wishlistProducts.reduce((total, product) => {
+      return state.wishlistProducts.reduce((total) => {
         return total + 1;
       }, 0);
     });

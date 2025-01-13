@@ -4,10 +4,6 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from enum import Enum as PyEnum
-# from sqlalchemy.orm import Mapped
-# from typing import List
-# from sqlalchemy import Table
-# from sqlalchemy import DateTime
 
 class Products(BaseDB):
     __tablename__ = 'products'
@@ -24,18 +20,6 @@ class Products(BaseDB):
     updated_at = Column(DateTime, nullable=False)
     cart = relationship("Carts", back_populates="product")
     wishlist = relationship("Wishlists", back_populates="product")
-    # id_dokter = Column(Integer, primary_key=True, index=True)
-    # nama_lengkap_dokter = Column(String(127), nullable=False)
-    # spesialisasi_dokter = Column(String(32), nullable=False)
-    # lama_pengalaman_dokter = Column(Integer, nullable=False)
-    # alumnus_dokter = Column(String(64), nullable=False)
-    # harga_dokter = Column(Integer, nullable=False)
-    # minat_klinis_dokter = Column(String(255), nullable=False)
-    # foto_dokter = Column(String(512), nullable=False)
-    # rating_dokter = Column(Float, nullable=False)
-    # id_poli = Column(Integer, ForeignKey('poli.id_poli'), nullable=False)
-    # janji_temu = relationship("JanjiTemu",back_populates="dokter")
-    # poli = relationship("Poli", back_populates="dokter")
 
 class Categories(BaseDB):
     __tablename__ = 'categories'
@@ -55,19 +39,6 @@ class Users(BaseDB):
     is_admin = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
     updated_at = Column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())
-    # id_user = Column(Integer, primary_key=True, index=True)
-    # nama_lengkap_user = Column(String(127), nullable=False)
-    # tgl_lahir_user = Column(Date, nullable=False)
-    # gender_user = Column(String(1), nullable=False)
-    # alamat_user = Column(String(255), nullable=False)
-    # no_bpjs_user = Column(String(18), nullable=False)
-    # no_telp_user = Column(String(16), nullable=False)
-    # email_user = Column(String(127), nullable=False)
-    # password_user = Column(String(128), nullable=False)
-    # foto_user = Column(String(512), nullable=False)
-    # janji_temu = relationship("JanjiTemu", back_populates="user")
-    # pengingat_minum_obat = relationship("PengingatMinumObat", back_populates="user")
-
 
 class Address(BaseDB):
     __tablename__ = "addresses"

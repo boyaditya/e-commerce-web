@@ -81,7 +81,7 @@ export default {
     const virtualAccountNumber = ref("8870182389");
     const totalAmount = ref(0);
     let timer;
-    const { state, updateTransaction, getPayment } = useGlobalState();
+    const { updateTransaction, getPayment } = useGlobalState();
 
     const setPaymentMethodName = () => {
       const paymentMethodMap = {

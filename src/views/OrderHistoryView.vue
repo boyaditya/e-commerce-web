@@ -44,8 +44,7 @@
                 <span class="total-amount">{{ formatPrice(order.total) }}</span>
               </div>
               <div class="action-buttons">
-                <button 
-                  class="btn-detail" 
+                <button class="btn-detail"
                   @click="$router.push({ name: 'OrderDetail', params: { invoice: order.invoice } })">
                   Lihat Detail
                 </button>
@@ -57,7 +56,7 @@
 
         <div v-else class="empty-state">
           <div class="empty-state-content">
-            <i class="fas fa-shopping-bag empty-icon"></i>
+            <i class="fa fa-shopping-bag empty-icon"></i>
             <h3>Belum ada transaksi</h3>
             <p>Yuk, mulai belanja dan dapatkan produk impianmu!</p>
             <router-link to="/store" class="btn-shop-now">Mulai Belanja</router-link>
@@ -114,10 +113,10 @@ export default {
     };
   },
   methods: {
-    async handleBuyAgain(order){
-      for(const item of order.details){
-        const result = await this.addOrUpdate(item.product_id, item.quantity);
-      };
+    async handleBuyAgain(order) {
+      for (const item of order.details) {
+        await this.addOrUpdate(item.product_id, item.quantity);
+      }
       this.$router.push("/cart");
     }
   },
@@ -173,7 +172,8 @@ export default {
   gap: 20px;
 }
 
-.order-date, .order-number {
+.order-date,
+.order-number {
   color: #757575;
   font-size: 14px;
 }
@@ -256,7 +256,8 @@ export default {
   gap: 12px;
 }
 
-.btn-detail, .btn-buy-again {
+.btn-detail,
+.btn-buy-again {
   padding: 8px 16px;
   border-radius: 4px;
   font-size: 14px;
