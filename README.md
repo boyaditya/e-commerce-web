@@ -1,52 +1,54 @@
-# E-commerce Website for Gaming Peripherals
+# 🌟 E-commerce Website for Gaming Peripherals
 
-Welcome to the repository for our **E-commerce Website** that specializes in selling gaming peripherals. This project is built using **Vue.js** for the frontend, **FastAPI** for the backend, and **MySQL** for the database.
+Welcome to the repository for our **E-commerce Website**, specializing in selling top-quality gaming peripherals. Built with a robust tech stack, this project offers a seamless shopping experience for gaming enthusiasts.
 
-## Features
+## 🚀 Features
 
-- **Authentication**
-  - User Login
-  - User Registration
-  - Logout
+### 🔒 **Authentication**
+- User Login
+- User Registration
+- Logout
 
-- **User Profile**
-  - Add Shipping Address
-  - Edit Shipping Address
+### 🏠 **User Profile**
+- Add Shipping Address
+- Edit Shipping Address
 
-- **Product Management**
-  - Search Products
-  - Filter Products by Category
-  - Sort Products
+### 🛒 **Product Management**
+- Search Products
+- Filter Products by Category
+- Sort Products
 
-- **Wishlist**
-  - Add to Wishlist
-  - View Wishlist
+### 💖 **Wishlist**
+- Add Products to Wishlist
+- View Wishlist
 
-- **Shopping Cart**
-  - Add Products to Cart
-  - Remove Products from Cart
-  - Adjust Product Quantity in Cart
+### 🛍️ **Shopping Cart**
+- Add Products to Cart
+- Remove Products from Cart
+- Adjust Product Quantity in Cart
 
-- **Checkout and Payment**
-  - Select Products from Cart for Checkout
-  - Choose Payment Method
-  - Complete Payment
+### 💳 **Checkout and Payment**
+- Select Products from Cart for Checkout
+- Choose Payment Method
+- Complete Payment
 
-- **Transaction History**
-  - View Transaction History
-  - View Transaction Details
+### 📜 **Transaction History**
+- View Transaction History
+- View Transaction Details
 
-## Tech Stack
+
+## 🛠️ Tech Stack
 
 - **Frontend**: Vue.js
 - **Backend**: FastAPI
 - **Database**: MySQL
 
-## Installation
+## ⚙️ Installation
 
 Follow these steps to set up the project locally:
 
 ### Prerequisites
+Ensure you have the following installed:
 - Node.js (for Vue.js)
 - Python 3.8+ (for FastAPI)
 - MySQL Server
@@ -56,7 +58,6 @@ Follow these steps to set up the project locally:
 git clone https://github.com/yourusername/ecommerce-website.git
 cd ecommerce-website
 ```
-
 
 ### Backend Setup
 1. Navigate to the `webservice` folder:
@@ -74,10 +75,13 @@ cd ecommerce-website
    uvicorn main:app --reload
    ```
    
-### Database Setup
-1. Ensure MySQL Server is running.
-2. Import the provided SQL file as mentioned in the Backend Setup.
-3. Update the database configuration in the backend's `database.py` file.
+
+## 🎯 Usage
+
+1. Open the frontend in your browser at `http://localhost:8080` (default Vue.js port).
+2. Access the backend API at `http://127.0.0.1:8000` (default FastAPI port).
+3. Register a new account, browse products, add to your wishlist or cart, and complete a purchase.
+
 
 ### Frontend Setup
 1. Install dependencies:
@@ -89,12 +93,36 @@ cd ecommerce-website
    npm run serve
    ```
 
+## 📸 Screenshot
+### Home Page
+![screencapture-localhost-8080-2025-01-13-12_42_57](https://github.com/user-attachments/assets/0cabffb7-f1be-4f55-941b-b66845a32a8d)
+### Store Page
+![screencapture-localhost-8081-store-2025-01-13-13_47_39](https://github.com/user-attachments/assets/87fa6c41-d187-4efc-a68e-f791054037da)
+### Product Details
+![screencapture-localhost-8081-product-9-2025-01-13-13_49_13](https://github.com/user-attachments/assets/a2e04200-f905-438a-a5df-32407d36b13f)
+### Cart
+![image](https://github.com/user-attachments/assets/e148db56-6604-492d-a22d-8b5be8616d66)
+![image](https://github.com/user-attachments/assets/29f0423c-6e43-4a87-ba8b-d3f379c26a35)
+### Wishlist
+![image](https://github.com/user-attachments/assets/97fff089-660f-4fd4-a0ec-5b7ae8d41398)
+### Checkout
+![screencapture-localhost-8081-checkout-2025-01-13-14_40_52](https://github.com/user-attachments/assets/7011b806-739b-4ff9-84fa-d2ea171b5112)
+### Payment
+![screencapture-localhost-8081-payment-va-bni-101-54-2025-01-13-14_42_22](https://github.com/user-attachments/assets/b3987d4d-e77e-4035-a2d2-23cd5f9356e7)
+### Order History
+![screencapture-localhost-8081-user-order-history-2025-01-13-14_45_35](https://github.com/user-attachments/assets/046a94a5-2f80-471c-9b11-cf5ca8cd2c0d)
+### Order Detail
+![screencapture-localhost-8081-order-detail-INV-20250113-000003-2025-01-13-14_50_52](https://github.com/user-attachments/assets/b86f6c14-d513-4655-9955-a58311283392)
+### Profile
+![screencapture-localhost-8081-user-profile-2025-01-13-14_51_49](https://github.com/user-attachments/assets/ae9ca5a5-08a3-4588-bc54-16bf09e538e5)
+### Edit Shipping Address
+![screencapture-localhost-8081-user-address-2025-01-13-14_57_24](https://github.com/user-attachments/assets/da440305-5e77-4cbe-814e-de2335e4d25f)
 
-## Usage
-1. Open the frontend in your browser at `http://localhost:8080` (default Vue.js port).
-2. The backend will be available at `http://127.0.0.1:8000/docs` (default FastAPI port).
-3. Register a new account, browse products, add to your wishlist or cart, and complete a purchase.
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+## 📜 License
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+
+
+Enjoy exploring our e-commerce platform! 🎮✨
+
 
