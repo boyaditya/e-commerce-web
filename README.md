@@ -55,7 +55,7 @@ Ensure you have the following installed:
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/yourusername/ecommerce-website.git
+git clone https://github.com/boyaditya/vue-ecommerce-web
 cd ecommerce-website
 ```
 
